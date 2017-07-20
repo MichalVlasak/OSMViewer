@@ -6,11 +6,17 @@
 #include <iostream>
 
 #include <QDebug>
+#include <QPainter>
 
 PaintingWidget::PaintingWidget(QWidget *parent)
     : QWidget(parent)
 {
     _mapSettings.widget = this;
+
+    _selectedAreaState = Unselecting;
+
+    _startPointSelectArea = QPoint(0, 0);
+    _endPointSelectArea = QPoint(0, 0);
 
     _layers.push_back(LayerInfo(new OSMLayer(_mapSettings), "OSM"));
     _layers.push_back(LayerInfo(new GridLayer(_mapSettings), "Grid"));
@@ -29,30 +35,55 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
             _layers[i].layer->paintEvent(paintEvent);
         }
     }
+
+    if(_selectedAreaState == Selecting)
+    {
+        QPainter *painter = new QPainter(_mapSettings.widget);
+
+        QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
+
+        painter->drawRect(rect);
+    }
+}
+
+void PaintingWidget::startSelectArea()
+{
+    _selectedAreaState = PrepareForSelecting;
 }
 
 void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     QWidget::mouseMoveEvent(mouseEvent);
 
-    int pixX = mouseEvent->pos().x();
-    int pixY = mouseEvent->pos().y();
-    //double lon = _mapSettings.getLonForPixel(_mapSettings.windowPixelToMapPixelX(pixX));
-    double lon = _mapSettings.getLonForPixelOld(pixX);
-    double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(pixY));
-
-    emit mouseCursorWgsChanged(lat, lon);
-
-    //qDebug() << mouseEvent->buttons() << " " << mouseEvent->pos() << " " << lon << " " << lat;
-
-    if(mouseEvent->buttons() & Qt::MouseButton::LeftButton)
+    if(_selectedAreaState == Selecting)
     {
-        QPointF currentPoint = mouseEvent->localPos();
-        QPointF delta = currentPoint - _mapSettings.movingStartPoint;
-        _mapSettings.worldCenter = _mapSettings.oldCenter + delta;
-        _mapSettings.widget->repaint();
-        //std::cout << "mouseMoveEvent delta  " << delta.x() << " " << delta.y() << std::endl;
-        //std::cout << "mouseMoveEvent center  " << _mapSettings.worldCenter.x() << " " << _mapSettings.worldCenter.y() << std::endl;
+        QPoint point = QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y()));
+
+        _endPointSelectArea = point;
+
+        repaint();
+    }
+    else
+    {
+        int pixX = mouseEvent->pos().x();
+        int pixY = mouseEvent->pos().y();
+        //double lon = _mapSettings.getLonForPixel(_mapSettings.windowPixelToMapPixelX(pixX));
+        double lon = _mapSettings.getLonForPixelOld(pixX);
+        double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(pixY));
+
+        emit mouseCursorWgsChanged(lat, lon);
+
+        //qDebug() << mouseEvent->buttons() << " " << mouseEvent->pos() << " " << lon << " " << lat;
+
+        if(mouseEvent->buttons() & Qt::MouseButton::LeftButton)
+        {
+            QPointF currentPoint = mouseEvent->localPos();
+            QPointF delta = currentPoint - _mapSettings.movingStartPoint;
+            _mapSettings.worldCenter = _mapSettings.oldCenter + delta;
+            _mapSettings.widget->repaint();
+            //std::cout << "mouseMoveEvent delta  " << delta.x() << " " << delta.y() << std::endl;
+            //std::cout << "mouseMoveEvent center  " << _mapSettings.worldCenter.x() << " " << _mapSettings.worldCenter.y() << std::endl;
+        }
     }
 }
 
@@ -60,12 +91,45 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
 {
     if(mouseEvent->buttons() & Qt::MouseButton::LeftButton)
     {
-        QWidget * widget = this->parentWidget();
-        QWidget * widget2 = widget->parentWidget();
+        QPoint point = QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y()));
 
-        _mapSettings.movingStartPoint = _mapSettings.widget->mapFrom(widget, QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y())));
-        _mapSettings.oldCenter = _mapSettings.worldCenter;
-        //std::cout << "mousePressEvent " << mouseEvent->localPos().x() << " " << mouseEvent->localPos().y() << std::endl;
+        if(_selectedAreaState == PrepareForSelecting)
+        {
+            _selectedAreaState = Selecting;
+
+            _startPointSelectArea = point;
+            _endPointSelectArea = point;
+
+            repaint();
+        }
+        else if(_selectedAreaState == Selecting)
+        {
+            _selectedAreaState = Unselecting;
+            _endPointSelectArea = point;
+
+            double lon = _mapSettings.getLonForPixelOld(_startPointSelectArea.x());
+            double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(_startPointSelectArea.y()));
+
+            QPointF topLeft(lon, lat);
+
+            lon = _mapSettings.getLonForPixelOld(_endPointSelectArea.x());
+            lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(_endPointSelectArea.y()));
+
+            QPointF bottomleft(lon, lat);
+
+            emit downloadSelectedArea(topLeft, bottomleft);
+
+            repaint();
+        }
+        else
+        {
+            QWidget * widget = this->parentWidget();
+            QWidget * widget2 = widget->parentWidget();
+
+            _mapSettings.movingStartPoint = _mapSettings.widget->mapFrom(widget, point);
+            _mapSettings.oldCenter = _mapSettings.worldCenter;
+            //std::cout << "mousePressEvent " << mouseEvent->localPos().x() << " " << mouseEvent->localPos().y() << std::endl;
+        }
     }
     else if(mouseEvent->buttons() & Qt::MouseButton::RightButton)
     {
@@ -73,6 +137,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         {
             _contextMenu = new MapContextMenu(this);
             QObject::connect(_contextMenu, SIGNAL(downloadArea()), SIGNAL(downloadArea()));
+            QObject::connect(_contextMenu, SIGNAL(selectAndDownloadArea()), SLOT(startSelectArea()));
         }
 
         if(_contextMenu != nullptr)

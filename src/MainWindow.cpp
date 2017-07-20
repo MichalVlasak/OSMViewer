@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(zoom, SIGNAL(zoomChanged()), SLOT(zoomChanged()));
     QObject::connect(_ui->paintWidget, SIGNAL(mouseCursorWgsChanged(double,double)), SLOT(mouseCursorWgsChanged(double,double)));
     QObject::connect(_ui->paintWidget, SIGNAL(downloadArea()), SLOT(downloadArea()));
+    QObject::connect(_ui->paintWidget, SIGNAL(downloadSelectedArea(QPointF,QPointF)), SLOT(downloadSelectedArea(QPointF,QPointF)));
     QObject::connect(_ui->action_Quit, SIGNAL(triggered(bool)), SLOT(close()));
     QObject::connect(_ui->action_AboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     QObject::connect(_ui->action_OSM_Directory, SIGNAL(triggered(bool)), SLOT(setOSMDirectoryPath()));
@@ -189,6 +190,30 @@ void MainWindow::downloadArea()
 
     downloadSetup.latTo = _ui->paintWidget->getBottomRight().y();
     downloadSetup.lonTo = _ui->paintWidget->getBottomRight().x();
+
+    OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
+
+    if(downloadAreaDialog->exec() == QDialog::Accepted)
+    {
+        downloadSetup = downloadAreaDialog->getCurrenSetup();
+
+        _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
+        _downloaderInfoDock->show();
+    }
+}
+
+void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
+{
+    OSMDownloadAreaDialog::Setup downloadSetup;
+
+    downloadSetup.levelFrom = _ui->paintWidget->getMapSettings().zoom.getCurrentZoomLevel();
+    downloadSetup.levelTo = downloadSetup.levelFrom + 1;
+
+    downloadSetup.latFrom = topLeft.y();
+    downloadSetup.lonFrom = topLeft.x();
+
+    downloadSetup.latTo = bottomRight.y();
+    downloadSetup.lonTo = bottomRight.x();
 
     OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
 

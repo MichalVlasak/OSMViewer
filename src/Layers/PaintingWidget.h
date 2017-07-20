@@ -29,6 +29,7 @@ class PaintingWidget : public QWidget
     signals:
         void mouseCursorWgsChanged(double lat, double lon);
         void downloadArea();
+        void downloadSelectedArea(QPointF topLeft, QPointF bottomRight);
 
     public slots:
 
@@ -38,7 +39,6 @@ class PaintingWidget : public QWidget
         void mouseMoveEvent(QMouseEvent * mouseEvent);
         void mousePressEvent(QMouseEvent * mouseEvent);
         void keyPressEvent(QKeyEvent * keyEvent);
-
 
     private:
         struct LayerInfo
@@ -55,13 +55,26 @@ class PaintingWidget : public QWidget
 
         typedef std::vector<LayerInfo> Layers;
 
+        enum SelectedAreaState
+        {
+            Unselecting,
+            PrepareForSelecting,
+            Selecting
+        };
+
     private:
         void centerAfterZoom(double lon, double lat);
+
+    private slots:
+        void startSelectArea();
 
     private:
         Layers _layers;
         MapSettings _mapSettings;
         class MapContextMenu * _contextMenu = nullptr;
+        QPoint _startPointSelectArea;
+        QPoint _endPointSelectArea;
+        SelectedAreaState _selectedAreaState;
 };
 
 #endif // PAINTINGWIDGET_H

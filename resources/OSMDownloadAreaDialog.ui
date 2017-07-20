@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>408</width>
-    <height>243</height>
+    <height>249</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OSm Download Area</string>
+   <string>OSM Download Area</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

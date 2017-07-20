@@ -13,6 +13,7 @@ class MapContextMenu : public QWidget
 
     signals:
         void downloadArea();
+        void selectAndDownloadArea();
 
     public slots:
 

@@ -48,6 +48,11 @@ void MapContextMenu::show(const QPointF &pos)
     menu->addAction(downloadArea);
     QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
 
+    QAction * selectAndDownloadArea = new QAction(tr("Select & Download Area"), this);
+    selectAndDownloadArea->setDisabled(window->getOSMTileDownloader()->isRunning());
+    menu->addAction(selectAndDownloadArea);
+    QObject::connect(selectAndDownloadArea, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadArea()));
+
     QPoint globalPos = mapToGlobal(QPoint(pos.x(), pos.y()));
     menu->exec(globalPos);
 }

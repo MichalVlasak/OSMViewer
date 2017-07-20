@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow
         void setOSMDirectoryPath();
         void setOSMTileDownloaderEnable(bool enable);
         void downloadArea();
+        void downloadSelectedArea(QPointF topLeft, QPointF bottomRight);
 
     private:
         Ui::MainWindow * _ui;
