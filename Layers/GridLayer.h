@@ -1,0 +1,48 @@
+#ifndef GRIDLAYER_H
+#define GRIDLAYER_H
+
+#include "BaseLayer.h"
+
+class GridLayer : public BaseLayer
+{
+    public:
+        explicit GridLayer(MapSettings & mapSettings);
+
+    public:
+        void paintEvent(QPaintEvent * paintEvent);
+
+    public:
+        enum LatLonInfo
+        {
+            Latitude, Longitude
+        };
+
+        static QString getPrintableDegree(double degree, LatLonInfo latLon, bool showFullNumber = false, bool showSecDecimals = false);
+
+    private:
+        double DegreeUnit = 360 * 60 * 60; // pocet sekund v celom kruhu
+
+        struct GridLevelInfo
+        {
+                GridLevelInfo(QColor c, float w, float s, int l, bool p)
+                {
+                    color = c;
+                    lineWidth = w;
+                    gridScale = s;
+                    level = l;
+                    isPrinted = p;
+                }
+
+                QColor color;
+                float lineWidth;
+                double gridScale;
+                int level;
+                bool isPrinted;
+        };
+        typedef std::vector<GridLevelInfo> GridLevels;
+        GridLevels _gridLevel;
+
+        void paintGrid(GridLevelInfo levelInfo);
+};
+
+#endif // GRIDLAYER_H

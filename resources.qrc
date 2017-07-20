@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="mapIcon">Icons/WorldMap-50.png</file>
+    </qresource>
+</RCC>
