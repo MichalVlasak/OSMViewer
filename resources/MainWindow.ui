@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>487</width>
-     <height>31</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -119,7 +119,7 @@
   <customwidget>
    <class>PaintingWidget</class>
    <extends>QWidget</extends>
-   <header>Layers/PaintingWidget.h</header>
+   <header>src/Layers/PaintingWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

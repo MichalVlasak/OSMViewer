@@ -1,7 +1,7 @@
 #include "PaintingWidget.h"
 #include "OSMLayer.h"
 #include "GridLayer.h"
-#include "MapContextMenu.h"
+#include "src/MapContextMenu.h"
 
 #include <iostream>
 

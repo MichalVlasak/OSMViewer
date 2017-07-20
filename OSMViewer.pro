@@ -23,44 +23,44 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES += main.cpp\
-        MainWindow.cpp \
-    Layers/BaseLayer.cpp \
-    Layers/OSMLayer.cpp \
-    Layers/GridLayer.cpp \
-    Layers/ZoomInfo.cpp \
-    Layers/PaintingWidget.cpp \
-    AppSettings.cpp \
-    Layers/MapSettings.cpp \
-    OSMDirectoryPathDialog.cpp \
-    MapContextMenu.cpp \
-    OSMDownloadAreaDialog.cpp \
-    OSMTileDownloader.cpp \
-    OSMTileDownloaderInfoWidget.cpp \
-    OSMTileDownloaderPrepare.cpp \
-    OSMTileDownloaderSetupWidget.cpp
+SOURCES += src/main.cpp\
+        src/MainWindow.cpp \
+    src/Layers/BaseLayer.cpp \
+    src/Layers/OSMLayer.cpp \
+    src/Layers/GridLayer.cpp \
+    src/Layers/ZoomInfo.cpp \
+    src/Layers/PaintingWidget.cpp \
+    src/Layers/MapSettings.cpp \
+    src/AppSettings.cpp \
+    src/OSMDirectoryPathDialog.cpp \
+    src/MapContextMenu.cpp \
+    src/OSMDownloadAreaDialog.cpp \
+    src/OSMTileDownloader.cpp \
+    src/OSMTileDownloaderInfoWidget.cpp \
+    src/OSMTileDownloaderPrepare.cpp \
+    src/OSMTileDownloaderSetupWidget.cpp
 
-HEADERS  += MainWindow.h \
-    Layers/BaseLayer.h \
-    Layers/OSMLayer.h \
-    Layers/GridLayer.h \
-    Layers/ZoomInfo.h \
-    Layers/PaintingWidget.h \
-    AppSettings.h \
-    Layers/MapSettings.h \
-    OSMDirectoryPathDialog.h \
-    MapContextMenu.h \
-    OSMDownloadAreaDialog.h \
-    OSMTileDownloader.h \
-    OSMTileDownloaderInfoWidget.h \
-    OSMTileDownloaderPrepare.h \
-    OSMTileDownloaderSetupWidget.h
+HEADERS  += src/MainWindow.h \
+    src/Layers/BaseLayer.h \
+    src/Layers/OSMLayer.h \
+    src/Layers/GridLayer.h \
+    src/Layers/ZoomInfo.h \
+    src/Layers/PaintingWidget.h \
+    src/Layers/MapSettings.h \
+    src/AppSettings.h \
+    src/OSMDirectoryPathDialog.h \
+    src/MapContextMenu.h \
+    src/OSMDownloadAreaDialog.h \
+    src/OSMTileDownloader.h \
+    src/OSMTileDownloaderInfoWidget.h \
+    src/OSMTileDownloaderPrepare.h \
+    src/OSMTileDownloaderSetupWidget.h
 
-FORMS    += MainWindow.ui \
-    OSMDirectoryPathDialog.ui \
-    OSMDownloadAreaDialog.ui \
-    OSMTileDownloaderInfoWidget.ui \
-    OSMTileDownloaderSetupWidget.ui
+FORMS    += resources/MainWindow.ui \
+    resources/OSMDirectoryPathDialog.ui \
+    resources/OSMDownloadAreaDialog.ui \
+    resources/OSMTileDownloaderInfoWidget.ui \
+    resources/OSMTileDownloaderSetupWidget.ui
 
 RESOURCES += \
-    resources.qrc
+    resources/resources.qrc

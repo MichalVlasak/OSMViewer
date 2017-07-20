@@ -1,5 +1,5 @@
 #include "OSMLayer.h"
-#include "OSMTileDownloader.h"
+#include "src/OSMTileDownloader.h"
 
 #include <QPainter>
 #include <QWidget>
