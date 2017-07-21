@@ -206,7 +206,7 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
             break;
 
         case Qt::Key_Home:
-            setCenterPosition();
+            centerToWgs(_mapSettings.homePosition);
             break;
 
         default:
@@ -230,6 +230,11 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
     _mapSettings.widget->repaint();
 }
 
+void PaintingWidget::centerToWgs(QPointF wgsPoint)
+{
+    centerToWgs(wgsPoint.x(), wgsPoint.y());
+}
+
 void PaintingWidget::centerToWgs(double lon, double lat)
 {
     int newPixCenterX = _mapSettings.getPixelForLon(lon);
@@ -250,18 +255,6 @@ void PaintingWidget::centerToWgs(double lon, double lat)
 MapSettings & PaintingWidget::getMapSettings()
 {
     return _mapSettings;
-}
-
-QPointF PaintingWidget::getCenterPosition()
-{
-    return QPoint(width() / 2, height() / 2);
-}
-
-void PaintingWidget::setCenterPosition()
-{
-    _mapSettings.worldCenter = getCenterPosition();
-
-    _mapSettings.widget->repaint();
 }
 
 void PaintingWidget::setCenterPosition(const QPointF & center)

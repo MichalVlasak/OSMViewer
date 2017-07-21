@@ -5,6 +5,7 @@
 
 MapSettings::MapSettings()
 {
+    homePosition = QPointF(17.15, 48.15);
 }
 
 int MapSettings::long2tilex(double lon, int z)

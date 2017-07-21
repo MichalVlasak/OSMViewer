@@ -31,6 +31,7 @@ class MapSettings
         QPointF movingStartPoint;
         QWidget * widget = nullptr;
         ZoomInfo zoom;
+        QPointF homePosition;
 };
 
 #endif // MAPSETTINGS_H

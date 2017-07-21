@@ -13,8 +13,6 @@ class PaintingWidget : public QWidget
         explicit PaintingWidget(QWidget *parent = 0);
 
     public:
-        QPointF getCenterPosition();
-        void setCenterPosition();
         void setCenterPosition(const QPointF & center);
         MapSettings & getMapSettings();
 
@@ -63,6 +61,7 @@ class PaintingWidget : public QWidget
         };
 
     private:
+        void centerToWgs(QPointF wgsPoint);
         void centerToWgs(double lon, double lat);
 
     private slots:
