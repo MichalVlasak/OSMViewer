@@ -38,7 +38,8 @@ SOURCES += src/main.cpp\
     src/OSMTileDownloader.cpp \
     src/OSMTileDownloaderInfoWidget.cpp \
     src/OSMTileDownloaderPrepare.cpp \
-    src/OSMTileDownloaderSetupWidget.cpp
+    src/OSMTileDownloaderSetupWidget.cpp \
+    src/AboutDialog.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -54,13 +55,15 @@ HEADERS  += src/MainWindow.h \
     src/OSMTileDownloader.h \
     src/OSMTileDownloaderInfoWidget.h \
     src/OSMTileDownloaderPrepare.h \
-    src/OSMTileDownloaderSetupWidget.h
+    src/OSMTileDownloaderSetupWidget.h \
+    src/AboutDialog.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
     resources/OSMDownloadAreaDialog.ui \
     resources/OSMTileDownloaderInfoWidget.ui \
-    resources/OSMTileDownloaderSetupWidget.ui
+    resources/OSMTileDownloaderSetupWidget.ui \
+    resources/AboutDialog.ui
 
 RESOURCES += \
     resources/resources.qrc

@@ -27,6 +27,7 @@ class MainWindow : public QMainWindow
 
     public:
         OSMTileDownloader * getOSMTileDownloader() { return _downloader; }
+        const QString & getApplicationName() const { return _applicationName; }
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -38,6 +39,7 @@ class MainWindow : public QMainWindow
         void setOSMTileDownloaderEnable(bool enable);
         void downloadArea();
         void downloadSelectedArea(QPointF topLeft, QPointF bottomRight);
+        void showAbout();
 
     private:
         Ui::MainWindow * _ui;
@@ -48,6 +50,7 @@ class MainWindow : public QMainWindow
         OSMTileDownloaderInfoWidget * _downloaderInfoWidget = nullptr;
         OSMTileDownloaderPrepare * _downloaderPrepare = nullptr;
         OSMTileDownloaderSetupWidget * _downloaderSetupWidget = nullptr;
+        QString _applicationName;
 
         QLabel * _zoomLevelLabel;
         QLabel * _zoomScaleLabel;

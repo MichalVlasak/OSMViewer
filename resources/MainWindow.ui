@@ -58,6 +58,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="action_AboutOSMViewer"/>
     <addaction name="action_AboutQt"/>
    </widget>
    <widget class="QMenu" name="menuOSM">
@@ -111,6 +112,11 @@
    </property>
    <property name="text">
     <string>Downloader Setup</string>
+   </property>
+  </action>
+  <action name="action_AboutOSMViewer">
+   <property name="text">
+    <string>About OSM Viewer</string>
    </property>
   </action>
  </widget>

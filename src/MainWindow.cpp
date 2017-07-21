@@ -4,6 +4,7 @@
 #include "Layers/GridLayer.h"
 #include "Layers/OSMLayer.h"
 #include "OSMDownloadAreaDialog.h"
+#include "AboutDialog.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -21,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
+
+    _applicationName = tr("Open Street Map Viewer");
+
+    this->setWindowTitle(_applicationName);
 
     _zoomLevelLabel = new QLabel("Zoom Level: ");
     _zoomScaleLabel = new QLabel("Zoom Scale: ");
@@ -84,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_ui->action_OSM_Directory, SIGNAL(triggered(bool)), SLOT(setOSMDirectoryPath()));
     QObject::connect(_ui->action_EnableDownloading, SIGNAL(triggered(bool)), SLOT(setOSMTileDownloaderEnable(bool)));
     QObject::connect(_ui->action_EnableDownloading, SIGNAL(triggered(bool)), _ui->paintWidget, SLOT(repaint()));
+    QObject::connect(_ui->action_AboutOSMViewer, SIGNAL(triggered(bool)), SLOT(showAbout()));
 
     if(_appSettings.restoreMainWindowSettings(this) == false)
     {
@@ -224,4 +230,11 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
         _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
         _downloaderInfoDock->show();
     }
+}
+
+void MainWindow::showAbout()
+{
+    AboutDialog * about = new AboutDialog(this);
+
+    about->exec();
 }
