@@ -138,6 +138,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
             _contextMenu = new MapContextMenu(this);
             QObject::connect(_contextMenu, SIGNAL(downloadArea()), SIGNAL(downloadArea()));
             QObject::connect(_contextMenu, SIGNAL(selectAndDownloadArea()), SLOT(startSelectArea()));
+            QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
         }
 
         if(_contextMenu != nullptr)
@@ -176,7 +177,7 @@ void PaintingWidget::wheelEvent(QWheelEvent *wheelEvent)
 
     if(newZoom != oldZoom)
     {
-        centerAfterZoom(lon, lat);
+        centerToWgs(lon, lat);
     }
 
     _mapSettings.widget->repaint();
@@ -223,13 +224,13 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
 
     if(newZoom != oldZoom)
     {
-        centerAfterZoom(lon, lat);
+        centerToWgs(lon, lat);
     }
 
     _mapSettings.widget->repaint();
 }
 
-void PaintingWidget::centerAfterZoom(double lon, double lat)
+void PaintingWidget::centerToWgs(double lon, double lat)
 {
     int newPixCenterX = _mapSettings.getPixelForLon(lon);
     int newPixCenterY = _mapSettings.getPixelForLat(lat);
@@ -242,6 +243,8 @@ void PaintingWidget::centerAfterZoom(double lon, double lat)
 
     _mapSettings.worldCenter.rx() = (width() / 2) - diffPixX;
     _mapSettings.worldCenter.ry() = (height() / 2) - diffPixY;
+
+    _mapSettings.widget->repaint();
 }
 
 MapSettings & PaintingWidget::getMapSettings()
@@ -321,4 +324,15 @@ QPointF PaintingWidget::getTopLeft()
     double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(0));
 
     return QPointF(lon, lat);
+}
+
+void PaintingWidget::centerMapToPixels(QPoint pos)
+{
+    int pixX = pos.x();
+    int pixY = pos.y();
+
+    double lon = _mapSettings.getLonForPixelOld(pixX);
+    double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(pixY));
+
+    centerToWgs(lon, lat);
 }

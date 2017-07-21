@@ -14,10 +14,15 @@ class MapContextMenu : public QWidget
     signals:
         void downloadArea();
         void selectAndDownloadArea();
+        void centerMap(QPoint pos);
 
     public slots:
 
+    private slots:
+        void centerMapActivated();
+
     private:
+        QPoint _pos;
 };
 
 #endif // MAPCONTEXTMENU_H

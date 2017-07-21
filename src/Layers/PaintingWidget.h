@@ -63,10 +63,11 @@ class PaintingWidget : public QWidget
         };
 
     private:
-        void centerAfterZoom(double lon, double lat);
+        void centerToWgs(double lon, double lat);
 
     private slots:
         void startSelectArea();
+        void centerMapToPixels(QPoint pos);
 
     private:
         Layers _layers;

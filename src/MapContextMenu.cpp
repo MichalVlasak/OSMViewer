@@ -53,6 +53,19 @@ void MapContextMenu::show(const QPointF &pos)
     menu->addAction(selectAndDownloadArea);
     QObject::connect(selectAndDownloadArea, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadArea()));
 
-    QPoint globalPos = mapToGlobal(QPoint(pos.x(), pos.y()));
+    menu->addSeparator();
+
+    QAction * centermap = new QAction(tr("Center Map"), this);
+    menu->addAction(centermap);
+    QObject::connect(centermap, SIGNAL(triggered(bool)), SLOT(centerMapActivated()));
+
+    _pos = QPoint(pos.x(), pos.y());
+
+    QPoint globalPos = mapToGlobal(_pos);
     menu->exec(globalPos);
+}
+
+void MapContextMenu::centerMapActivated()
+{
+    emit centerMap(_pos);
 }
