@@ -38,11 +38,11 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
 
     if(_selectedAreaState == Selecting)
     {
-        QPainter *painter = new QPainter(_mapSettings.widget);
+        QPainter painter(_mapSettings.widget);
 
         QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
 
-        painter->drawRect(rect);
+        painter.drawRect(rect);
     }
 }
 
