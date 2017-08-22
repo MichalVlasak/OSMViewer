@@ -81,6 +81,11 @@ void OSMTileDownloaderPrepare::run()
                         item.fullPath = filePath;
                         item.basePath = _tilesPath;
 
+                        while(_downloader->isFreeQueue() == false)
+                        {
+                            QThread::msleep(500);
+                        }
+
                         _downloader->addUrlToDownload(item, false);
                     }
                 }

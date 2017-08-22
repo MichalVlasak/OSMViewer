@@ -9,6 +9,9 @@ class OSMTileDownloader : public QObject
         Q_OBJECT
 
     public:
+        static const size_t MAX_QUEUE;
+
+    public:
         struct DownloadItem
         {
                 int level;
@@ -28,10 +31,11 @@ class OSMTileDownloader : public QObject
         void addUrlToDownload(DownloadItem newItem, bool autoDownload = true);
         bool isRunning();
         int getThreads() { return _threads; }
-        void setThreads(int threads);
+        void setThreads(size_t threads);
         QString getBaseUrl() { return _baseWebRootUrl; }
         void setBaseUrl(QString url);
         QStringList getBaseUrlList() { return _baseWebRootUrllist; }
+        bool isFreeQueue();
 
     public slots:
         void setDownloadingEnable(bool enabled);
@@ -63,7 +67,7 @@ class OSMTileDownloader : public QObject
         QMutex _processMutex;
         QString _baseWebRootUrl;
         QStringList _baseWebRootUrllist;
-        int _threads;
+        size_t _threads;
 };
 
 #endif // OSMTILEDOWNLOADER_H

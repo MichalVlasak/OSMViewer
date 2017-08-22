@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+const size_t OSMTileDownloader::MAX_QUEUE = 1000;
+
 OSMTileDownloader::OSMTileDownloader(QObject *parent)
     : QObject(parent)
 {
@@ -73,7 +75,7 @@ void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload
 
     QMutexLocker lock(&_mutex);
 
-    for(DownloadItem item : _itemsToDownload)
+    for(const DownloadItem & item : _itemsToDownload)
     {
         if(item.level == newItem.level && item.column == newItem.column && item.row == newItem.row)
         {
@@ -84,6 +86,7 @@ void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload
     if(isPresent == false)
     {
         _itemsToDownload.push_back(newItem);
+        lock.unlock();
     }
 
     if(_itemsToDownload.size() > 0 && autoDownload == true)
@@ -105,8 +108,6 @@ void OSMTileDownloader::startDownload()
 
     if(proc != nullptr && _itemsToDownload.size() > 0)
     {
-        QMutexLocker lock(&_mutex);
-
         DownloadItemsVector::iterator it = _itemsToDownload.begin();
 
         if(it != _itemsToDownload.end())
@@ -117,7 +118,11 @@ void OSMTileDownloader::startDownload()
             {
                 emit downloadedItem(item.level, item.column, item.row);
 
+                //QMutexLocker lock(&_mutex);
+
                 _itemsToDownload.erase(_itemsToDownload.begin());
+
+                //lock.unlock();
 
                 it = _itemsToDownload.begin();
 
@@ -220,7 +225,7 @@ bool OSMTileDownloader::isRunning()
     return false;
 }
 
-void OSMTileDownloader::setThreads(int threads)
+void OSMTileDownloader::setThreads(size_t threads)
 {
     QMutexLocker lock(&_processMutex);
 
@@ -241,4 +246,11 @@ void OSMTileDownloader::setThreads(int threads)
     {
         startDownload();
     }
+}
+
+bool OSMTileDownloader::isFreeQueue()
+{
+    QMutexLocker lock(&_mutex);
+
+    return _itemsToDownload.size() < MAX_QUEUE;
 }

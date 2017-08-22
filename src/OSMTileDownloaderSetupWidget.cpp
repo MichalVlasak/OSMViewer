@@ -44,7 +44,7 @@ void OSMTileDownloaderSetupWidget::clickedButton(QAbstractButton *button)
         }
         else if(btn == _ui->buttonBox->button(QDialogButtonBox::Ok))
         {
-            _downloader->setThreads(_ui->threads->value());
+            _downloader->setThreads(size_t(_ui->threads->value()));
             _isSettingsChanged = false;
             updateSettingsChanged();
         }
