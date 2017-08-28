@@ -201,16 +201,19 @@ void GridLayer::paintGrid(GridLevelInfo levelInfo)
         double lon = lonUnit / levelInfo.gridScale * degUnit;
         int posX = _mapSettings.getPixelForLon(lon);
 
-        painter.drawLine(posX, posYStart, posX, posYStop);
-
-        QString label = getPrintableDegree(lonUnit, Longitude);
-        int labelWidth = fontMetrics.width(label);
-
-        if((lastLabelPosX + 5 + labelWidth) < posX || lon == -180.)
+        if(posX > 0 && posX < wWidth && labelPosY > 0 && labelPosY < wHeight)
         {
-            painter.drawText(QPointF(posX + 5, labelPosY), label);
+            painter.drawLine(posX, posYStart, posX, posYStop);
 
-            lastLabelPosX = posX;
+            QString label = getPrintableDegree(lonUnit, Longitude);
+            int labelWidth = fontMetrics.width(label);
+
+            if((lastLabelPosX + 5 + labelWidth) < posX || lon == -180.)
+            {
+                painter.drawText(QPointF(posX + 5, labelPosY), label);
+
+                lastLabelPosX = posX;
+            }
         }
     }
 

@@ -73,20 +73,22 @@ void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload
 {
     bool isPresent = false;
 
-    QMutexLocker lock(&_mutex);
-
-    for(const DownloadItem & item : _itemsToDownload)
     {
-        if(item.level == newItem.level && item.column == newItem.column && item.row == newItem.row)
+        QMutexLocker lock(&_mutex);
+
+        for(const DownloadItem & item : _itemsToDownload)
         {
-            isPresent = true;
+            if(item.level == newItem.level && item.column == newItem.column && item.row == newItem.row)
+            {
+                isPresent = true;
+            }
         }
-    }
 
-    if(isPresent == false)
-    {
-        _itemsToDownload.push_back(newItem);
-        lock.unlock();
+        if(isPresent == false)
+        {
+            _itemsToDownload.push_back(newItem);
+            lock.unlock();
+        }
     }
 
     if(_itemsToDownload.size() > 0 && autoDownload == true)
@@ -112,17 +114,17 @@ void OSMTileDownloader::startDownload()
 
         if(it != _itemsToDownload.end())
         {
-            DownloadItem & item = *it;
+            DownloadItem item = *it;
 
             while(isFileExist(item) == true)
             {
                 emit downloadedItem(item.level, item.column, item.row);
 
-                //QMutexLocker lock(&_mutex);
+                {
+                    QMutexLocker lock(&_mutex);
 
-                _itemsToDownload.erase(_itemsToDownload.begin());
-
-                //lock.unlock();
+                    _itemsToDownload.erase(_itemsToDownload.begin());
+                }
 
                 it = _itemsToDownload.begin();
 

@@ -19,6 +19,8 @@ void OSMTileDownloaderPrepare::setDownloadParameters(OSMDownloadAreaDialog::Setu
     _tilesPath = tilesPath;
     _runPrepare = true;
 
+    _infoWidget->setLevelRange(_setup.levelFrom, _setup.levelTo);
+
     start();
 }
 
