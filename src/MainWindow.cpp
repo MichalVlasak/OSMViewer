@@ -221,6 +221,16 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
     downloadSetup.latTo = bottomRight.y();
     downloadSetup.lonTo = bottomRight.x();
 
+    if(downloadSetup.latFrom < downloadSetup.latTo)
+    {
+        std::swap(downloadSetup.latFrom, downloadSetup.latTo);
+    }
+
+    if(downloadSetup.lonFrom > downloadSetup.lonTo)
+    {
+        std::swap(downloadSetup.lonFrom, downloadSetup.lonTo);
+    }
+
     OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
 
     if(downloadAreaDialog->exec() == QDialog::Accepted)
