@@ -117,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloadAreaHighlight = new DownloadAreaHighlight(_ui->paintWidget->getMapSettings());
     _ui->paintWidget->addLayer(_downloadAreaHighlight, "DownloadAreaHighlight");
     _downloaderPrepare->setDownloadAreaHighlight(_downloadAreaHighlight);
+    _appSettings.restoreDownloadAreaHighlightSettings(_downloadAreaHighlight);
 }
 
 MainWindow::~MainWindow()
@@ -125,6 +126,7 @@ MainWindow::~MainWindow()
     _appSettings.storeMainWindowSettings(this);
     _appSettings.storeOSMDirectoryPath(_ui->paintWidget->getOSMLayer());
     _appSettings.storeDownloadSettings(_downloader);
+    _appSettings.storeDownloadAreaHighlightSettings(_downloadAreaHighlight);
 
     //while(_downloader2->isRunning() == true);
 
@@ -142,6 +144,14 @@ MainWindow * MainWindow::getInstance()
     }
 
     return mainWindow;
+}
+
+void MainWindow::initialize()
+{
+    if(_downloaderInfoWidget != nullptr)
+    {
+        _downloaderInfoWidget->initialize();
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)

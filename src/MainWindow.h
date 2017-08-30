@@ -28,7 +28,9 @@ class MainWindow : public QMainWindow
 
     public:
         OSMTileDownloader * getOSMTileDownloader() { return _downloader; }
+        DownloadAreaHighlight * getDownloadAreaHighlight()  { return _downloadAreaHighlight; }
         const QString & getApplicationName() const { return _applicationName; }
+        void initialize();
 
     private:
         void keyPressEvent(QKeyEvent * event);

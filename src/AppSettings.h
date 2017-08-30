@@ -23,6 +23,9 @@ class AppSettings
         void storeDownloadSettings(class OSMTileDownloader * downloader);
         bool restoreDownloadSettings(class OSMTileDownloader * downloader);
 
+        void storeDownloadAreaHighlightSettings(class DownloadAreaHighlight * highlighter);
+        bool restoreDownloadAreaHighlightSettings(class DownloadAreaHighlight * highlighter);
+
     private:
         QString _settingsFileName;
         QDomDocument _doc;

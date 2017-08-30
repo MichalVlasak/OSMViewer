@@ -13,6 +13,8 @@ class DownloadAreaHighlight : public BaseLayer
         void paintEvent(QPaintEvent * paintEvent);
         void setDownloadParams(OSMDownloadAreaDialog::Setup setup);
         void resetDownloadParams();
+        void setVisible(bool value);
+        bool isVisible();
 
     private:
         void clearDownloadParams();
@@ -20,6 +22,7 @@ class DownloadAreaHighlight : public BaseLayer
     private:
         OSMDownloadAreaDialog::Setup _setup;
         bool _isDownloadParamsSetupEnable;
+        bool _isVisible = true;
 };
 
 #endif // DOWNLOADAREAHIGHLIGHT_H

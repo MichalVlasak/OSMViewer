@@ -1,5 +1,6 @@
 #include "OSMTileDownloaderInfoWidget.h"
 #include "ui_OSMTileDownloaderInfoWidget.h"
+#include "MainWindow.h"
 
 #include <QPushButton>
 #include <QTimer>
@@ -11,21 +12,6 @@ OSMTileDownloaderInfoWidget::OSMTileDownloaderInfoWidget(OSMTileDownloader * dow
     _downloader(downloader)
 {
     _ui->setupUi(this);
-
-    _timer = new QTimer(this);
-    _timer->setInterval(500);
-    _timer->start();
-
-    _ui->cancelButton->setDisabled(true);
-
-    _ui->levelValue->setText(tr("0"));
-    _ui->columnValue->setText(tr("0"));
-    _ui->rowValue->setText(tr("0"));
-
-    //QObject::connect(_downloader, SIGNAL(allItemIsDownloaded()), SLOT(close()));
-    QObject::connect(_downloader, SIGNAL(downloadedItem(int,int,int)), SLOT(downloadedItem(int,int,int)));
-    QObject::connect(_ui->cancelButton, SIGNAL(clicked(bool)), SLOT(cancel()));
-    QObject::connect(_timer, SIGNAL(timeout()), SLOT(updateDownloadInfoLabel()));
 }
 
 OSMTileDownloaderInfoWidget::~OSMTileDownloaderInfoWidget()
@@ -33,13 +19,42 @@ OSMTileDownloaderInfoWidget::~OSMTileDownloaderInfoWidget()
     delete _ui;
 }
 
+void OSMTileDownloaderInfoWidget::initialize()
+{
+
+    _timer = new QTimer(this);
+    _timer->setInterval(500);
+    _timer->start();
+
+    _levelFrom = _levelTo = 0;
+
+    _ui->cancelButton->setDisabled(true);
+
+    _ui->levelValue->setText(tr("0"));
+    _ui->columnValue->setText(tr("0"));
+    _ui->rowValue->setText(tr("0"));
+
+    DownloadAreaHighlight * highliter = MainWindow::getInstance()->getDownloadAreaHighlight();
+
+    if(highliter != nullptr)
+    {
+        _ui->highlightDownArea->setChecked(highliter->isVisible());
+    }
+
+    //QObject::connect(_downloader, SIGNAL(allItemIsDownloaded()), SLOT(close()));
+    QObject::connect(_downloader, SIGNAL(downloadedItem(int,int,int)), SLOT(downloadedItem(int,int,int)));
+    QObject::connect(_ui->cancelButton, SIGNAL(clicked(bool)), SLOT(cancel()));
+    QObject::connect(_timer, SIGNAL(timeout()), SLOT(updateDownloadInfoLabel()));
+    QObject::connect(_ui->highlightDownArea, SIGNAL(toggled(bool)), SLOT(highlightDownArea(bool)));
+}
+
 void OSMTileDownloaderInfoWidget::setLevelInfo(int level, LevelInfo info)
 {
     _levelInfo[level] = info;
 
     LevelInfoMap::iterator it;
-    int levelMin = _ui->levelProgress->minimum();
-    int levelMax = _ui->levelProgress->maximum();
+    int levelMin = _levelFrom;
+    int levelMax = _levelTo;
 
     for(it = _levelInfo.begin(); it != _levelInfo.end(); ++it)
     {
@@ -67,8 +82,11 @@ void OSMTileDownloaderInfoWidget::setLevelRange(int levelFrom, int levelTo)
 {
     if(levelFrom <= levelTo)
     {
-        _ui->levelProgress->setMaximum(levelTo);
-        _ui->levelProgress->setMinimum(levelFrom);
+        _levelFrom = levelFrom;
+        _levelTo = levelTo;
+
+        _ui->levelProgress->setMaximum(_levelFrom);
+        _ui->levelProgress->setMinimum(_levelTo);
     }
 }
 
@@ -135,4 +153,14 @@ void OSMTileDownloaderInfoWidget::updateDownloadInfoLabel()
     }
 
     _ui->downloadInfoLabel->setText(info);
+}
+
+void OSMTileDownloaderInfoWidget::highlightDownArea(bool value)
+{
+    DownloadAreaHighlight * highliter = MainWindow::getInstance()->getDownloadAreaHighlight();
+
+    if(highliter != nullptr)
+    {
+        highliter->setVisible(value);
+    }
 }

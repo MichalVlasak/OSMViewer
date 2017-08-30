@@ -31,6 +31,7 @@ class OSMTileDownloaderInfoWidget : public QWidget
     public:
         void setLevelInfo(int level, LevelInfo info);
         void setLevelRange(int levelFrom, int levelTo);
+        void initialize();
 
     signals:
         void cancelDownloading();
@@ -39,6 +40,7 @@ class OSMTileDownloaderInfoWidget : public QWidget
         void downloadedItem(int level, int col, int row);
         void cancel();
         void updateDownloadInfoLabel();
+        void highlightDownArea(bool value);
 
     private:
         typedef std::map<int, LevelInfo> LevelInfoMap;
@@ -48,6 +50,7 @@ class OSMTileDownloaderInfoWidget : public QWidget
         LevelInfoMap _levelInfo;
         OSMTileDownloader * _downloader;
         QTimer * _timer;
+        int _levelFrom, _levelTo;
 };
 
 #endif // OSMTILEDOWNLOADERINFOFORM_H

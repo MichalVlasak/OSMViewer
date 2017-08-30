@@ -10,7 +10,7 @@ DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings)
 
 void DownloadAreaHighlight::paintEvent(QPaintEvent *paintEvent)
 {
-    if(_isDownloadParamsSetupEnable == true)
+    if(_isDownloadParamsSetupEnable == true && _isVisible == true)
     {
         QPainter painter(_mapSettings.widget);
 
@@ -33,6 +33,8 @@ void DownloadAreaHighlight::setDownloadParams(OSMDownloadAreaDialog::Setup setup
 void DownloadAreaHighlight::resetDownloadParams()
 {
     clearDownloadParams();
+
+    _mapSettings.widget->repaint();
 }
 
 void DownloadAreaHighlight::clearDownloadParams()
@@ -44,4 +46,16 @@ void DownloadAreaHighlight::clearDownloadParams()
     _setup.levelFrom = 0.;
     _setup.levelTo = 0.;
     _isDownloadParamsSetupEnable = false;
+}
+
+void DownloadAreaHighlight::setVisible(bool value)
+{
+    _isVisible = value;
+
+    _mapSettings.widget->repaint();
+}
+
+bool DownloadAreaHighlight::isVisible()
+{
+    return _isVisible;
 }

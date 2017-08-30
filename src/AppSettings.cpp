@@ -1,6 +1,7 @@
 #include "AppSettings.h"
 #include "MainWindow.h"
 #include "Layers/OSMLayer.h"
+#include "Layers/DownloadAreaHighlight.h"
 
 #include <QTextStream>
 #include <QDebug>
@@ -301,6 +302,61 @@ bool AppSettings::restoreDownloadSettings(OSMTileDownloader *downloader)
                     if(downloader != nullptr)
                     {
                         downloader->setDownloadingEnable(value.toInt());
+                        result = true;
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+void AppSettings::storeDownloadAreaHighlightSettings(DownloadAreaHighlight * highlighter)
+{
+    QDomElement downloaderElement = _doc.createElement("DownloadAreaHighlight");
+    _rootElement.appendChild(downloaderElement);
+
+    QDomElement downloadEnableElement = _doc.createElement("VisibleDownloadAreaHighlight");
+    downloaderElement.appendChild(downloadEnableElement);
+    QDomText downloadEnableText = _doc.createTextNode(QString::number(highlighter->isVisible()));
+    downloadEnableElement.appendChild(downloadEnableText);
+}
+
+bool AppSettings::restoreDownloadAreaHighlightSettings(DownloadAreaHighlight *highlighter)
+{
+    bool result = false;
+    QFile file(_settingsFileName);
+
+    QDomDocument document;
+    if (document.setContent(&file) == false)
+    {
+        /*std::cerr << "Error: Parse error at line " << errorLine << ", "
+                  << "column " << errorColumn << ": "
+                  << qPrintable(errorStr) << std::endl;*/
+        return false;
+    }
+
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList downloadSettingsNodes = rootElem.elementsByTagName("DownloadAreaHighlight");
+
+        for(int iMap = 0; iMap < downloadSettingsNodes.size(); iMap++)
+        {
+            QDomNode downloadSettingNode = downloadSettingsNodes.at(iMap);
+
+            if(downloadSettingNode.isNull() == false)
+            {
+                QString value = getValueString(downloadSettingNode, "VisibleDownloadAreaHighlight");
+
+                if(value.isEmpty() == false)
+                {
+                    if(highlighter != nullptr)
+                    {
+                        int isVisible = value.toInt();
+                        highlighter->setVisible((isVisible > 0) ? true : false);
                         result = true;
                     }
                 }
