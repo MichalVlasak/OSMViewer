@@ -46,6 +46,7 @@ class OSMTileDownloader : public QObject
         void downloadItemIsDone();
         void downloadingEnable(bool value);
         void downloadedItem(int level, int col, int row);
+        void changeThreadsCount(int count);
 
     private:
         bool isFileExist(DownloadItem item);

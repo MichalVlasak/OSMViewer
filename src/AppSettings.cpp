@@ -267,6 +267,11 @@ void AppSettings::storeDownloadSettings(OSMTileDownloader * downloader)
     downloaderElement.appendChild(downloadEnableElement);
     QDomText downloadEnableText = _doc.createTextNode(QString::number(downloader->isDownloadingEnable()));
     downloadEnableElement.appendChild(downloadEnableText);
+
+    QDomElement threadsCountElement = _doc.createElement("ThreadsCount");
+    downloaderElement.appendChild(threadsCountElement);
+    QDomText threadsCountText = _doc.createTextNode(QString::number(downloader->getThreads()));
+    threadsCountElement.appendChild(threadsCountText);
 }
 
 bool AppSettings::restoreDownloadSettings(OSMTileDownloader *downloader)
@@ -302,6 +307,17 @@ bool AppSettings::restoreDownloadSettings(OSMTileDownloader *downloader)
                     if(downloader != nullptr)
                     {
                         downloader->setDownloadingEnable(value.toInt());
+                        result = true;
+                    }
+                }
+
+                value = getValueString(downloadSettingNode, "ThreadsCount");
+
+                if(value.isEmpty() == false)
+                {
+                    if(downloader != nullptr)
+                    {
+                        downloader->setThreads(value.toInt());
                         result = true;
                     }
                 }

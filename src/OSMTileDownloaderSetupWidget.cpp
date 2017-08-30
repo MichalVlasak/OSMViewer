@@ -24,6 +24,7 @@ OSMTileDownloaderSetupWidget::OSMTileDownloaderSetupWidget(OSMTileDownloader * d
     QObject::connect(_ui->baseUrlCombo, SIGNAL(currentIndexChanged(QString)), SLOT(changeBaseUrlFromCombo(QString)));
     QObject::connect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), SLOT(settingsChanged()));
     QObject::connect(_ui->threads, SIGNAL(valueChanged(int)), SLOT(settingsChanged()));
+    QObject::connect(_downloader, SIGNAL(changeThreadsCount(int)), _ui->threads, SLOT(setValue(int)));
 }
 
 OSMTileDownloaderSetupWidget::~OSMTileDownloaderSetupWidget()

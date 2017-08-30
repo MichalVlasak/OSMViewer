@@ -248,6 +248,8 @@ void OSMTileDownloader::setThreads(size_t threads)
     {
         startDownload();
     }
+
+    emit changeThreadsCount(_threads);
 }
 
 bool OSMTileDownloader::isFreeQueue()
