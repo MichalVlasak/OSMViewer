@@ -67,7 +67,7 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         _endPointSelectArea = point;
 
-        QTimer::singleShot(100, this, SLOT(repaint()));
+        QTimer::singleShot(1, this, SLOT(repaint()));
     }
     else
     {
@@ -87,7 +87,7 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
             QPointF delta = currentPoint - _mapSettings.movingStartPoint;
             _mapSettings.worldCenter = _mapSettings.oldCenter + delta;
 
-            QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
+            QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
             //std::cout << "mouseMoveEvent delta  " << delta.x() << " " << delta.y() << std::endl;
             //std::cout << "mouseMoveEvent center  " << _mapSettings.worldCenter.x() << " " << _mapSettings.worldCenter.y() << std::endl;
         }
@@ -107,7 +107,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
             _startPointSelectArea = point;
             _endPointSelectArea = point;
 
-            QTimer::singleShot(100, this, SLOT(repaint()));
+            QTimer::singleShot(1, this, SLOT(repaint()));
         }
         else if(_selectedAreaState == Selecting)
         {
@@ -126,7 +126,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
 
             emit downloadSelectedArea(topLeft, bottomleft);
 
-            QTimer::singleShot(100, this, SLOT(repaint()));
+            QTimer::singleShot(1, this, SLOT(repaint()));
         }
         else
         {
@@ -187,7 +187,7 @@ void PaintingWidget::wheelEvent(QWheelEvent *wheelEvent)
         centerToWgs(lon, lat);
     }
 
-    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
+    QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
 }
 
 void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
@@ -234,7 +234,7 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
         centerToWgs(lon, lat);
     }
 
-    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
+    QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
 }
 
 void PaintingWidget::centerToWgs(QPointF wgsPoint)
@@ -256,7 +256,7 @@ void PaintingWidget::centerToWgs(double lon, double lat)
     _mapSettings.worldCenter.rx() = (width() / 2) - diffPixX;
     _mapSettings.worldCenter.ry() = (height() / 2) - diffPixY;
 
-    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
+    QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
 }
 
 MapSettings & PaintingWidget::getMapSettings()
@@ -268,7 +268,7 @@ void PaintingWidget::setCenterPosition(const QPointF & center)
 {
     _mapSettings.worldCenter = center;
 
-    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
+    QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
 }
 
 void PaintingWidget::setOSMDirectoryPath(QString path)
