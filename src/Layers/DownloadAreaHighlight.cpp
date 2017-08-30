@@ -1,6 +1,7 @@
 #include "DownloadAreaHighlight.h"
 
 #include <QPainter>
+#include <QTimer>
 
 DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings)
     : BaseLayer(mapSettings)
@@ -34,7 +35,7 @@ void DownloadAreaHighlight::resetDownloadParams()
 {
     clearDownloadParams();
 
-    _mapSettings.widget->repaint();
+    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
 }
 
 void DownloadAreaHighlight::clearDownloadParams()
@@ -52,7 +53,7 @@ void DownloadAreaHighlight::setVisible(bool value)
 {
     _isVisible = value;
 
-    _mapSettings.widget->repaint();
+    QTimer::singleShot(100, _mapSettings.widget, SLOT(repaint()));
 }
 
 bool DownloadAreaHighlight::isVisible()
