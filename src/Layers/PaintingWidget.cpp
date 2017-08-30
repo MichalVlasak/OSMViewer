@@ -24,6 +24,11 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     setMouseTracking(true);
 }
 
+void PaintingWidget::addLayer(BaseLayer *layer, QString layerName)
+{
+    _layers.push_back(LayerInfo(layer, layerName));
+}
+
 void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
 {
     QWidget::paintEvent(paintEvent);
@@ -296,7 +301,10 @@ OSMLayer * PaintingWidget::getOSMLayer()
         {
             OSMLayer * osmLayer = dynamic_cast<OSMLayer*>(layer);
 
-            return osmLayer;
+            if(osmLayer != nullptr)
+            {
+                return osmLayer;
+            }
         }
     }
 

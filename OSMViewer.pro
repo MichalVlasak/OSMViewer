@@ -39,7 +39,8 @@ SOURCES += src/main.cpp\
     src/OSMTileDownloaderInfoWidget.cpp \
     src/OSMTileDownloaderPrepare.cpp \
     src/OSMTileDownloaderSetupWidget.cpp \
-    src/AboutDialog.cpp
+    src/AboutDialog.cpp \
+    src/Layers/DownloadAreaHighlight.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -56,7 +57,8 @@ HEADERS  += src/MainWindow.h \
     src/OSMTileDownloaderInfoWidget.h \
     src/OSMTileDownloaderPrepare.h \
     src/OSMTileDownloaderSetupWidget.h \
-    src/AboutDialog.h
+    src/AboutDialog.h \
+    src/Layers/DownloadAreaHighlight.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

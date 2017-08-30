@@ -15,6 +15,7 @@ class OSMTileDownloaderPrepare : public QThread
 
     public:
         void setDownloadParameters(OSMDownloadAreaDialog::Setup setup, const QString & tilesPath);
+        void setDownloadAreaHighlight(class DownloadAreaHighlight * downloadAreaHighlight);
 
     signals:
         void columnIsPrepared();
@@ -31,6 +32,7 @@ class OSMTileDownloaderPrepare : public QThread
         OSMTileDownloaderInfoWidget * _infoWidget;
         QString _tilesPath;
         volatile bool _runPrepare = true;
+        class DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
 };
 
 #endif // OSMTILEDOWNLOADERPREPARE_H

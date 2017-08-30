@@ -10,6 +10,7 @@
 #include "OSMTileDownloaderInfoWidget.h"
 #include "OSMTileDownloaderPrepare.h"
 #include "OSMTileDownloaderSetupWidget.h"
+#include "Layers/DownloadAreaHighlight.h"
 
 namespace Ui {
 class MainWindow;
@@ -51,6 +52,7 @@ class MainWindow : public QMainWindow
         OSMTileDownloaderPrepare * _downloaderPrepare = nullptr;
         OSMTileDownloaderSetupWidget * _downloaderSetupWidget = nullptr;
         QString _applicationName;
+        DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
 
         QLabel * _zoomLevelLabel;
         QLabel * _zoomScaleLabel;

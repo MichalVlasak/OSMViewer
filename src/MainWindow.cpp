@@ -113,6 +113,10 @@ MainWindow::MainWindow(QWidget *parent) :
     _appSettings.restoreMapSettings(_ui->paintWidget->getMapSettings());
     _appSettings.restoreOSMDirectoryPath(_ui->paintWidget->getOSMLayer());
     zoomChanged();
+
+    _downloadAreaHighlight = new DownloadAreaHighlight(_ui->paintWidget->getMapSettings());
+    _ui->paintWidget->addLayer(_downloadAreaHighlight, "DownloadAreaHighlight");
+    _downloaderPrepare->setDownloadAreaHighlight(_downloadAreaHighlight);
 }
 
 MainWindow::~MainWindow()
@@ -239,6 +243,13 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
 
         _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
         _downloaderInfoDock->show();
+    }
+    else
+    {
+        if(_downloadAreaHighlight != nullptr)
+        {
+            _downloadAreaHighlight->resetDownloadParams();
+        }
     }
 }
 

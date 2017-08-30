@@ -1,6 +1,7 @@
 #include "OSMTileDownloaderPrepare.h"
 
 #include "Layers/MapSettings.h"
+#include "Layers/DownloadAreaHighlight.h"
 
 #include <iostream>
 
@@ -13,6 +14,11 @@ OSMTileDownloaderPrepare::OSMTileDownloaderPrepare(OSMTileDownloader * downloade
     QObject::connect(_infoWidget, SIGNAL(cancelDownloading()), SLOT(cancelDownloading()));
 }
 
+void OSMTileDownloaderPrepare::setDownloadAreaHighlight(DownloadAreaHighlight * downloadAreaHighlight)
+{
+    _downloadAreaHighlight = downloadAreaHighlight;
+}
+
 void OSMTileDownloaderPrepare::setDownloadParameters(OSMDownloadAreaDialog::Setup setup, const QString & tilesPath)
 {
     _setup = setup;
@@ -20,6 +26,11 @@ void OSMTileDownloaderPrepare::setDownloadParameters(OSMDownloadAreaDialog::Setu
     _runPrepare = true;
 
     _infoWidget->setLevelRange(_setup.levelFrom, _setup.levelTo);
+
+    if(_downloadAreaHighlight != nullptr)
+    {
+        _downloadAreaHighlight->setDownloadParams(setup);
+    }
 
     start();
 }
@@ -99,9 +110,19 @@ void OSMTileDownloaderPrepare::run()
             }
         }
     }
+
+    if(_downloadAreaHighlight != nullptr)
+    {
+        _downloadAreaHighlight->resetDownloadParams();
+    }
 }
 
 void OSMTileDownloaderPrepare::cancelDownloading()
 {
     _runPrepare = false;
+
+    if(_downloadAreaHighlight != nullptr)
+    {
+        _downloadAreaHighlight->resetDownloadParams();
+    }
 }

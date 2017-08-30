@@ -10,12 +10,44 @@ MapSettings::MapSettings()
 
 int MapSettings::long2tilex(double lon, int z)
 {
-    return (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
+    int retVal = (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
+    int maxVal = pow(2.0, z);
+
+    if(retVal == maxVal)
+    {
+        retVal--;
+    }
+    if(retVal > maxVal)
+    {
+        retVal -= (retVal - maxVal) + 1;
+    }
+    else if(retVal < 0)
+    {
+        retVal = 0;
+    }
+
+    return retVal;
 }
 
 int MapSettings::lat2tiley(double lat, int z)
 {
-    return (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
+    int retVal = (int)(floor((1.0 - log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI) / 2.0 * pow(2.0, z)));
+    int maxVal = pow(2.0, z);
+
+    if(retVal == maxVal)
+    {
+        retVal--;
+    }
+    if(retVal > maxVal)
+    {
+        retVal -= (retVal - maxVal) + 1;
+    }
+    else if(retVal < 0)
+    {
+        retVal = 0;
+    }
+
+    return retVal;
 }
 
 double MapSettings::tilex2long(int x, int z)

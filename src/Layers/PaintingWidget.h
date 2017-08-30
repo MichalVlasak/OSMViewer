@@ -19,6 +19,8 @@ class PaintingWidget : public QWidget
         QString getOSMDirectoryPath();
         void setOSMDirectoryPath(QString path);
 
+        void addLayer(BaseLayer * layer, QString layerName);
+
         class OSMLayer * getOSMLayer();
 
         QPointF getTopLeft();
