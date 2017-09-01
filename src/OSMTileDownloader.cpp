@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QThread>
+#include <QTimer>
 
 #include <iostream>
 
@@ -93,7 +94,8 @@ void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload
 
     if(_itemsToDownload.size() > 0 && autoDownload == true)
     {
-        startDownload();
+        QTimer::singleShot(1, this, SLOT(startDownload()));
+        //startDownload();
     }
 }
 
@@ -161,6 +163,10 @@ void OSMTileDownloader::startDownload()
             //proc->waitForFinished();
 
             //std::cout << "stop download" << std::endl;
+        }
+        else
+        {
+            emit allItemIsDownloaded();
         }
     }
 }
