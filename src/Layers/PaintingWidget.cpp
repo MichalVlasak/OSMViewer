@@ -216,6 +216,10 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
             centerToWgs(_mapSettings.homePosition);
             break;
 
+        case Qt::Key_Escape:
+            _selectedAreaState = Unselecting;
+            break;
+
         default:
             break;
     }

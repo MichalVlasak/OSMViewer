@@ -4,17 +4,23 @@
 #include "BaseLayer.h"
 #include "../OSMDownloadAreaDialog.h"
 
-class DownloadAreaHighlight : public BaseLayer
+#include <QObject>
+
+class DownloadAreaHighlight : public QObject, public BaseLayer
 {
+        Q_OBJECT
+
     public:
-        explicit DownloadAreaHighlight(MapSettings & mapSettings);
+        explicit DownloadAreaHighlight(MapSettings & mapSettings, QObject * parent = nullptr);
 
     public:
         void paintEvent(QPaintEvent * paintEvent);
         void setDownloadParams(OSMDownloadAreaDialog::Setup setup);
-        void resetDownloadParams();
         void setVisible(bool value);
         bool isVisible();
+
+    public slots:
+        void resetDownloadParams();
 
     private:
         void clearDownloadParams();

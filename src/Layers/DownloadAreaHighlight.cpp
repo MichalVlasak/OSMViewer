@@ -3,8 +3,9 @@
 #include <QPainter>
 #include <QTimer>
 
-DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings)
-    : BaseLayer(mapSettings)
+DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings, QObject * parent)
+    : QObject(parent),
+      BaseLayer(mapSettings)
 {
     clearDownloadParams();
 }

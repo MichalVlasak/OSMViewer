@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
 
     public:
         OSMTileDownloader * getOSMTileDownloader() { return _downloader; }
+        OSMTileDownloaderPrepare * getOSMTileDownloaderprepare() { return _downloaderPrepare; }
         DownloadAreaHighlight * getDownloadAreaHighlight()  { return _downloadAreaHighlight; }
         const QString & getApplicationName() const { return _applicationName; }
         void initialize();

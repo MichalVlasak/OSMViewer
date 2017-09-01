@@ -111,7 +111,7 @@ void OSMTileDownloaderPrepare::run()
         }
     }
 
-    if(_downloadAreaHighlight != nullptr)
+    if(_downloadAreaHighlight != nullptr && _downloader->isRunning() == false)
     {
         _downloadAreaHighlight->resetDownloadParams();
     }
@@ -120,9 +120,4 @@ void OSMTileDownloaderPrepare::run()
 void OSMTileDownloaderPrepare::cancelDownloading()
 {
     _runPrepare = false;
-
-    if(_downloadAreaHighlight != nullptr)
-    {
-        _downloadAreaHighlight->resetDownloadParams();
-    }
 }
