@@ -85,8 +85,8 @@ void OSMTileDownloaderInfoWidget::setLevelRange(int levelFrom, int levelTo)
         _levelFrom = levelFrom;
         _levelTo = levelTo;
 
-        _ui->levelProgress->setMaximum(_levelFrom);
-        _ui->levelProgress->setMinimum(_levelTo);
+        _ui->levelProgress->setMinimum(_levelFrom);
+        _ui->levelProgress->setMaximum(_levelTo);
     }
 }
 
@@ -122,6 +122,18 @@ void OSMTileDownloaderInfoWidget::cancel()
 void OSMTileDownloaderInfoWidget::updateDownloadInfoLabel()
 {
     bool isDownloading = _downloader->isRunning();
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        OSMTileDownloaderPrepare * downloadPrepare =  window->getOSMTileDownloaderprepare();
+
+        if(downloadPrepare != nullptr)
+        {
+            isDownloading |= downloadPrepare->isRunning();
+        }
+    }
+
     QString info;
 
     if(isDownloading == true)
