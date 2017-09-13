@@ -85,7 +85,18 @@ double MapSettings::getLonForPixelOld(double pix)
 {
     double lon = (pix - worldCenter.x()) * zoom.getCurrentDegreeForTile();
 
-    return lon / OSMLayer::TileSize;
+    lon /= OSMLayer::TileSize;
+
+    if(lon < -180.)
+    {
+        lon = -180.;
+    }
+    else if(lon > 180.)
+    {
+        lon = 180.;
+    }
+
+    return lon;
 }
 
 double MapSettings::getLonForPixel(double pix)
@@ -99,7 +110,18 @@ double MapSettings::getLonForPixel(double pix)
 
 double MapSettings::getLatForPixel(double pix)
 {
+    if(pix < 0)
+    {
+        return 89.99;
+    }
+
     double mapSize = pow(2, zoom.getCurrentZoomLevel()) * OSMLayer::TileSize;
+
+    if(mapSize < pix)
+    {
+        return -89.99;
+    }
+
     double n = M_PI - ((2.0 * M_PI * (fmod(pix, mapSize - 1) / OSMLayer::TileSize)) / pow(2., zoom.getCurrentZoomLevel()));
     double latitude = 180. / M_PI * atan(sinh(n));
     return latitude;
