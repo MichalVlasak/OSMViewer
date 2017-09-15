@@ -32,6 +32,8 @@ class MainWindow : public QMainWindow
         DownloadAreaHighlight * getDownloadAreaHighlight()  { return _downloadAreaHighlight; }
         const QString & getApplicationName() const { return _applicationName; }
         void initialize();
+        bool isDeleteOldTilesBeforDownload();
+        void setDeleteOldTilesBeforDownload(bool value);
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -61,8 +63,9 @@ class MainWindow : public QMainWindow
         QLabel * _zoomScaleLabel;
         QLabel * _mouseWgs;
         QRect _rect;
-        double _lastMouseLat;
-        double _lastMouseLon;
+        double _lastMouseLat = 0.;
+        double _lastMouseLon = 0.;
+        bool _isDeleteOldTilesBeforDownload = false;
 };
 
 #endif // MAINWINDOW_H

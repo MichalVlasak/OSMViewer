@@ -21,6 +21,8 @@ class OSMDownloadAreaDialog : public QDialog
                 double latTo = 0.;
                 double lonFrom = 0.;
                 double lonTo = 0.;
+
+                bool deleteOldDownloadNew = false;
         };
 
     public:

@@ -80,6 +80,11 @@ void OSMTileDownloaderPrepare::run()
                 QString filePath = _tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
                 QFile file(filePath);
 
+                if(file.exists() == true && _setup.deleteOldDownloadNew == true)
+                {
+                    file.remove();
+                }
+
                 if(file.exists() == false)
                 {
                     if(_downloader != nullptr)

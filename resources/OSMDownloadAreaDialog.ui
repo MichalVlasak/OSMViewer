@@ -197,6 +197,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="deleteOld">
+     <property name="text">
+      <string>Delete old maps and download new</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

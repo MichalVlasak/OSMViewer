@@ -144,6 +144,11 @@ void AppSettings::storeMainWindowSettings(MainWindow *mainWindow)
     mainWindowElement.appendChild(windowGeometryElement);
     QDomText windowGeometryText = _doc.createTextNode(QString::fromStdString(buffGeometry));
     windowGeometryElement.appendChild(windowGeometryText);
+
+    QDomElement deleteTileBeforDownload = _doc.createElement("DeleteTileBeforeDownload");
+    mainWindowElement.appendChild(deleteTileBeforDownload);
+    QDomText deleteTileBeforDownloadText = _doc.createTextNode(QString::number(mainWindow->isDeleteOldTilesBeforDownload()));
+    deleteTileBeforDownload.appendChild(deleteTileBeforDownloadText);
 }
 
 bool AppSettings::restoreMainWindowSettings(MainWindow *mainWindow)
@@ -196,6 +201,14 @@ bool AppSettings::restoreMainWindowSettings(MainWindow *mainWindow)
                         std::cerr << "Cannot restore Main Window geometry!" << std::endl;
                         result |= false;
                     }
+                }
+
+                value = getValueString(mapNode, "DeleteTileBeforeDownload");
+
+                if(value.isEmpty() == false)
+                {
+                    bool deleteTiles = (value.toInt() == 0) ? false : true;
+                    mainWindow->setDeleteOldTilesBeforDownload(deleteTiles);
                 }
             }
         }

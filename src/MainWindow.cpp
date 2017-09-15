@@ -222,6 +222,8 @@ void MainWindow::downloadArea()
     downloadSetup.latTo = _ui->paintWidget->getBottomRight().y();
     downloadSetup.lonTo = _ui->paintWidget->getBottomRight().x();
 
+    downloadSetup.deleteOldDownloadNew = _isDeleteOldTilesBeforDownload;
+
     OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
 
     if(downloadAreaDialog->exec() == QDialog::Accepted)
@@ -231,6 +233,8 @@ void MainWindow::downloadArea()
         _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
         _downloaderInfoDock->show();
     }
+
+    _isDeleteOldTilesBeforDownload = downloadAreaDialog->getCurrenSetup().deleteOldDownloadNew;
 }
 
 void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
@@ -245,6 +249,8 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
 
     downloadSetup.latTo = bottomRight.y();
     downloadSetup.lonTo = bottomRight.x();
+
+    downloadSetup.deleteOldDownloadNew = _isDeleteOldTilesBeforDownload;
 
     if(downloadSetup.latFrom < downloadSetup.latTo)
     {
@@ -272,6 +278,8 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
             _downloadAreaHighlight->resetDownloadParams();
         }
     }
+
+    _isDeleteOldTilesBeforDownload = downloadAreaDialog->getCurrenSetup().deleteOldDownloadNew;
 }
 
 void MainWindow::showAbout()
@@ -279,4 +287,14 @@ void MainWindow::showAbout()
     AboutDialog * about = new AboutDialog(this);
 
     about->exec();
+}
+
+bool MainWindow::isDeleteOldTilesBeforDownload()
+{
+    return _isDeleteOldTilesBeforDownload;
+}
+
+void MainWindow::setDeleteOldTilesBeforDownload(bool value)
+{
+    _isDeleteOldTilesBeforDownload = value;
 }
