@@ -61,6 +61,8 @@ class MainWindow : public QMainWindow
         QLabel * _zoomScaleLabel;
         QLabel * _mouseWgs;
         QRect _rect;
+        double _lastMouseLat;
+        double _lastMouseLon;
 };
 
 #endif // MAINWINDOW_H

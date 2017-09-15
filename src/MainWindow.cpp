@@ -169,6 +169,8 @@ void MainWindow::zoomChanged()
 
     _zoomLevelLabel->setText(zoomLevel);
     _zoomScaleLabel->setText(zoomScale);
+
+    mouseCursorWgsChanged(_lastMouseLat, _lastMouseLon);
 }
 
 void MainWindow::mouseCursorWgsChanged(double lat, double lon)
@@ -176,7 +178,15 @@ void MainWindow::mouseCursorWgsChanged(double lat, double lon)
     QString latString = GridLayer::getPrintableDegree(lat * 60. * 60., GridLayer::Latitude, true, true);
     QString lonString = GridLayer::getPrintableDegree(lon * 60. * 60., GridLayer::Longitude, true, true);
 
-    _mouseWgs->setText(lonString + " " + latString);
+    int level = _ui->paintWidget->getMapSettings().zoom.getCurrentZoomLevel();
+    int column = _ui->paintWidget->getMapSettings().long2tilex(lon, level);
+    int row = _ui->paintWidget->getMapSettings().lat2tiley(lat, level);
+    QString lcr = QString("L:%1/C:%2/R:%3").arg(level).arg(column).arg(row); // level, column, row
+
+    _mouseWgs->setText(lonString + " " + latString + " (" + lcr + ")");
+
+    _lastMouseLat = lat;
+    _lastMouseLon = lon;
 }
 
 void MainWindow::setOSMDirectoryPath()
