@@ -1,6 +1,7 @@
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
+#include "AppVersion.h"
 #include "MainWindow.h"
 
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -38,6 +39,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     _ui->authorLabel->setText("Michal Vlasak");
     _ui->eMailLabel->setText("michal.vlasak@gmail.com");
     _ui->dateLabel->setText(date);
+    _ui->versionLabel->setText(APP_VERSION);
 }
 
 AboutDialog::~AboutDialog()

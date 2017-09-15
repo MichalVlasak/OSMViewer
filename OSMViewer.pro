@@ -58,7 +58,8 @@ HEADERS  += src/MainWindow.h \
     src/OSMTileDownloaderPrepare.h \
     src/OSMTileDownloaderSetupWidget.h \
     src/AboutDialog.h \
-    src/Layers/DownloadAreaHighlight.h
+    src/Layers/DownloadAreaHighlight.h \
+    src/AppVersion.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
