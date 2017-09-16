@@ -157,7 +157,13 @@ void OSMTileDownloader::startDownload()
 
             //std::cout << "start download" << std::endl;
 
-            QString command = "wget " + tileUrl + " -O " + item.fullPath;
+#ifdef __linux__
+            QString programs = "wget ";
+#else
+            QString programs = "\"C:\\Program Files (x86)\\GnuWin32\\bin\\wget.exe\" ";
+#endif
+
+            QString command = programs + tileUrl + " -O " + item.fullPath;
             proc->start(command);
             proc->startDetached(command);
             //proc->waitForFinished();

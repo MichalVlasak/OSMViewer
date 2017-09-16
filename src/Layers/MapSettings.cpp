@@ -1,7 +1,12 @@
 #include "MapSettings.h"
 #include "OSMLayer.h"
 
+#ifdef __linux__
 #include <cmath>
+#else
+#define _USE_MATH_DEFINES
+#include <math.h>
+#endif
 
 MapSettings::MapSettings()
 {
