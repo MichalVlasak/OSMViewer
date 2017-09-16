@@ -1,0 +1,8 @@
+Co je na plane pre vyvoj:
+- okrem zobrazenia oblasti ktora sa prave stahuje, zobrazit jednotlive dlazdice ktore sa stahuju
+- vytvorenie "projektu" stahovania, kedy sa zadefinuje aka oblast sa ma stahovat, pricom po
+zastaveni stahovania sa aktualny stav zapamata a bude mozne po nacitani takehoto projektu znovu
+pokracovat kde sa v stahovani skoncilo
+- export oblasti s dlazdicami
+- nacitanie *.gpx suborov a zobrazenie na mape
+
