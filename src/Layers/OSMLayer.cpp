@@ -89,7 +89,9 @@ void OSMLayer::paintEvent(QPaintEvent *paintEvent)
                 {
                     if(_settings.deleteType == DeleteOldMapsWidget::DeleteAll)
                     {
-                        file.remove();
+                        // tato volba pri stahovani pocas prehliadania nema vyznam, pretoze
+                        // v jednom cykle sa vymaze, da sa stahovat a v dalsom sa zase vymaze
+                        // da sa stahovat atd.
                     }
                     else if(_settings.deleteType == DeleteOldMapsWidget::DeleteOldAsTime)
                     {
