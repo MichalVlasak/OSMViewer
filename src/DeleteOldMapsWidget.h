@@ -32,6 +32,14 @@ class DeleteOldMapsWidget : public QWidget
 
         DeleteSettings getDeleteSettings() const;
         void setDeleteSettings(DeleteSettings settings);
+
+        /**
+         * @brief setEnabledDeleteAll umozni zapnut a vypnut RadioButton pre
+         * zvolenia vymazania vsetkych dlazdic bez kontroli datumu (pri stahovani
+         * pocas prezerania je tato volba kontraproduktivna: vymaze stiahne zobrazi
+         * vymaze stiahne zobrazi ... cize sa v podstate nic nezobrazi)
+         * @param enable
+         */
         void setEnabledDeleteAll(bool enable);
 
     private:
