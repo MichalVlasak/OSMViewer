@@ -40,7 +40,9 @@ SOURCES += src/main.cpp\
     src/OSMTileDownloaderPrepare.cpp \
     src/OSMTileDownloaderSetupWidget.cpp \
     src/AboutDialog.cpp \
-    src/Layers/DownloadAreaHighlight.cpp
+    src/Layers/DownloadAreaHighlight.cpp \
+    src/DeleteOldMapsWidget.cpp \
+    src/DeleteOldMapsDialog.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -59,14 +61,18 @@ HEADERS  += src/MainWindow.h \
     src/OSMTileDownloaderSetupWidget.h \
     src/AboutDialog.h \
     src/Layers/DownloadAreaHighlight.h \
-    src/AppVersion.h
+    src/AppVersion.h \
+    src/DeleteOldMapsWidget.h \
+    src/DeleteOldMapsDialog.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
     resources/OSMDownloadAreaDialog.ui \
     resources/OSMTileDownloaderInfoWidget.ui \
     resources/OSMTileDownloaderSetupWidget.ui \
-    resources/AboutDialog.ui
+    resources/AboutDialog.ui \
+    resources/DeleteOldMapsWidget.ui \
+    resources/DeleteOldMapsDialog.ui
 
 RESOURCES += \
     resources/resources.qrc

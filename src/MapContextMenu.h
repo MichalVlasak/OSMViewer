@@ -1,6 +1,8 @@
 #ifndef MAPCONTEXTMENU_H
 #define MAPCONTEXTMENU_H
 
+#include "DeleteOldMapsWidget.h"
+
 #include <QWidget>
 
 class MapContextMenu : public QWidget
@@ -20,6 +22,10 @@ class MapContextMenu : public QWidget
 
     private slots:
         void centerMapActivated();
+        void setEnableDownloading(bool enabled);
+
+    private:
+        bool getDeleteMapsSettings(DeleteOldMapsWidget::DeleteSettings & settings);
 
     private:
         QPoint _pos;

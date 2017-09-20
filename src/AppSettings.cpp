@@ -145,10 +145,20 @@ void AppSettings::storeMainWindowSettings(MainWindow *mainWindow)
     QDomText windowGeometryText = _doc.createTextNode(QString::fromStdString(buffGeometry));
     windowGeometryElement.appendChild(windowGeometryText);
 
-    QDomElement deleteTileBeforDownload = _doc.createElement("DeleteTileBeforeDownload");
-    mainWindowElement.appendChild(deleteTileBeforDownload);
-    QDomText deleteTileBeforDownloadText = _doc.createTextNode(QString::number(mainWindow->isDeleteOldTilesBeforDownload()));
-    deleteTileBeforDownload.appendChild(deleteTileBeforDownloadText);
+    QDomElement deleteTilesEnabled = _doc.createElement("DeleteTilesEnabled");
+    mainWindowElement.appendChild(deleteTilesEnabled);
+    QDomText deleteTilesEnabledText = _doc.createTextNode(QString::number(mainWindow->getDeleteSettings().deleteEnabled));
+    deleteTilesEnabled.appendChild(deleteTilesEnabledText);
+
+    QDomElement deleteTilesType = _doc.createElement("DeleteTilesType");
+    mainWindowElement.appendChild(deleteTilesType);
+    QDomText deleteTilesTypeText = _doc.createTextNode(QString::number(mainWindow->getDeleteSettings().deleteType));
+    deleteTilesType.appendChild(deleteTilesTypeText);
+
+    QDomElement deleteTilesTime = _doc.createElement("DeleteTilesTime");
+    mainWindowElement.appendChild(deleteTilesTime);
+    QDomText deleteTilesTimeText = _doc.createTextNode(mainWindow->getDeleteSettings().deleteTime.toString(Qt::DateFormat::ISODate));
+    deleteTilesTime.appendChild(deleteTilesTimeText);
 }
 
 bool AppSettings::restoreMainWindowSettings(MainWindow *mainWindow)
@@ -203,13 +213,42 @@ bool AppSettings::restoreMainWindowSettings(MainWindow *mainWindow)
                     }
                 }
 
-                value = getValueString(mapNode, "DeleteTileBeforeDownload");
+                DeleteOldMapsWidget::DeleteSettings deleteSettings;
+                value = getValueString(mapNode, "DeleteTilesEnabled");
 
                 if(value.isEmpty() == false)
                 {
                     bool deleteTiles = (value.toInt() == 0) ? false : true;
-                    mainWindow->setDeleteOldTilesBeforDownload(deleteTiles);
+                    deleteSettings.deleteEnabled = deleteTiles;
                 }
+                else
+                {
+                    deleteSettings.deleteEnabled = false;
+                }
+
+                value = getValueString(mapNode, "DeleteTilesType");
+
+                if(value.isEmpty() == false)
+                {
+                    deleteSettings.deleteType = DeleteOldMapsWidget::DeleteType(value.toInt());
+                }
+                else
+                {
+                    deleteSettings.deleteType = DeleteOldMapsWidget::DeleteOldAsTime;
+                }
+
+                value = getValueString(mapNode, "DeleteTilesTime");
+
+                if(value.isEmpty() == false)
+                {
+                    deleteSettings.deleteTime = QDateTime::fromString(value, Qt::DateFormat::ISODate);
+                }
+                else
+                {
+                    deleteSettings.deleteTime = QDateTime::currentDateTime();
+                }
+
+                mainWindow->setDeleteSettings(deleteSettings);
             }
         }
     }

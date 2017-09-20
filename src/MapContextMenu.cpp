@@ -1,5 +1,6 @@
 #include "MapContextMenu.h"
 #include "MainWindow.h"
+#include "DeleteOldMapsDialog.h"
 
 #include <QMenu>
 
@@ -26,6 +27,7 @@ void MapContextMenu::show(const QPointF &pos)
     QAction * enableDownloading = new QAction(tr("Enable Downloading"), this);
 
     enableDownloading->setCheckable(true);
+    QObject::connect(enableDownloading, SIGNAL(triggered(bool)), SLOT(setEnableDownloading(bool)));
 
     MainWindow * window = MainWindow::getInstance();
 
@@ -36,8 +38,6 @@ void MapContextMenu::show(const QPointF &pos)
         if(downloader != nullptr)
         {
             enableDownloading->setChecked(downloader->isDownloadingEnable());
-
-            QObject::connect(enableDownloading, SIGNAL(triggered(bool)), downloader, SLOT(setDownloadingEnable(bool)));
         }
     }
 
@@ -68,4 +68,45 @@ void MapContextMenu::show(const QPointF &pos)
 void MapContextMenu::centerMapActivated()
 {
     emit centerMap(_pos);
+}
+
+void MapContextMenu::setEnableDownloading(bool enabled)
+{
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        OSMTileDownloader * downloader = window->getOSMTileDownloader();
+
+        if(downloader != nullptr)
+        {
+            if(enabled == true)
+            {
+                DeleteOldMapsWidget::DeleteSettings settings = window->getDeleteSettings();
+
+                if(getDeleteMapsSettings(settings) == true)
+                {
+                    window->setDeleteSettings(settings);
+                }
+            }
+
+            downloader->setDownloadingEnable(enabled);
+        }
+    }
+}
+
+bool MapContextMenu::getDeleteMapsSettings(DeleteOldMapsWidget::DeleteSettings & settings)
+{
+    DeleteOldMapsDialog * dialog = new DeleteOldMapsDialog(this);
+    dialog->setDeleteSettings(settings);
+    dialog->setEnabledDeleteAll(false);
+
+    if(dialog->exec() == QDialog::Accepted)
+    {
+        settings = dialog->getDeleteSettings();
+
+        return true;
+    }
+
+    return false;
 }

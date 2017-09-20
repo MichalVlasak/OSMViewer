@@ -222,7 +222,7 @@ void MainWindow::downloadArea()
     downloadSetup.latTo = _ui->paintWidget->getBottomRight().y();
     downloadSetup.lonTo = _ui->paintWidget->getBottomRight().x();
 
-    downloadSetup.deleteOldDownloadNew = _isDeleteOldTilesBeforDownload;
+    downloadSetup.deleteSettings = _deleteSettings;
 
     OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
 
@@ -234,7 +234,7 @@ void MainWindow::downloadArea()
         _downloaderInfoDock->show();
     }
 
-    _isDeleteOldTilesBeforDownload = downloadAreaDialog->getCurrenSetup().deleteOldDownloadNew;
+    _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
 }
 
 void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
@@ -250,7 +250,7 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
     downloadSetup.latTo = bottomRight.y();
     downloadSetup.lonTo = bottomRight.x();
 
-    downloadSetup.deleteOldDownloadNew = _isDeleteOldTilesBeforDownload;
+    downloadSetup.deleteSettings = _deleteSettings;
 
     if(downloadSetup.latFrom < downloadSetup.latTo)
     {
@@ -279,7 +279,7 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
         }
     }
 
-    _isDeleteOldTilesBeforDownload = downloadAreaDialog->getCurrenSetup().deleteOldDownloadNew;
+    _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
 }
 
 void MainWindow::showAbout()
@@ -289,12 +289,19 @@ void MainWindow::showAbout()
     about->exec();
 }
 
-bool MainWindow::isDeleteOldTilesBeforDownload()
+DeleteOldMapsWidget::DeleteSettings MainWindow::getDeleteSettings()
 {
-    return _isDeleteOldTilesBeforDownload;
+    return _deleteSettings;
 }
 
-void MainWindow::setDeleteOldTilesBeforDownload(bool value)
+void MainWindow::setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings)
 {
-    _isDeleteOldTilesBeforDownload = value;
+    _deleteSettings = settings;
+
+    OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
+
+    if(osmLayer != nullptr)
+    {
+        osmLayer->setDeleteSettings(settings);
+    }
 }

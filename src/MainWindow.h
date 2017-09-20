@@ -32,8 +32,9 @@ class MainWindow : public QMainWindow
         DownloadAreaHighlight * getDownloadAreaHighlight()  { return _downloadAreaHighlight; }
         const QString & getApplicationName() const { return _applicationName; }
         void initialize();
-        bool isDeleteOldTilesBeforDownload();
-        void setDeleteOldTilesBeforDownload(bool value);
+
+        DeleteOldMapsWidget::DeleteSettings getDeleteSettings();
+        void setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings);
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -65,7 +66,8 @@ class MainWindow : public QMainWindow
         QRect _rect;
         double _lastMouseLat = 0.;
         double _lastMouseLon = 0.;
-        bool _isDeleteOldTilesBeforDownload = false;
+
+        DeleteOldMapsWidget::DeleteSettings _deleteSettings;
 };
 
 #endif // MAINWINDOW_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
-    <height>249</height>
+    <width>417</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -197,11 +197,20 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="deleteOld">
-     <property name="text">
-      <string>Delete old maps and download new</string>
+    <widget class="DeleteOldMapsWidget" name="deleteOldMapsWidget" native="true"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -215,6 +224,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DeleteOldMapsWidget</class>
+   <extends>QWidget</extends>
+   <header>src/DeleteOldMapsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

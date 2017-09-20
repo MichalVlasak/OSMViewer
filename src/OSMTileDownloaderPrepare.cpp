@@ -4,6 +4,7 @@
 #include "Layers/DownloadAreaHighlight.h"
 
 #include <iostream>
+#include <QFileInfo>
 
 OSMTileDownloaderPrepare::OSMTileDownloaderPrepare(OSMTileDownloader * downloader, OSMTileDownloaderInfoWidget * infoWidget, QObject *parent)
     : QThread(parent),
@@ -80,9 +81,21 @@ void OSMTileDownloaderPrepare::run()
                 QString filePath = _tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
                 QFile file(filePath);
 
-                if(file.exists() == true && _setup.deleteOldDownloadNew == true)
+                if(file.exists() == true && _setup.deleteSettings.deleteEnabled == true)
                 {
-                    file.remove();
+                    if(_setup.deleteSettings.deleteType == DeleteOldMapsWidget::DeleteAll)
+                    {
+                        file.remove();
+                    }
+                    else if(_setup.deleteSettings.deleteType == DeleteOldMapsWidget::DeleteOldAsTime)
+                    {
+                        QFileInfo fileInfo(filePath);
+
+                        if(fileInfo.created() < _setup.deleteSettings.deleteTime)
+                        {
+                            file.remove();
+                        }
+                    }
                 }
 
                 if(file.exists() == false)

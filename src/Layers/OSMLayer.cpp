@@ -3,6 +3,8 @@
 
 #include <QPainter>
 #include <QWidget>
+#include <QFileInfo>
+#include <QDateTime>
 
 #include <iostream>
 #include <cmath>
@@ -78,6 +80,29 @@ void OSMLayer::paintEvent(QPaintEvent *paintEvent)
             }
 
             QString filePath = _tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
+
+            if(_downloader != nullptr && _downloader->isDownloadingEnable() == true)
+            {
+                QFile file(filePath);
+
+                if(file.exists() == true && _settings.deleteEnabled == true)
+                {
+                    if(_settings.deleteType == DeleteOldMapsWidget::DeleteAll)
+                    {
+                        file.remove();
+                    }
+                    else if(_settings.deleteType == DeleteOldMapsWidget::DeleteOldAsTime)
+                    {
+                        QFileInfo fileInfo(filePath);
+
+                        if(fileInfo.created() < _settings.deleteTime)
+                        {
+                            file.remove();
+                        }
+                    }
+                }
+            }
+
             QPixmap pixmap(filePath);
 
             if(pixmap.isNull() == false)
@@ -103,4 +128,9 @@ void OSMLayer::paintEvent(QPaintEvent *paintEvent)
             }
         }
     }
+}
+
+void OSMLayer::setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings)
+{
+    _settings = settings;
 }

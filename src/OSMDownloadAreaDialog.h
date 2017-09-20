@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "DeleteOldMapsWidget.h"
+
 namespace Ui {
 class OSMDownloadAreaDialog;
 }
@@ -22,7 +24,7 @@ class OSMDownloadAreaDialog : public QDialog
                 double lonFrom = 0.;
                 double lonTo = 0.;
 
-                bool deleteOldDownloadNew = false;
+                DeleteOldMapsWidget::DeleteSettings deleteSettings;
         };
 
     public:

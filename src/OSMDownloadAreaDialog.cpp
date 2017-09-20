@@ -51,7 +51,7 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, QWidget *parent) :
     _ui->lonTo->setValue(_setup.lonTo);
     _ui->lonTo->setMinimum(_setup.lonFrom);
 
-    _ui->deleteOld->setChecked(_setup.deleteOldDownloadNew);
+    _ui->deleteOldMapsWidget->setDeleteSettings(_setup.deleteSettings);
 
     QObject::connect(_ui->levelFrom, SIGNAL(valueChanged(int)), SLOT(changeLevelFrom(int)));
     QObject::connect(_ui->levelTo, SIGNAL(valueChanged(int)), SLOT(changeLevelTo(int)));
@@ -117,7 +117,7 @@ OSMDownloadAreaDialog::Setup OSMDownloadAreaDialog::getCurrenSetup()
     setup.lonFrom = _ui->lonFrom->value();
     setup.lonTo = _ui->lonTo->value();
 
-    setup.deleteOldDownloadNew = _ui->deleteOld->isChecked();
+    setup.deleteSettings = _ui->deleteOldMapsWidget->getDeleteSettings();
 
     return setup;
 }
