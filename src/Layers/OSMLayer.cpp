@@ -1,10 +1,9 @@
 #include "OSMLayer.h"
 #include "src/OSMTileDownloader.h"
+#include "src/DeleteOldMapsUtils.h"
 
 #include <QPainter>
 #include <QWidget>
-#include <QFileInfo>
-#include <QDateTime>
 
 #include <iostream>
 #include <cmath>
@@ -83,26 +82,7 @@ void OSMLayer::paintEvent(QPaintEvent *paintEvent)
 
             if(_downloader != nullptr && _downloader->isDownloadingEnable() == true)
             {
-                QFile file(filePath);
-
-                if(file.exists() == true && _settings.deleteEnabled == true)
-                {
-                    if(_settings.deleteType == DeleteOldMapsWidget::DeleteAll)
-                    {
-                        // tato volba pri stahovani pocas prehliadania nema vyznam, pretoze
-                        // v jednom cykle sa vymaze, da sa stahovat a v dalsom sa zase vymaze
-                        // da sa stahovat atd.
-                    }
-                    else if(_settings.deleteType == DeleteOldMapsWidget::DeleteOldAsTime)
-                    {
-                        QFileInfo fileInfo(filePath);
-
-                        if(fileInfo.created() < _settings.deleteTime)
-                        {
-                            file.remove();
-                        }
-                    }
-                }
+                DeleteOldMapsUtils::tryDeleteFile(filePath, _settings, false);
             }
 
             QPixmap pixmap(filePath);

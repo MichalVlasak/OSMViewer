@@ -42,7 +42,8 @@ SOURCES += src/main.cpp\
     src/AboutDialog.cpp \
     src/Layers/DownloadAreaHighlight.cpp \
     src/DeleteOldMapsWidget.cpp \
-    src/DeleteOldMapsDialog.cpp
+    src/DeleteOldMapsDialog.cpp \
+    src/DeleteOldMapsUtils.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -63,7 +64,8 @@ HEADERS  += src/MainWindow.h \
     src/Layers/DownloadAreaHighlight.h \
     src/AppVersion.h \
     src/DeleteOldMapsWidget.h \
-    src/DeleteOldMapsDialog.h
+    src/DeleteOldMapsDialog.h \
+    src/DeleteOldMapsUtils.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
