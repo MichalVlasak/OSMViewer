@@ -46,12 +46,14 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderInfoDock->setWidget(_downloaderInfoWidget);
     _downloaderInfoDock->hide();
     _downloaderInfoDock->setFloating(true);
+    _downloaderInfoDock->setObjectName(tr("Downloader Info"));
 
     _downloaderSetupDock = new QDockWidget(tr("Downloader Setup"), this);
     _downloaderSetupDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _downloaderSetupDock->setWidget(_downloaderSetupWidget);
     _downloaderSetupDock->hide();
     _downloaderSetupDock->setFloating(true);
+    _downloaderSetupDock->setObjectName(tr("Downloader Setup"));
 
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderSetupDock);

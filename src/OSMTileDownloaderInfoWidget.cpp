@@ -12,6 +12,8 @@ OSMTileDownloaderInfoWidget::OSMTileDownloaderInfoWidget(OSMTileDownloader * dow
     _downloader(downloader)
 {
     _ui->setupUi(this);
+
+    setObjectName("OSMTileDownloaderInfoWidget");
 }
 
 OSMTileDownloaderInfoWidget::~OSMTileDownloaderInfoWidget()

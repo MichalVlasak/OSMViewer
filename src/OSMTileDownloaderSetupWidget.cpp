@@ -15,6 +15,8 @@ OSMTileDownloaderSetupWidget::OSMTileDownloaderSetupWidget(OSMTileDownloader * d
 {
     _ui->setupUi(this);
 
+    setObjectName("OSMTileDownloaderSetupWidget");
+
     _ui->threads->setValue(_downloader->getThreads());
     _ui->baseUrlEdit->setText(_downloader->getBaseUrl());
     _ui->baseUrlCombo->insertItems(0, _downloader->getBaseUrlList());
