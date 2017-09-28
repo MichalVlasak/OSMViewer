@@ -234,9 +234,9 @@ void MainWindow::downloadArea()
 
         _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
         _downloaderInfoDock->show();
-    }
 
-    _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
+        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
+    }
 }
 
 void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
@@ -272,6 +272,8 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
 
         _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
         _downloaderInfoDock->show();
+
+        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
     }
     else
     {
@@ -280,8 +282,6 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
             _downloadAreaHighlight->resetDownloadParams();
         }
     }
-
-    _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
 }
 
 void MainWindow::showAbout()

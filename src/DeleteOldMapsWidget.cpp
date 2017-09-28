@@ -32,7 +32,7 @@ DeleteOldMapsWidget::DeleteSettings DeleteOldMapsWidget::getDeleteSettings() con
         settings.deleteType = DeleteOldAsTime;
     }
 
-    settings.deleteEnabled = _ui->deleteGroupBox->isEnabled();
+    settings.deleteEnabled = _ui->deleteGroupBox->isChecked();
     settings.deleteTime = _ui->time->dateTime();
 
     return settings;
