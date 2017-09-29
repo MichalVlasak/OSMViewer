@@ -139,7 +139,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Cout (session):</string>
+      <string>Count (session):</string>
      </property>
     </widget>
    </item>
@@ -180,7 +180,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Cout (all):</string>
+      <string>Count (all):</string>
      </property>
     </widget>
    </item>
