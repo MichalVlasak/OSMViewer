@@ -4,6 +4,7 @@
 #include "Layers/ZoomInfo.h"
 
 #include <QSpinBox>
+#include <QPushButton>
 
 OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, QWidget *parent) :
     QDialog(parent),
@@ -61,6 +62,9 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, QWidget *parent) :
 
     QObject::connect(_ui->lonFrom, SIGNAL(valueChanged(double)), SLOT(changeLonFrom(double)));
     QObject::connect(_ui->lonTo, SIGNAL(valueChanged(double)), SLOT(changeLonTo(double)));
+
+    QObject::connect(_ui->setFromMinimum, SIGNAL(clicked(bool)), SLOT(setFromMinimum()));
+    QObject::connect(_ui->setToMaximum, SIGNAL(clicked(bool)), SLOT(setToMaximum()));
 }
 
 OSMDownloadAreaDialog::~OSMDownloadAreaDialog()
@@ -120,4 +124,14 @@ OSMDownloadAreaDialog::Setup OSMDownloadAreaDialog::getCurrenSetup()
     setup.deleteSettings = _ui->deleteOldMapsWidget->getDeleteSettings();
 
     return setup;
+}
+
+void OSMDownloadAreaDialog::setFromMinimum()
+{
+    _ui->levelFrom->setValue(_ui->levelFrom->minimum());
+}
+
+void OSMDownloadAreaDialog::setToMaximum()
+{
+    _ui->levelTo->setValue(_ui->levelTo->maximum());
 }

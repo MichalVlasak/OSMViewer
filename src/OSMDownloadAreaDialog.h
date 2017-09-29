@@ -43,6 +43,9 @@ class OSMDownloadAreaDialog : public QDialog
         void changeLonFrom(double lon);
         void changeLonTo(double lon);
 
+        void setFromMinimum();
+        void setToMaximum();
+
     private:
         Ui::OSMDownloadAreaDialog *_ui;
         Setup _setup;

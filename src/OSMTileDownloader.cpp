@@ -74,6 +74,8 @@ void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload
 {
     bool isPresent = false;
 
+    _isDownloadCanceled = false;
+
     {
         QMutexLocker lock(&_mutex);
 
@@ -137,6 +139,7 @@ void OSMTileDownloader::startDownload()
                 else
                 {
                     emit allItemIsDownloaded();
+
                     return;
                 }
             }
@@ -211,6 +214,18 @@ void OSMTileDownloader::processDone()
 
         emit downloadItemIsDone();
 
+        if(_isDownloadCanceled == false)
+        {
+            _sessionDownloadCount++;
+        }
+
+        if(_itemsToDownload.size() == 0)
+        {
+            _sessionDownloadCount = 0;
+        }
+
+        _allDownloadCount++;
+
         startDownload();
     }
 }
@@ -220,6 +235,9 @@ void OSMTileDownloader::cancelDownload()
     QMutexLocker lock(&_mutex);
 
     _itemsToDownload.clear();
+
+    _sessionDownloadCount = 0;
+    _isDownloadCanceled = true;
 }
 
 bool OSMTileDownloader::isRunning()
@@ -269,4 +287,14 @@ bool OSMTileDownloader::isFreeQueue()
     QMutexLocker lock(&_mutex);
 
     return _itemsToDownload.size() < MAX_QUEUE;
+}
+
+unsigned OSMTileDownloader::getSessionDownloadCount()
+{
+    return _sessionDownloadCount;
+}
+
+unsigned OSMTileDownloader::getAllDownloadCount()
+{
+    return _allDownloadCount;
 }

@@ -167,6 +167,8 @@ void OSMTileDownloaderInfoWidget::updateDownloadInfoLabel()
     }
 
     _ui->downloadInfoLabel->setText(info);
+    _ui->sessionDownloadCount->setText(QString::number(_downloader->getSessionDownloadCount()));
+    _ui->allDownloadCount->setText(QString::number(_downloader->getAllDownloadCount()));
 }
 
 void OSMTileDownloaderInfoWidget::highlightDownArea(bool value)

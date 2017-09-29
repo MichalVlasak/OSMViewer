@@ -36,6 +36,8 @@ class OSMTileDownloader : public QObject
         void setBaseUrl(QString url);
         QStringList getBaseUrlList() { return _baseWebRootUrllist; }
         bool isFreeQueue();
+        unsigned getSessionDownloadCount();
+        unsigned getAllDownloadCount();
 
     public slots:
         void setDownloadingEnable(bool enabled);
@@ -69,6 +71,9 @@ class OSMTileDownloader : public QObject
         QString _baseWebRootUrl;
         QStringList _baseWebRootUrllist;
         size_t _threads;
+        unsigned _sessionDownloadCount = 0;
+        unsigned _allDownloadCount = 0;
+        bool _isDownloadCanceled = false;
 };
 
 #endif // OSMTILEDOWNLOADER_H
