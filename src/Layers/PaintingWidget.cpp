@@ -2,6 +2,8 @@
 #include "OSMLayer.h"
 #include "GridLayer.h"
 #include "src/MapContextMenu.h"
+#include "src/CenterPointsManager.h"
+#include "src/MainWindow.h".h"
 
 #include <iostream>
 
@@ -213,7 +215,11 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
             break;
 
         case Qt::Key_Home:
-            centerToWgs(_mapSettings.homePosition);
+            {
+                CenterPointsManager & pointsManager = MainWindow::getInstance()->getCenterPointsManager();
+
+                centerToPoint(pointsManager.getHomeCenterPoint());
+            }
             break;
 
         case Qt::Key_Escape:
@@ -241,9 +247,14 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
     QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
 }
 
-void PaintingWidget::centerToWgs(QPointF wgsPoint)
+void PaintingWidget::centerToPoint(const CenterPointStruct & centerPoint)
 {
-    centerToWgs(wgsPoint.x(), wgsPoint.y());
+    if(centerPoint.level != CenterPointStruct::UndefinedLevel)
+    {
+        _mapSettings.zoom.setCurrentZoomLevel(centerPoint.level);
+    }
+
+    centerToWgs(centerPoint.position.x(), centerPoint.position.y());
 }
 
 void PaintingWidget::centerToWgs(double lon, double lat)

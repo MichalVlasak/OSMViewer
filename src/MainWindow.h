@@ -11,6 +11,8 @@
 #include "OSMTileDownloaderPrepare.h"
 #include "OSMTileDownloaderSetupWidget.h"
 #include "Layers/DownloadAreaHighlight.h"
+#include "CenterPointsManager.h"
+#include "CenterPointsWidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,6 +37,8 @@ class MainWindow : public QMainWindow
 
         DeleteOldMapsWidget::DeleteSettings getDeleteSettings();
         void setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings);
+        CenterPointsManager & getCenterPointsManager();
+        void centerToPoint(const CenterPointStruct & point);
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -68,6 +72,9 @@ class MainWindow : public QMainWindow
         double _lastMouseLon = 0.;
 
         DeleteOldMapsWidget::DeleteSettings _deleteSettings;
+        CenterPointsManager _centerPointsManager;
+        CenterPointsWidget * _centerPointsWidget = nullptr;
+        QDockWidget * _centerPointsDock = nullptr;
 };
 
 #endif // MAINWINDOW_H

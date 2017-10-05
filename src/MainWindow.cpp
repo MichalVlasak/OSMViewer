@@ -41,6 +41,15 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderPrepare = new OSMTileDownloaderPrepare(_downloader, _downloaderInfoWidget, this);
     _downloaderSetupWidget = new OSMTileDownloaderSetupWidget(_downloader, this);
 
+    _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
+
+    _centerPointsDock = new QDockWidget(tr("Center Points"), this);
+    _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _centerPointsDock->setWidget(_centerPointsWidget);
+    _centerPointsDock->hide();
+    _centerPointsDock->setFloating(true);
+    _centerPointsDock->setObjectName(tr("Center Points"));
+
     _downloaderInfoDock = new QDockWidget(tr("Downloader Info"), this);
     _downloaderInfoDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _downloaderInfoDock->setWidget(_downloaderInfoWidget);
@@ -55,8 +64,12 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderSetupDock->setFloating(true);
     _downloaderSetupDock->setObjectName(tr("Downloader Setup"));
 
+    addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderSetupDock);
+
+    QObject::connect(_ui->action_CenterPoints, SIGNAL(triggered(bool)), _centerPointsDock, SLOT(setVisible(bool)));
+    QObject::connect(_centerPointsDock, SIGNAL(visibilityChanged(bool)), _ui->action_CenterPoints, SLOT(setChecked(bool)));
 
     QObject::connect(_ui->action_DownloaderInfo, SIGNAL(triggered(bool)), _downloaderInfoDock, SLOT(setVisible(bool)));
     QObject::connect(_downloaderInfoDock, SIGNAL(visibilityChanged(bool)), _ui->action_DownloaderInfo, SLOT(setChecked(bool)));
@@ -314,4 +327,16 @@ void MainWindow::setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings)
     {
         osmLayer->setDeleteSettings(settings);
     }
+}
+
+CenterPointsManager & MainWindow::getCenterPointsManager()
+{
+    return _centerPointsManager;
+}
+
+void MainWindow::centerToPoint(const CenterPointStruct & point)
+{
+    _ui->paintWidget->centerToPoint(point);
+
+    zoomChanged();
 }

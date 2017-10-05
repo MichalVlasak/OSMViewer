@@ -5,6 +5,7 @@
 
 #include "BaseLayer.h"
 #include "MapSettings.h"
+#include "src/CenterPointStruct.h"
 
 class PaintingWidget : public QWidget
 {
@@ -25,6 +26,8 @@ class PaintingWidget : public QWidget
 
         QPointF getTopLeft();
         QPointF getBottomRight();
+
+        void centerToPoint(const CenterPointStruct & centerPoint);
 
     signals:
         void mouseCursorWgsChanged(double lat, double lon);
@@ -63,7 +66,6 @@ class PaintingWidget : public QWidget
         };
 
     private:
-        void centerToWgs(QPointF wgsPoint);
         void centerToWgs(double lon, double lat);
 
     private slots:

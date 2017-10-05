@@ -43,7 +43,10 @@ SOURCES += src/main.cpp\
     src/Layers/DownloadAreaHighlight.cpp \
     src/DeleteOldMapsWidget.cpp \
     src/DeleteOldMapsDialog.cpp \
-    src/DeleteOldMapsUtils.cpp
+    src/DeleteOldMapsUtils.cpp \
+    src/CenterPointsManager.cpp \
+    src/CenterPointsWidget.cpp \
+    src/CenterPointEditDialog.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -65,7 +68,11 @@ HEADERS  += src/MainWindow.h \
     src/AppVersion.h \
     src/DeleteOldMapsWidget.h \
     src/DeleteOldMapsDialog.h \
-    src/DeleteOldMapsUtils.h
+    src/DeleteOldMapsUtils.h \
+    src/CenterPointStruct.h \
+    src/CenterPointsManager.h \
+    src/CenterPointsWidget.h \
+    src/CenterPointEditDialog.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -74,7 +81,9 @@ FORMS    += resources/MainWindow.ui \
     resources/OSMTileDownloaderSetupWidget.ui \
     resources/AboutDialog.ui \
     resources/DeleteOldMapsWidget.ui \
-    resources/DeleteOldMapsDialog.ui
+    resources/DeleteOldMapsDialog.ui \
+    resources/CenterPointsWidget.ui \
+    resources/CenterPointEditDialog.ui
 
 RESOURCES += \
     resources/resources.qrc

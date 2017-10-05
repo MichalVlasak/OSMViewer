@@ -52,6 +52,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_CenterPoints"/>
+    <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
@@ -117,6 +119,14 @@
   <action name="action_AboutOSMViewer">
    <property name="text">
     <string>About OSM Viewer</string>
+   </property>
+  </action>
+  <action name="action_CenterPoints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center Points</string>
    </property>
   </action>
  </widget>
