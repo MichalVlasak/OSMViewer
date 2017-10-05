@@ -120,7 +120,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _ui->paintWidget->addLayer(_downloadAreaHighlight, "DownloadAreaHighlight");
     _downloaderPrepare->setDownloadAreaHighlight(_downloadAreaHighlight);
     _appSettings.restoreDownloadAreaHighlightSettings(_downloadAreaHighlight);
-    QObject::connect(_downloader, SIGNAL(allItemIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
+
+    QObject::connect(_downloaderPrepare, SIGNAL(allIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
 }
 
 MainWindow::~MainWindow()
@@ -236,6 +237,13 @@ void MainWindow::downloadArea()
         _downloaderInfoDock->show();
 
         _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
+    }
+    else
+    {
+        if(_downloadAreaHighlight != nullptr)
+        {
+            _downloadAreaHighlight->resetDownloadParams();
+        }
     }
 }
 

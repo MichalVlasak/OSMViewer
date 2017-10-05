@@ -114,9 +114,14 @@ void OSMTileDownloaderPrepare::run()
         }
     }
 
-    if(_downloadAreaHighlight != nullptr && _downloader->isRunning() == false)
+    if(_downloadAreaHighlight != nullptr)
     {
-        _downloadAreaHighlight->resetDownloadParams();
+        while(_downloader->isRunning() == true)
+        {
+            QThread::msleep(100);
+        }
+
+        emit allIsDownloaded();
     }
 }
 

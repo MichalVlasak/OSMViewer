@@ -19,6 +19,7 @@ class OSMTileDownloaderPrepare : public QThread
 
     signals:
         void columnIsPrepared();
+        void allIsDownloaded();
 
     private:
         void run();

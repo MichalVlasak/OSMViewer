@@ -36,7 +36,7 @@ void DownloadAreaHighlight::resetDownloadParams()
 {
     clearDownloadParams();
 
-    QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
+    QTimer::singleShot(1000, _mapSettings.widget, SLOT(repaint()));
 }
 
 void DownloadAreaHighlight::clearDownloadParams()
