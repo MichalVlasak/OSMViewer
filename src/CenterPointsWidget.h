@@ -2,6 +2,7 @@
 #define CENTERPOINTSWIDGET_H
 
 #include <QWidget>
+#include <QStringListModel>
 
 #include "CenterPointsManager.h"
 
@@ -20,10 +21,16 @@ class CenterPointsWidget : public QWidget
     private slots:
         void centerHome();
         void editHome();
+        void centerToPointFromList(QModelIndex index);
+        void centerToPointFromList();
+        void addPointToCenterList();
+        void editPointFromCenterList();
+        void removePointFromCenterList();
 
     private:
         Ui::CenterPointsWidget * _ui;
         CenterPointsManager & _pointsManager;
+        QStringListModel * _listModel = nullptr;
 };
 
 #endif // CENTERPOINTSWIDGET_H

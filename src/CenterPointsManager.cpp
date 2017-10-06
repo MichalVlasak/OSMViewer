@@ -2,13 +2,19 @@
 
 CenterPointsManager::CenterPointsManager()
 {
-    //_homePosition = CenterPointStruct(QPointF(0.0, 0.0), "Zero Point", -1);
-    _homePosition = CenterPointStruct(QPointF(17.1097222222, 48.1438888889), "Bratislava", 12);
+    _homePosition = CenterPointStruct(QPointF(0.0, 0.0), "Zero Point", -1);
+
+    addCenterPoint(CenterPointStruct(QPointF(17.1097222222, 48.1438888889), "Bratislava", 12));
 }
 
 const CenterPointStruct & CenterPointsManager::getHomeCenterPoint() const
 {
     return _homePosition;
+}
+
+void CenterPointsManager::setHomeCenterPoint(const CenterPointStruct & point)
+{
+    _homePosition = point;
 }
 
 const CenterPointsManager::CenterPointsVector & CenterPointsManager::getCenterPointsVector() const

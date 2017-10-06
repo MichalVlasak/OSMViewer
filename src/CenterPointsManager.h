@@ -15,6 +15,7 @@ class CenterPointsManager
 
     public:
         const CenterPointStruct & getHomeCenterPoint() const;
+        void setHomeCenterPoint(const CenterPointStruct & point);
         const CenterPointsVector & getCenterPointsVector() const;
         void addCenterPoint(const CenterPointStruct & centerPoint);
 
