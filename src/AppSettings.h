@@ -26,6 +26,9 @@ class AppSettings
         void storeDownloadAreaHighlightSettings(class DownloadAreaHighlight * highlighter);
         bool restoreDownloadAreaHighlightSettings(class DownloadAreaHighlight * highlighter);
 
+        void storeCenterPoints(class CenterPointsManager * pointsManager);
+        bool restoreCenterPoints(class CenterPointsManager * pointsManager);
+
     private:
         QString _settingsFileName;
         QDomDocument _doc;

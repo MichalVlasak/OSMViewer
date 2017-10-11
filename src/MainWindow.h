@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow
 
         DeleteOldMapsWidget::DeleteSettings getDeleteSettings();
         void setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings);
-        CenterPointsManager & getCenterPointsManager();
+        CenterPointsManager * getCenterPointsManager();
         void centerToPoint(const CenterPointStruct & point);
 
     private:
@@ -72,7 +72,7 @@ class MainWindow : public QMainWindow
         double _lastMouseLon = 0.;
 
         DeleteOldMapsWidget::DeleteSettings _deleteSettings;
-        CenterPointsManager _centerPointsManager;
+        CenterPointsManager * _centerPointsManager;
         CenterPointsWidget * _centerPointsWidget = nullptr;
         QDockWidget * _centerPointsDock = nullptr;
 };

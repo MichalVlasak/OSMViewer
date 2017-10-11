@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderPrepare = new OSMTileDownloaderPrepare(_downloader, _downloaderInfoWidget, this);
     _downloaderSetupWidget = new OSMTileDownloaderSetupWidget(_downloader, this);
 
+    _centerPointsManager = new CenterPointsManager(this);
     _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
@@ -135,6 +136,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _appSettings.restoreDownloadAreaHighlightSettings(_downloadAreaHighlight);
 
     QObject::connect(_downloaderPrepare, SIGNAL(allIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
+
+    _appSettings.restoreCenterPoints(_centerPointsManager);
 }
 
 MainWindow::~MainWindow()
@@ -144,6 +147,7 @@ MainWindow::~MainWindow()
     _appSettings.storeOSMDirectoryPath(_ui->paintWidget->getOSMLayer());
     _appSettings.storeDownloadSettings(_downloader);
     _appSettings.storeDownloadAreaHighlightSettings(_downloadAreaHighlight);
+    _appSettings.storeCenterPoints(_centerPointsManager);
 
     //while(_downloader2->isRunning() == true);
 
@@ -329,7 +333,7 @@ void MainWindow::setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings)
     }
 }
 
-CenterPointsManager & MainWindow::getCenterPointsManager()
+CenterPointsManager * MainWindow::getCenterPointsManager()
 {
     return _centerPointsManager;
 }

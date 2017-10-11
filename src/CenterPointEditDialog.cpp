@@ -30,3 +30,14 @@ CenterPointEditDialog::~CenterPointEditDialog()
 {
     delete _ui;
 }
+
+CenterPointStruct CenterPointEditDialog::getCenterPoint()
+{
+    CenterPointStruct point;
+
+    point.name = _ui->name->text();
+    point.level = (_ui->levelCheckBox->isChecked() == true) ? _ui->level->value() : CenterPointStruct::UndefinedLevel;
+    point.position = QPointF(_ui->longitude->value(), _ui->latitude->value());
+
+    return point;
+}

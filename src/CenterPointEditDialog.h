@@ -17,6 +17,8 @@ class CenterPointEditDialog : public QDialog
         explicit CenterPointEditDialog(const CenterPointStruct & point, QWidget *parent = 0);
         ~CenterPointEditDialog();
 
+        CenterPointStruct getCenterPoint();
+
     private:
         Ui::CenterPointEditDialog * _ui;
 };

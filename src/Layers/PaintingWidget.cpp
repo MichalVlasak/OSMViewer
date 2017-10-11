@@ -216,9 +216,12 @@ void PaintingWidget::keyPressEvent(QKeyEvent *keyEvent)
 
         case Qt::Key_Home:
             {
-                CenterPointsManager & pointsManager = MainWindow::getInstance()->getCenterPointsManager();
+                CenterPointsManager * pointsManager = MainWindow::getInstance()->getCenterPointsManager();
 
-                centerToPoint(pointsManager.getHomeCenterPoint());
+                if(pointsManager != nullptr)
+                {
+                    centerToPoint(pointsManager->getHomeCenterPoint());
+                }
             }
             break;
 

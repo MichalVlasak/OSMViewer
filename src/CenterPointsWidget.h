@@ -15,21 +15,23 @@ class CenterPointsWidget : public QWidget
         Q_OBJECT
 
     public:
-        explicit CenterPointsWidget(CenterPointsManager & pointsManager, QWidget *parent = 0);
+        explicit CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent = 0);
         ~CenterPointsWidget();
 
     private slots:
         void centerHome();
         void editHome();
+        void changeHome();
         void centerToPointFromList(QModelIndex index);
         void centerToPointFromList();
         void addPointToCenterList();
         void editPointFromCenterList();
         void removePointFromCenterList();
+        void refreshPointsList();
 
     private:
         Ui::CenterPointsWidget * _ui;
-        CenterPointsManager & _pointsManager;
+        CenterPointsManager * _pointsManager;
         QStringListModel * _listModel = nullptr;
 };
 
