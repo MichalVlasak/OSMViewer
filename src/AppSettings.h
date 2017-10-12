@@ -11,6 +11,8 @@ class AppSettings
         AppSettings();
         ~AppSettings();
 
+        static QString getValueString(QDomNode & node, const QString & name);
+
         void storeMainWindowSettings(class MainWindow * mainWindow);
         bool restoreMainWindowSettings(class MainWindow * mainWindow);
 

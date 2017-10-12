@@ -32,7 +32,7 @@ AppSettings::~AppSettings()
     }
 }
 
-QString getValueString(QDomNode node, QString name)
+QString AppSettings::getValueString(QDomNode & node, const QString & name)
 {
     QDomNodeList readNodes = node.toElement().elementsByTagName(name);
 
@@ -435,29 +435,6 @@ bool AppSettings::restoreDownloadAreaHighlightSettings(DownloadAreaHighlight *hi
     return result;
 }
 
-void storePoint(const CenterPointStruct & point, QDomElement & element, QDomDocument & doc)
-{
-    QDomElement homePointNameElement = doc.createElement("Name");
-    element.appendChild(homePointNameElement);
-    QDomText homePointNameText = doc.createTextNode(point.name);
-    homePointNameElement.appendChild(homePointNameText);
-
-    QDomElement homePointLevelElement = doc.createElement("Level");
-    element.appendChild(homePointLevelElement);
-    QDomText homePointLevelText = doc.createTextNode(QString::number(point.level));
-    homePointLevelElement.appendChild(homePointLevelText);
-
-    QDomElement homePointLatitudeElement = doc.createElement("Latitude");
-    element.appendChild(homePointLatitudeElement);
-    QDomText homePointLatitudeText = doc.createTextNode(QString::number(point.position.y(), 'g', 13));
-    homePointLatitudeElement.appendChild(homePointLatitudeText);
-
-    QDomElement homePointLongitudeElement = doc.createElement("Longitude");
-    element.appendChild(homePointLongitudeElement);
-    QDomText homePointLongitudeText = doc.createTextNode(QString::number(point.position.x(), 'g', 13));
-    homePointLongitudeElement.appendChild(homePointLongitudeText);
-}
-
 void AppSettings::storeCenterPoints(CenterPointsManager *pointsManager)
 {
     if(pointsManager != nullptr)
@@ -467,10 +444,15 @@ void AppSettings::storeCenterPoints(CenterPointsManager *pointsManager)
         QDomElement centerPointsElement = _doc.createElement("CenterPoints");
         _rootElement.appendChild(centerPointsElement);
 
+        QDomElement importExportPathElement = _doc.createElement("LastPathForImportExport");
+        centerPointsElement.appendChild(importExportPathElement);
+        QDomText importExportPathText = _doc.createTextNode(pointsManager->getImportExportLastPath());
+        importExportPathElement.appendChild(importExportPathText);
+
         QDomElement homePointElement = _doc.createElement("HomePoint");
         centerPointsElement.appendChild(homePointElement);
 
-        storePoint(homePoint, homePointElement, _doc);
+        CenterPointsManager::storePoint(homePoint, homePointElement, _doc);
 
         QDomElement pointsListElement = _doc.createElement("Points");
         centerPointsElement.appendChild(pointsListElement);
@@ -482,7 +464,7 @@ void AppSettings::storeCenterPoints(CenterPointsManager *pointsManager)
             QDomElement pointElement = _doc.createElement("Point");
             pointsListElement.appendChild(pointElement);
 
-            storePoint(point, pointElement, _doc);
+            CenterPointsManager::storePoint(point, pointElement, _doc);
         }
     }
 }
@@ -513,6 +495,15 @@ bool AppSettings::restoreCenterPoints(CenterPointsManager *pointsManager)
 
             if(centerPointsNode.isNull() == false)
             {
+                QString path = getValueString(centerPointsNode, "LastPathForImportExport");
+
+                if(path.isEmpty() == false)
+                {
+                    pointsManager->setImportExportLastPath(path);
+
+                    result = true;
+                }
+
                 QDomNodeList homePointsNode = centerPointsNode.toElement().elementsByTagName("HomePoint");
 
                 for(int iHomePoint = 0; iHomePoint < homePointsNode.size(); iHomePoint++)
@@ -535,6 +526,8 @@ bool AppSettings::restoreCenterPoints(CenterPointsManager *pointsManager)
                             homePoint.position = QPointF(lon.toDouble(), lat.toDouble());
 
                             pointsManager->setHomeCenterPoint(homePoint);
+
+                            result = true;
                         }
                     }
                 }
@@ -569,6 +562,8 @@ bool AppSettings::restoreCenterPoints(CenterPointsManager *pointsManager)
                                     point.position = QPointF(lon.toDouble(), lat.toDouble());
 
                                     pointsManager->addCenterPoint(point);
+
+                                    result = true;
                                 }
                             }
                         }

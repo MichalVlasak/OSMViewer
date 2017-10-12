@@ -27,12 +27,16 @@ class CenterPointsWidget : public QWidget
         void addPointToCenterList();
         void editPointFromCenterList();
         void removePointFromCenterList();
+        void removeAllPointsFromCenterList();
         void refreshPointsList();
+        void importPoints();
+        void exportPoints();
 
     private:
         Ui::CenterPointsWidget * _ui;
         CenterPointsManager * _pointsManager;
         QStringListModel * _listModel = nullptr;
+        QString _lastAdded;
 };
 
 #endif // CENTERPOINTSWIDGET_H

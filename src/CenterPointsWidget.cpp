@@ -5,6 +5,7 @@
 #include "CenterPointEditDialog.h"
 
 #include <QListView>
+#include <QMessageBox>
 
 CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent) :
     QWidget(parent),
@@ -26,6 +27,9 @@ CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWid
     QObject::connect(_ui->addButton, SIGNAL(clicked(bool)), SLOT(addPointToCenterList()));
     QObject::connect(_ui->editButton, SIGNAL(clicked(bool)), SLOT(editPointFromCenterList()));
     QObject::connect(_ui->deleteButton, SIGNAL(clicked(bool)), SLOT(removePointFromCenterList()));
+    QObject::connect(_ui->deleteAllButton, SIGNAL(clicked(bool)), SLOT(removeAllPointsFromCenterList()));
+    QObject::connect(_ui->importButton, SIGNAL(clicked(bool)), SLOT(importPoints()));
+    QObject::connect(_ui->exportButton, SIGNAL(clicked(bool)), SLOT(exportPoints()));
     QObject::connect(_ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(centerToPointFromList(QModelIndex)));
     QObject::connect(_pointsManager, SIGNAL(homePointWasChanged()), SLOT(changeHome()));
     QObject::connect(_pointsManager, SIGNAL(pointsWasAdded()), SLOT(refreshPointsList()));
@@ -45,12 +49,30 @@ void CenterPointsWidget::refreshPointsList()
 
     QStringList pointsNameList;
 
+    int row = -1;
+    int i = 0;
+
     for(const CenterPointStruct & point : points)
     {
         pointsNameList << point.name;
+
+        if(_lastAdded.isEmpty() == false)
+        {
+            if(point.name.compare(_lastAdded) == 0)
+            {
+                row = i;
+            }
+
+            i++;
+        }
     }
 
     _listModel->setStringList(pointsNameList);
+
+    if(row != -1)
+    {
+        _ui->listView->selectionModel()->setCurrentIndex(_listModel->index(row), QItemSelectionModel::Select);
+    }
 }
 
 void CenterPointsWidget::centerHome()
@@ -118,7 +140,9 @@ void CenterPointsWidget::addPointToCenterList()
 
     if(dialog->exec() == QDialog::Accepted)
     {
-        _pointsManager->addCenterPoint(dialog->getCenterPoint());
+        CenterPointStruct point = dialog->getCenterPoint();
+        _lastAdded = point.name;
+        _pointsManager->addCenterPoint(point);
     }
 }
 
@@ -176,10 +200,53 @@ void CenterPointsWidget::removePointFromCenterList()
                 {
                     if(name.compare(point.name) == 0)
                     {
-                        _pointsManager->removeCenterPoint(point);
+                        QMessageBox::StandardButton reply;
+
+                        reply = QMessageBox::question(this, tr("Delete Point"), tr("Are You sure to delete point \"") + point.name + tr("\"?"));
+
+                        if(reply == QMessageBox::Yes)
+                        {
+                            _pointsManager->removeCenterPoint(point);
+
+                            // po vymazani bodu musim ukoncit cyklus, pretoze sa mi
+                            // zmenil vektor na ktory mam referenciu a teda zostanem
+                            // v nekonzistentnom stave.
+                            break;
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+void CenterPointsWidget::removeAllPointsFromCenterList()
+{
+    if(_pointsManager != nullptr)
+    {
+        QMessageBox::StandardButton reply;
+
+        reply = QMessageBox::question(this, tr("Delete All Points"), tr("Are You sure to delete all points?"));
+
+        if(reply == QMessageBox::Yes)
+        {
+            _pointsManager->removeAllCenterPoints();
+        }
+    }
+}
+
+void CenterPointsWidget::importPoints()
+{
+    if(_pointsManager != nullptr)
+    {
+        _pointsManager->importPoints();
+    }
+}
+
+void CenterPointsWidget::exportPoints()
+{
+    if(_pointsManager != nullptr)
+    {
+        _pointsManager->exportPoints();
     }
 }

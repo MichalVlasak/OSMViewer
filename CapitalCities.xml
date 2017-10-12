@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OSMViewerCenterPoints>
+    <CenterPoints>
+        <Points>
+            <Point>
+                <Name>Amsterdam (Netherlands)</Name>
+                <Level>11</Level>
+                <Latitude>52.370216</Latitude>
+                <Longitude>4.895168</Longitude>
+            </Point>
+            <Point>
+                <Name>Andorra la Vella (Andorra)</Name>
+                <Level>14</Level>
+                <Latitude>42.5</Latitude>
+                <Longitude>1.5</Longitude>
+            </Point>
+            <Point>
+                <Name>Ankara (Turkey)</Name>
+                <Level>11</Level>
+                <Latitude>39.925533</Latitude>
+                <Longitude>32.866287</Longitude>
+            </Point>
+            <Point>
+                <Name>Astana (Kazakhstan)</Name>
+                <Level>11</Level>
+                <Latitude>51.1666666667</Latitude>
+                <Longitude>71.4333333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Athens (Greece)</Name>
+                <Level>11</Level>
+                <Latitude>37.9839722222</Latitude>
+                <Longitude>23.7278055556</Longitude>
+            </Point>
+            <Point>
+                <Name>Baku (Azerbaijan)</Name>
+                <Level>12</Level>
+                <Latitude>40.3944444444</Latitude>
+                <Longitude>49.8819444444</Longitude>
+            </Point>
+            <Point>
+                <Name>Belgrade (Serbia)</Name>
+                <Level>11</Level>
+                <Latitude>44.786568</Latitude>
+                <Longitude>20.4489216</Longitude>
+            </Point>
+            <Point>
+                <Name>Berlin (Germany)</Name>
+                <Level>11</Level>
+                <Latitude>52.5166666667</Latitude>
+                <Longitude>13.4</Longitude>
+            </Point>
+            <Point>
+                <Name>Bern (Switzerland)</Name>
+                <Level>12</Level>
+                <Latitude>46.947922</Latitude>
+                <Longitude>7.444608</Longitude>
+            </Point>
+            <Point>
+                <Name>Bratislava (Slovakia)</Name>
+                <Level>12</Level>
+                <Latitude>48.1438888889</Latitude>
+                <Longitude>17.1097222222</Longitude>
+            </Point>
+            <Point>
+                <Name>Brussels (Belgium)</Name>
+                <Level>12</Level>
+                <Latitude>50.8333333333</Latitude>
+                <Longitude>4.35</Longitude>
+            </Point>
+            <Point>
+                <Name>Bucharest (Romania)</Name>
+                <Level>11</Level>
+                <Latitude>44.439663</Latitude>
+                <Longitude>26.096306</Longitude>
+            </Point>
+            <Point>
+                <Name>Budapest (Hungary)</Name>
+                <Level>12</Level>
+                <Latitude>47.4719444444</Latitude>
+                <Longitude>19.0502777778</Longitude>
+            </Point>
+            <Point>
+                <Name>Chisinau (Moldova)</Name>
+                <Level>12</Level>
+                <Latitude>47.00367</Latitude>
+                <Longitude>28.907089</Longitude>
+            </Point>
+            <Point>
+                <Name>Copenhagen (Denmark)</Name>
+                <Level>11</Level>
+                <Latitude>55.6761111111</Latitude>
+                <Longitude>12.5683333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Dublin (Ireland)</Name>
+                <Level>11</Level>
+                <Latitude>53.34419</Latitude>
+                <Longitude>-6.26751</Longitude>
+            </Point>
+            <Point>
+                <Name>Helsinki (Finland)</Name>
+                <Level>11</Level>
+                <Latitude>60.1708333333</Latitude>
+                <Longitude>24.9375</Longitude>
+            </Point>
+            <Point>
+                <Name>Kyiv (Ukraine)</Name>
+                <Level>11</Level>
+                <Latitude>50.4501</Latitude>
+                <Longitude>30.5234</Longitude>
+            </Point>
+            <Point>
+                <Name>Lisbon (Portugal)</Name>
+                <Level>11</Level>
+                <Latitude>38.736946</Latitude>
+                <Longitude>-9.142685</Longitude>
+            </Point>
+            <Point>
+                <Name>Ljubljana (Slovenia)</Name>
+                <Level>12</Level>
+                <Latitude>46.0569465</Latitude>
+                <Longitude>14.5057515</Longitude>
+            </Point>
+            <Point>
+                <Name>London (United Kingdom)</Name>
+                <Level>10</Level>
+                <Latitude>51.5073509</Latitude>
+                <Longitude>-0.1277583</Longitude>
+            </Point>
+            <Point>
+                <Name>Luxembourg (Luxembourg)</Name>
+                <Level>12</Level>
+                <Latitude>49.611622</Latitude>
+                <Longitude>6.131935</Longitude>
+            </Point>
+            <Point>
+                <Name>Madrid (Spain)</Name>
+                <Level>11</Level>
+                <Latitude>40.416775</Latitude>
+                <Longitude>-3.70379</Longitude>
+            </Point>
+            <Point>
+                <Name>Minsk (Belarus)</Name>
+                <Level>11</Level>
+                <Latitude>53.9</Latitude>
+                <Longitude>27.5666666667</Longitude>
+            </Point>
+            <Point>
+                <Name>Monaco (Monaco)</Name>
+                <Level>14</Level>
+                <Latitude>43.7384176</Latitude>
+                <Longitude>7.4246158</Longitude>
+            </Point>
+            <Point>
+                <Name>Moscow (Russia)</Name>
+                <Level>10</Level>
+                <Latitude>55.7496</Latitude>
+                <Longitude>37.6237</Longitude>
+            </Point>
+            <Point>
+                <Name>Nicosia (Cyprus)</Name>
+                <Level>12</Level>
+                <Latitude>35.1666666667</Latitude>
+                <Longitude>33.3666666667</Longitude>
+            </Point>
+            <Point>
+                <Name>Oslo (Norway)</Name>
+                <Level>11</Level>
+                <Latitude>59.9138688</Latitude>
+                <Longitude>10.7522454</Longitude>
+            </Point>
+            <Point>
+                <Name>Paris (France)</Name>
+                <Level>10</Level>
+                <Latitude>48.8566666667</Latitude>
+                <Longitude>2.3508333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Podgorica (Montenegro)</Name>
+                <Level>13</Level>
+                <Latitude>42.441286</Latitude>
+                <Longitude>19.262892</Longitude>
+            </Point>
+            <Point>
+                <Name>Prague (Czech Republic)</Name>
+                <Level>12</Level>
+                <Latitude>50.0872222222</Latitude>
+                <Longitude>14.4211111111</Longitude>
+            </Point>
+            <Point>
+                <Name>Pristina (Kosovo)</Name>
+                <Level>12</Level>
+                <Latitude>42.6666666667</Latitude>
+                <Longitude>21.1666666667</Longitude>
+            </Point>
+            <Point>
+                <Name>Reykjavik (Iceland)</Name>
+                <Level>11</Level>
+                <Latitude>64.135491</Latitude>
+                <Longitude>-21.896149</Longitude>
+            </Point>
+            <Point>
+                <Name>Riga (Latvia)</Name>
+                <Level>11</Level>
+                <Latitude>56.9333333333</Latitude>
+                <Longitude>24.1</Longitude>
+            </Point>
+            <Point>
+                <Name>Rome (Italy)</Name>
+                <Level>11</Level>
+                <Latitude>41.890169</Latitude>
+                <Longitude>12.492269</Longitude>
+            </Point>
+            <Point>
+                <Name>San Marino (San Marino)</Name>
+                <Level>15</Level>
+                <Latitude>43.94236</Latitude>
+                <Longitude>12.457777</Longitude>
+            </Point>
+            <Point>
+                <Name>Sarajevo (Bosnia and Herzegovina)</Name>
+                <Level>12</Level>
+                <Latitude>43.8666666667</Latitude>
+                <Longitude>18.4166666667</Longitude>
+            </Point>
+            <Point>
+                <Name>Skopje (Macedonia)</Name>
+                <Level>12</Level>
+                <Latitude>41.99735</Latitude>
+                <Longitude>21.428</Longitude>
+            </Point>
+            <Point>
+                <Name>Sofia (Bulgaria)</Name>
+                <Level>11</Level>
+                <Latitude>42.7</Latitude>
+                <Longitude>23.3333333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Stockholm (Sweden)</Name>
+                <Level>11</Level>
+                <Latitude>59.334591</Latitude>
+                <Longitude>18.06324</Longitude>
+            </Point>
+            <Point>
+                <Name>Tallinn (Estonia)</Name>
+                <Level>11</Level>
+                <Latitude>59.4372222222</Latitude>
+                <Longitude>24.7452777778</Longitude>
+            </Point>
+            <Point>
+                <Name>Tbilisi (Georgia)</Name>
+                <Level>11</Level>
+                <Latitude>41.7166666667</Latitude>
+                <Longitude>44.7833333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Tirana (Albania)</Name>
+                <Level>13</Level>
+                <Latitude>41.33</Latitude>
+                <Longitude>19.82</Longitude>
+            </Point>
+            <Point>
+                <Name>Vaduz (Liechtenstein)</Name>
+                <Level>13</Level>
+                <Latitude>47.14137</Latitude>
+                <Longitude>9.5207</Longitude>
+            </Point>
+            <Point>
+                <Name>Valletta (Malta)</Name>
+                <Level>13</Level>
+                <Latitude>35.89891</Latitude>
+                <Longitude>14.51455</Longitude>
+            </Point>
+            <Point>
+                <Name>Vatican City (Vatican City)</Name>
+                <Level>16</Level>
+                <Latitude>41.902916</Latitude>
+                <Longitude>12.453389</Longitude>
+            </Point>
+            <Point>
+                <Name>Vienna (Austria)</Name>
+                <Level>12</Level>
+                <Latitude>48.2083333333</Latitude>
+                <Longitude>16.3730555556</Longitude>
+            </Point>
+            <Point>
+                <Name>Vilnius (Lithuania)</Name>
+                <Level>11</Level>
+                <Latitude>54.6871555</Latitude>
+                <Longitude>25.2796514</Longitude>
+            </Point>
+            <Point>
+                <Name>Warsaw (Poland)</Name>
+                <Level>12</Level>
+                <Latitude>52.2322222222</Latitude>
+                <Longitude>21.0083333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Yerevan (Armenia)</Name>
+                <Level>12</Level>
+                <Latitude>40.1833333333</Latitude>
+                <Longitude>44.5166666667</Longitude>
+            </Point>
+            <Point>
+                <Name>Zagreb (Croatia)</Name>
+                <Level>11</Level>
+                <Latitude>45.8166666667</Latitude>
+                <Longitude>15.9888888889</Longitude>
+            </Point>
+        </Points>
+    </CenterPoints>
+</OSMViewerCenterPoints>

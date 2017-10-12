@@ -4,7 +4,10 @@
 #include "CenterPointStruct.h"
 
 #include <vector>
+
 #include <QObject>
+#include <QtXml>
+
 
 class CenterPointsManager : public QObject
 {
@@ -22,6 +25,15 @@ class CenterPointsManager : public QObject
         const CenterPointsVector & getCenterPointsVector() const;
         void addCenterPoint(const CenterPointStruct & centerPoint);
         void removeCenterPoint(const CenterPointStruct & centerPoint);
+        void removeAllCenterPoints();
+
+        void importPoints();
+        void exportPoints();
+
+        const QString & getImportExportLastPath() const;
+        void setImportExportLastPath(const QString & path);
+
+        static void storePoint(const CenterPointStruct & point, QDomElement & element, QDomDocument & doc);
 
     signals:
         void homePointWasChanged();
@@ -31,6 +43,7 @@ class CenterPointsManager : public QObject
     private:
         CenterPointStruct _homePosition;
         CenterPointsVector _pointsVector;
+        QString _importExportLastPath;
 };
 
 #endif // CENTERPOINTSMANAGER_H
