@@ -45,6 +45,24 @@
                 <Longitude>49.8819444444</Longitude>
             </Point>
             <Point>
+                <Name>Bandar Seri Begawan (Brunei)</Name>
+                <Level>12</Level>
+                <Latitude>4.903052</Latitude>
+                <Longitude>114.939821</Longitude>
+            </Point>
+            <Point>
+                <Name>Bangui (Central African Republic)</Name>
+                <Level>12</Level>
+                <Latitude>4.394673</Latitude>
+                <Longitude>18.55819</Longitude>
+            </Point>
+            <Point>
+                <Name>Beijing (China)</Name>
+                <Level>11</Level>
+                <Latitude>39.9042</Latitude>
+                <Longitude>116.407396</Longitude>
+            </Point>
+            <Point>
                 <Name>Belgrade (Serbia)</Name>
                 <Level>11</Level>
                 <Latitude>44.786568</Latitude>
@@ -69,6 +87,12 @@
                 <Longitude>7.444608</Longitude>
             </Point>
             <Point>
+                <Name>Bogotá (Colombia)</Name>
+                <Level>11</Level>
+                <Latitude>4.710989</Latitude>
+                <Longitude>-74.072092</Longitude>
+            </Point>
+            <Point>
                 <Name>Brasilia (Brazil)</Name>
                 <Level>11</Level>
                 <Latitude>-15.794157</Latitude>
@@ -79,6 +103,12 @@
                 <Level>12</Level>
                 <Latitude>48.1438888889</Latitude>
                 <Longitude>17.1097222222</Longitude>
+            </Point>
+            <Point>
+                <Name>Brazzaville (Republic of the Congo)</Name>
+                <Level>12</Level>
+                <Latitude>-4.26336</Latitude>
+                <Longitude>15.242885</Longitude>
             </Point>
             <Point>
                 <Name>Bridgetown (Barbados)</Name>
@@ -109,6 +139,12 @@
                 <Level>10</Level>
                 <Latitude>-34.603722</Latitude>
                 <Longitude>-58.381592</Longitude>
+            </Point>
+            <Point>
+                <Name>Bujumbura (Burundi)</Name>
+                <Level>12</Level>
+                <Latitude>-3.361378</Latitude>
+                <Longitude>29.359878</Longitude>
             </Point>
             <Point>
                 <Name>Canberra (Australia)</Name>
@@ -147,6 +183,12 @@
                 <Longitude>25.923147</Longitude>
             </Point>
             <Point>
+                <Name>Havana (Cuba)</Name>
+                <Level>12</Level>
+                <Latitude>23.113592</Latitude>
+                <Longitude>-82.366596</Longitude>
+            </Point>
+            <Point>
                 <Name>Helsinki (Finland)</Name>
                 <Level>11</Level>
                 <Latitude>60.1708333333</Latitude>
@@ -157,6 +199,12 @@
                 <Level>11</Level>
                 <Latitude>34.543896</Latitude>
                 <Longitude>69.160652</Longitude>
+            </Point>
+            <Point>
+                <Name>Kinshasa (Democratic Republic of the Congo)</Name>
+                <Level>12</Level>
+                <Latitude>-4.441931</Latitude>
+                <Longitude>15.266293</Longitude>
             </Point>
             <Point>
                 <Name>Kyiv (Ukraine)</Name>
@@ -225,10 +273,22 @@
                 <Longitude>7.4246158</Longitude>
             </Point>
             <Point>
+                <Name>Moroni (Comoros)</Name>
+                <Level>13</Level>
+                <Latitude>-11.717216</Latitude>
+                <Longitude>43.247315</Longitude>
+            </Point>
+            <Point>
                 <Name>Moscow (Russia)</Name>
                 <Level>10</Level>
                 <Latitude>55.7496</Latitude>
                 <Longitude>37.6237</Longitude>
+            </Point>
+            <Point>
+                <Name>N'Djamena (Chad)</Name>
+                <Level>12</Level>
+                <Latitude>12.134846</Latitude>
+                <Longitude>15.055742</Longitude>
             </Point>
             <Point>
                 <Name>Nassau (Bahamas)</Name>
@@ -249,10 +309,28 @@
                 <Longitude>10.7522454</Longitude>
             </Point>
             <Point>
+                <Name>Ottawa (Canada)</Name>
+                <Level>11</Level>
+                <Latitude>45.42153</Latitude>
+                <Longitude>-75.697193</Longitude>
+            </Point>
+            <Point>
+                <Name>Ouagadougou (Burkina Faso)</Name>
+                <Level>11</Level>
+                <Latitude>12.371428</Latitude>
+                <Longitude>-1.51966</Longitude>
+            </Point>
+            <Point>
                 <Name>Paris (France)</Name>
                 <Level>10</Level>
                 <Latitude>48.8566666667</Latitude>
                 <Longitude>2.3508333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Phnom Penh (Cambodia)</Name>
+                <Level>12</Level>
+                <Latitude>11.544873</Latitude>
+                <Longitude>104.892167</Longitude>
             </Point>
             <Point>
                 <Name>Podgorica (Montenegro)</Name>
@@ -271,6 +349,12 @@
                 <Level>12</Level>
                 <Latitude>50.0872222222</Latitude>
                 <Longitude>14.4211111111</Longitude>
+            </Point>
+            <Point>
+                <Name>Praia (Cabo Verde)</Name>
+                <Level>13</Level>
+                <Latitude>14.93305</Latitude>
+                <Longitude>-23.513327</Longitude>
             </Point>
             <Point>
                 <Name>Pristina (Kosovo)</Name>
@@ -303,10 +387,22 @@
                 <Longitude>-66.067657</Longitude>
             </Point>
             <Point>
+                <Name>San Jose (Costa Rica)</Name>
+                <Level>12</Level>
+                <Latitude>9.928069</Latitude>
+                <Longitude>-84.090725</Longitude>
+            </Point>
+            <Point>
                 <Name>San Marino (San Marino)</Name>
                 <Level>15</Level>
                 <Latitude>43.94236</Latitude>
                 <Longitude>12.457777</Longitude>
+            </Point>
+            <Point>
+                <Name>Santiago (Chile)</Name>
+                <Level>11</Level>
+                <Latitude>-33.44889</Latitude>
+                <Longitude>-70.669265</Longitude>
             </Point>
             <Point>
                 <Name>Sarajevo (Bosnia and Herzegovina)</Name>
@@ -397,6 +493,18 @@
                 <Level>12</Level>
                 <Latitude>52.2322222222</Latitude>
                 <Longitude>21.0083333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Yamoussoukro (Cote d'Ivoire)</Name>
+                <Level>12</Level>
+                <Latitude>6.827623</Latitude>
+                <Longitude>-5.289343</Longitude>
+            </Point>
+            <Point>
+                <Name>Yaounde (Cameroon)</Name>
+                <Level>12</Level>
+                <Latitude>3.848032</Latitude>
+                <Longitude>11.502075</Longitude>
             </Point>
             <Point>
                 <Name>Yerevan (Armenia)</Name>

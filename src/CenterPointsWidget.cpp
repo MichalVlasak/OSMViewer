@@ -6,6 +6,7 @@
 
 #include <QListView>
 #include <QMessageBox>
+#include <QLineEdit>
 
 CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent) :
     QWidget(parent),
@@ -34,6 +35,7 @@ CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWid
     QObject::connect(_pointsManager, SIGNAL(homePointWasChanged()), SLOT(changeHome()));
     QObject::connect(_pointsManager, SIGNAL(pointsWasAdded()), SLOT(refreshPointsList()));
     QObject::connect(_pointsManager, SIGNAL(pointsWasRemoved()), SLOT(refreshPointsList()));
+    QObject::connect(_ui->findLineEdit, SIGNAL(textChanged(QString)), SLOT(findTextChanged(QString)));
 }
 
 CenterPointsWidget::~CenterPointsWidget()
@@ -54,16 +56,26 @@ void CenterPointsWidget::refreshPointsList()
 
     for(const CenterPointStruct & point : points)
     {
-        pointsNameList << point.name;
-
-        if(_lastAdded.isEmpty() == false)
+        if(_findText.isEmpty() == true)
         {
-            if(point.name.compare(_lastAdded) == 0)
-            {
-                row = i;
-            }
+            pointsNameList << point.name;
 
-            i++;
+            if(_lastAdded.isEmpty() == false)
+            {
+                if(point.name.compare(_lastAdded) == 0)
+                {
+                    row = i;
+                }
+
+                i++;
+            }
+        }
+        else
+        {
+            if(point.name.indexOf(_findText, 0, Qt::CaseInsensitive) >= 0)
+            {
+                pointsNameList << point.name;
+            }
         }
     }
 
@@ -249,4 +261,12 @@ void CenterPointsWidget::exportPoints()
     {
         _pointsManager->exportPoints();
     }
+}
+
+void CenterPointsWidget::findTextChanged(const QString &findText)
+{
+    _findText = findText;
+    _lastAdded.clear();
+
+    refreshPointsList();
 }

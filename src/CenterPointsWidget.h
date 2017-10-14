@@ -31,12 +31,14 @@ class CenterPointsWidget : public QWidget
         void refreshPointsList();
         void importPoints();
         void exportPoints();
+        void findTextChanged(const QString & findText);
 
     private:
         Ui::CenterPointsWidget * _ui;
         CenterPointsManager * _pointsManager;
         QStringListModel * _listModel = nullptr;
         QString _lastAdded;
+        QString _findText;
 };
 
 #endif // CENTERPOINTSWIDGET_H
