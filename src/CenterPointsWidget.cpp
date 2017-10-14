@@ -270,3 +270,8 @@ void CenterPointsWidget::findTextChanged(const QString &findText)
 
     refreshPointsList();
 }
+
+void CenterPointsWidget::setLastAdded(const QString &pointName)
+{
+    _lastAdded = pointName;
+}

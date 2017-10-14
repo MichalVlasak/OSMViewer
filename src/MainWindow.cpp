@@ -338,9 +338,19 @@ CenterPointsManager * MainWindow::getCenterPointsManager()
     return _centerPointsManager;
 }
 
+CenterPointsWidget * MainWindow::getCenterPointsWidget()
+{
+    return _centerPointsWidget;
+}
+
 void MainWindow::centerToPoint(const CenterPointStruct & point)
 {
     _ui->paintWidget->centerToPoint(point);
 
     zoomChanged();
+}
+
+MapSettings & MainWindow::getMapSettings()
+{
+    return _ui->paintWidget->getMapSettings();
 }

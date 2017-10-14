@@ -1,6 +1,7 @@
 #include "MapContextMenu.h"
 #include "MainWindow.h"
 #include "DeleteOldMapsDialog.h"
+#include "CenterPointEditDialog.h"
 
 #include <QMenu>
 
@@ -55,9 +56,17 @@ void MapContextMenu::show(const QPointF &pos)
 
     menu->addSeparator();
 
-    QAction * centermap = new QAction(tr("Center Map"), this);
-    menu->addAction(centermap);
-    QObject::connect(centermap, SIGNAL(triggered(bool)), SLOT(centerMapActivated()));
+    QAction * centerMap = new QAction(tr("Center Map"), this);
+    menu->addAction(centerMap);
+    QObject::connect(centerMap, SIGNAL(triggered(bool)), SLOT(centerMapActivated()));
+
+    QAction * centerPoints = new QAction(tr("Add to Center Points"), this);
+    menu->addAction(centerPoints);
+    QObject::connect(centerPoints, SIGNAL(triggered(bool)), SLOT(addToCenterPoint()));
+
+    QAction * homePoint = new QAction(tr("Set as Home Point"), this);
+    menu->addAction(homePoint);
+    QObject::connect(homePoint, SIGNAL(triggered(bool)), SLOT(setAsHomePoint()));
 
     _pos = QPoint(pos.x(), pos.y());
 
@@ -109,4 +118,73 @@ bool MapContextMenu::getDeleteMapsSettings(DeleteOldMapsWidget::DeleteSettings &
     }
 
     return false;
+}
+
+void MapContextMenu::addToCenterPoint()
+{
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        MapSettings & mapSettings = window->getMapSettings();
+
+        int level = mapSettings.zoom.getCurrentZoomLevel();
+        double lat = mapSettings.getLatForPixel(mapSettings.windowPixelToMapPixelY(_pos.y()));
+        double lon = mapSettings.getLonForPixelOld((_pos.x()));
+
+        CenterPointStruct point;
+
+        point.level = level;
+        point.position = QPointF(lon, lat);
+
+        CenterPointEditDialog * dialog = new CenterPointEditDialog(point, this);
+
+        if(dialog->exec() == QDialog::Accepted)
+        {
+            point = dialog->getCenterPoint();
+
+            CenterPointsManager * pointsManager = window->getCenterPointsManager();
+            {
+                CenterPointsWidget * pointsWidget = window->getCenterPointsWidget();
+
+                if(pointsWidget != nullptr)
+                {
+                    pointsWidget->setLastAdded(point.name);
+                }
+
+                pointsManager->addCenterPoint(point);
+            }
+        }
+    }
+}
+
+void MapContextMenu::setAsHomePoint()
+{
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        MapSettings & mapSettings = window->getMapSettings();
+
+        int level = mapSettings.zoom.getCurrentZoomLevel();
+        double lat = mapSettings.getLatForPixel(mapSettings.windowPixelToMapPixelY(_pos.y()));
+        double lon = mapSettings.getLonForPixelOld((_pos.x()));
+
+        CenterPointStruct point;
+
+        point.level = level;
+        point.position = QPointF(lon, lat);
+
+        CenterPointEditDialog * dialog = new CenterPointEditDialog(point, this);
+
+        if(dialog->exec() == QDialog::Accepted)
+        {
+            point = dialog->getCenterPoint();
+
+            CenterPointsManager * pointsManager = window->getCenterPointsManager();
+            {
+                pointsManager->setHomeCenterPoint(point);
+            }
+        }
+    }
 }

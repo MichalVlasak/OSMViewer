@@ -23,6 +23,8 @@ class MapContextMenu : public QWidget
     private slots:
         void centerMapActivated();
         void setEnableDownloading(bool enabled);
+        void addToCenterPoint();
+        void setAsHomePoint();
 
     private:
         bool getDeleteMapsSettings(DeleteOldMapsWidget::DeleteSettings & settings);

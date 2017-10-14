@@ -18,6 +18,9 @@ class CenterPointsWidget : public QWidget
         explicit CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent = 0);
         ~CenterPointsWidget();
 
+    public:
+        void setLastAdded(const QString & pointName);
+
     private slots:
         void centerHome();
         void editHome();
