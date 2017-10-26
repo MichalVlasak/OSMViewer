@@ -7,6 +7,7 @@
 #include <QListView>
 #include <QMessageBox>
 #include <QLineEdit>
+#include <QPushButton>
 
 CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent) :
     QWidget(parent),
@@ -31,11 +32,16 @@ CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWid
     QObject::connect(_ui->deleteAllButton, SIGNAL(clicked(bool)), SLOT(removeAllPointsFromCenterList()));
     QObject::connect(_ui->importButton, SIGNAL(clicked(bool)), SLOT(importPoints()));
     QObject::connect(_ui->exportButton, SIGNAL(clicked(bool)), SLOT(exportPoints()));
+    QObject::connect(_ui->listView, SIGNAL(clicked(QModelIndex)), SLOT(clickedToList(QModelIndex)));
     QObject::connect(_ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(centerToPointFromList(QModelIndex)));
     QObject::connect(_pointsManager, SIGNAL(homePointWasChanged()), SLOT(changeHome()));
     QObject::connect(_pointsManager, SIGNAL(pointsWasAdded()), SLOT(refreshPointsList()));
     QObject::connect(_pointsManager, SIGNAL(pointsWasRemoved()), SLOT(refreshPointsList()));
     QObject::connect(_ui->findLineEdit, SIGNAL(textChanged(QString)), SLOT(findTextChanged(QString)));
+
+    _ui->centerButton->setEnabled(false);
+    _ui->editButton->setEnabled(false);
+    _ui->deleteButton->setEnabled(false);
 }
 
 CenterPointsWidget::~CenterPointsWidget()
@@ -136,6 +142,16 @@ void CenterPointsWidget::centerToPointFromList(QModelIndex index)
                 }
             }
         }
+    }
+}
+
+void CenterPointsWidget::clickedToList(QModelIndex index)
+{
+    if(index.isValid() == true)
+    {
+        _ui->centerButton->setEnabled(true);
+        _ui->editButton->setEnabled(true);
+        _ui->deleteButton->setEnabled(true);
     }
 }
 

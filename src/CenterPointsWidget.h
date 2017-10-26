@@ -25,6 +25,7 @@ class CenterPointsWidget : public QWidget
         void centerHome();
         void editHome();
         void changeHome();
+        void clickedToList(QModelIndex index);
         void centerToPointFromList(QModelIndex index);
         void centerToPointFromList();
         void addPointToCenterList();
