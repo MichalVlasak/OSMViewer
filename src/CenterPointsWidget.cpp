@@ -185,6 +185,8 @@ void CenterPointsWidget::editPointFromCenterList()
                             _pointsManager->removeCenterPoint(point);
                             _pointsManager->addCenterPoint(dialog->getCenterPoint());
                         }
+
+                        delete dialog;
                     }
                 }
             }

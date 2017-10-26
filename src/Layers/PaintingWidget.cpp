@@ -3,7 +3,7 @@
 #include "GridLayer.h"
 #include "src/MapContextMenu.h"
 #include "src/CenterPointsManager.h"
-#include "src/MainWindow.h".h"
+#include "src/MainWindow.h"
 
 #include <iostream>
 
