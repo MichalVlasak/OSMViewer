@@ -2,8 +2,11 @@
 #include "MainWindow.h"
 #include "DeleteOldMapsDialog.h"
 #include "CenterPointEditDialog.h"
+#include "WgsConversion.h"
 
 #include <QMenu>
+#include <QClipboard>
+#include <QApplication>
 
 MapContextMenu::MapContextMenu(QWidget * parent)
     : QWidget(parent)
@@ -67,6 +70,12 @@ void MapContextMenu::show(const QPointF &pos)
     QAction * homePoint = new QAction(tr("Set as Home Point"), this);
     menu->addAction(homePoint);
     QObject::connect(homePoint, SIGNAL(triggered(bool)), SLOT(setAsHomePoint()));
+
+    menu->addSeparator();
+
+    QAction * pointToClipboard = new QAction(tr("Save position to Clipboard"), this);
+    menu->addAction(pointToClipboard);
+    QObject::connect(pointToClipboard, SIGNAL(triggered(bool)), SLOT(pointToClipboard()));
 
     _pos = QPoint(pos.x(), pos.y());
 
@@ -185,6 +194,29 @@ void MapContextMenu::setAsHomePoint()
             {
                 pointsManager->setHomeCenterPoint(point);
             }
+        }
+    }
+}
+
+void MapContextMenu::pointToClipboard()
+{
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        MapSettings & mapSettings = window->getMapSettings();
+
+        double lat = mapSettings.getLatForPixel(mapSettings.windowPixelToMapPixelY(_pos.y()));
+        double lon = mapSettings.getLonForPixelOld((_pos.x()));
+
+        QString latString = WgsConversion::convertDoubleDegToWgs(lat, WgsConversion::Latitude, true, true);
+        QString lonString = WgsConversion::convertDoubleDegToWgs(lon, WgsConversion::Longitude, true, true);
+
+        QClipboard * clipboard = QApplication::clipboard();
+
+        if(clipboard != nullptr)
+        {
+            clipboard->setText(latString + " " + lonString);
         }
     }
 }

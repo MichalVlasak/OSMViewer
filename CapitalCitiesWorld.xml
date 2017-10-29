@@ -3,6 +3,12 @@
     <CenterPoints>
         <Points>
             <Point>
+                <Name>Abu Dhabi (United Arab Emirates)</Name>
+                <Level>12</Level>
+                <Latitude>24.453884</Latitude>
+                <Longitude>54.377344</Longitude>
+            </Point>
+            <Point>
                 <Name>Abuja (Nigeria)</Name>
                 <Level>12</Level>
                 <Latitude>9.076479</Latitude>
@@ -63,6 +69,12 @@
                 <Longitude>-171.751355</Longitude>
             </Point>
             <Point>
+                <Name>Ashgabat (Turkmenistan)</Name>
+                <Level>12</Level>
+                <Latitude>37.960077</Latitude>
+                <Longitude>58.326063</Longitude>
+            </Point>
+            <Point>
                 <Name>Asmara (Eritrea)</Name>
                 <Level>13</Level>
                 <Latitude>15.322877</Latitude>
@@ -109,6 +121,12 @@
                 <Level>12</Level>
                 <Latitude>4.903052</Latitude>
                 <Longitude>114.939821</Longitude>
+            </Point>
+            <Point>
+                <Name>Bangkok (Thailand)</Name>
+                <Level>11</Level>
+                <Latitude>13.756331</Latitude>
+                <Longitude>100.501765</Longitude>
             </Point>
             <Point>
                 <Name>Bangui (Central African Republic)</Name>
@@ -261,6 +279,12 @@
                 <Longitude>18.424055</Longitude>
             </Point>
             <Point>
+                <Name>Caracas (Venezuela)</Name>
+                <Level>13</Level>
+                <Latitude>10.480594</Latitude>
+                <Longitude>-66.903606</Longitude>
+            </Point>
+            <Point>
                 <Name>Castries (Saint Lucia)</Name>
                 <Level>15</Level>
                 <Latitude>14.010109</Latitude>
@@ -303,6 +327,18 @@
                 <Longitude>90.412518</Longitude>
             </Point>
             <Point>
+                <Name>Dili (Timor-Leste)</Name>
+                <Level>13</Level>
+                <Latitude>-8.556856</Latitude>
+                <Longitude>125.560314</Longitude>
+            </Point>
+            <Point>
+                <Name>Dodoma (Tanzania)</Name>
+                <Level>13</Level>
+                <Latitude>-6.162959</Latitude>
+                <Longitude>35.751607</Longitude>
+            </Point>
+            <Point>
                 <Name>Doha (Qatar)</Name>
                 <Level>11</Level>
                 <Latitude>25.285447</Latitude>
@@ -315,10 +351,22 @@
                 <Longitude>-6.26751</Longitude>
             </Point>
             <Point>
+                <Name>Dushanbe (Tajikistan)</Name>
+                <Level>12</Level>
+                <Latitude>38.559772</Latitude>
+                <Longitude>68.787038</Longitude>
+            </Point>
+            <Point>
                 <Name>Freetown (Sierra Leone)</Name>
                 <Level>13</Level>
                 <Latitude>8.465677</Latitude>
                 <Longitude>-13.231722</Longitude>
+            </Point>
+            <Point>
+                <Name>Funafuti (Tuvalu)</Name>
+                <Level>15</Level>
+                <Latitude>-8.521147</Latitude>
+                <Longitude>179.196193</Longitude>
             </Point>
             <Point>
                 <Name>Gaborone (Botswana)</Name>
@@ -337,6 +385,18 @@
                 <Level>12</Level>
                 <Latitude>14.634915</Latitude>
                 <Longitude>-90.506882</Longitude>
+            </Point>
+            <Point>
+                <Name>Hanoi (Vietnam)</Name>
+                <Level>13</Level>
+                <Latitude>21.027764</Latitude>
+                <Longitude>105.83416</Longitude>
+            </Point>
+            <Point>
+                <Name>Harare (Zimbabwe)</Name>
+                <Level>12</Level>
+                <Latitude>-17.825166</Latitude>
+                <Longitude>31.03351</Longitude>
             </Point>
             <Point>
                 <Name>Havana (Cuba)</Name>
@@ -391,6 +451,12 @@
                 <Level>11</Level>
                 <Latitude>34.543896</Latitude>
                 <Longitude>69.160652</Longitude>
+            </Point>
+            <Point>
+                <Name>Kampala (Uganda)</Name>
+                <Level>12</Level>
+                <Latitude>0.347596</Latitude>
+                <Longitude>32.58252</Longitude>
             </Point>
             <Point>
                 <Name>Kathmandu (Nepal)</Name>
@@ -489,6 +555,12 @@
                 <Longitude>31.2057209015</Longitude>
             </Point>
             <Point>
+                <Name>Lomé (Togo)</Name>
+                <Level>12</Level>
+                <Latitude>6.172497</Latitude>
+                <Longitude>1.231362</Longitude>
+            </Point>
+            <Point>
                 <Name>London (United Kingdom)</Name>
                 <Level>10</Level>
                 <Latitude>51.5073509</Latitude>
@@ -499,6 +571,12 @@
                 <Level>12</Level>
                 <Latitude>-8.838333</Latitude>
                 <Longitude>13.234444</Longitude>
+            </Point>
+            <Point>
+                <Name>Lusaka (Zambia)</Name>
+                <Level>12</Level>
+                <Latitude>-15.387526</Latitude>
+                <Longitude>28.322817</Longitude>
             </Point>
             <Point>
                 <Name>Luxembourg (Luxembourg)</Name>
@@ -597,6 +675,12 @@
                 <Longitude>-10.760524</Longitude>
             </Point>
             <Point>
+                <Name>Montevideo (Uruguay)</Name>
+                <Level>12</Level>
+                <Latitude>-34.901113</Latitude>
+                <Longitude>-56.164531</Longitude>
+            </Point>
+            <Point>
                 <Name>Moroni (Comoros)</Name>
                 <Level>13</Level>
                 <Latitude>-11.717216</Latitude>
@@ -669,6 +753,12 @@
                 <Longitude>-15.958237</Longitude>
             </Point>
             <Point>
+                <Name>Nukuʻalofa (Tonga)</Name>
+                <Level>13</Level>
+                <Latitude>-21.139342</Latitude>
+                <Longitude>-175.204947</Longitude>
+            </Point>
+            <Point>
                 <Name>Oslo (Norway)</Name>
                 <Level>11</Level>
                 <Latitude>59.9138688</Latitude>
@@ -739,6 +829,18 @@
                 <Level>12</Level>
                 <Latitude>-9.478012</Latitude>
                 <Longitude>147.150654</Longitude>
+            </Point>
+            <Point>
+                <Name>Port Vila (Vanuatu)</Name>
+                <Level>14</Level>
+                <Latitude>-17.733251</Latitude>
+                <Longitude>168.327325</Longitude>
+            </Point>
+            <Point>
+                <Name>Port of Spain (Trinidad and Tobago)</Name>
+                <Level>13</Level>
+                <Latitude>10.654901</Latitude>
+                <Longitude>-61.501926</Longitude>
             </Point>
             <Point>
                 <Name>Port-au-Prince (Haiti)</Name>
@@ -849,6 +951,12 @@
                 <Longitude>-89.218191</Longitude>
             </Point>
             <Point>
+                <Name>Sana'a (Yemen)</Name>
+                <Level>12</Level>
+                <Latitude>15.369445</Latitude>
+                <Longitude>44.191007</Longitude>
+            </Point>
+            <Point>
                 <Name>Santiago (Chile)</Name>
                 <Level>11</Level>
                 <Latitude>-33.44889</Latitude>
@@ -915,6 +1023,12 @@
                 <Longitude>6.733343</Longitude>
             </Point>
             <Point>
+                <Name>Taipei (Taiwan)</Name>
+                <Level>12</Level>
+                <Latitude>25.032969</Latitude>
+                <Longitude>121.565418</Longitude>
+            </Point>
+            <Point>
                 <Name>Tallinn (Estonia)</Name>
                 <Level>11</Level>
                 <Latitude>59.4372222222</Latitude>
@@ -925,6 +1039,12 @@
                 <Level>16</Level>
                 <Latitude>1.3278</Latitude>
                 <Longitude>172.97696</Longitude>
+            </Point>
+            <Point>
+                <Name>Tashkent (Uzbekistan)</Name>
+                <Level>12</Level>
+                <Latitude>41.299496</Latitude>
+                <Longitude>69.240073</Longitude>
             </Point>
             <Point>
                 <Name>Tbilisi (Georgia)</Name>
@@ -967,6 +1087,12 @@
                 <Level>12</Level>
                 <Latitude>32.887209</Latitude>
                 <Longitude>13.191338</Longitude>
+            </Point>
+            <Point>
+                <Name>Tunis (Tunisia)</Name>
+                <Level>12</Level>
+                <Latitude>36.806495</Latitude>
+                <Longitude>10.181532</Longitude>
             </Point>
             <Point>
                 <Name>Ulaanbaatar (Mongolia)</Name>
@@ -1021,6 +1147,12 @@
                 <Level>12</Level>
                 <Latitude>52.2322222222</Latitude>
                 <Longitude>21.0083333333</Longitude>
+            </Point>
+            <Point>
+                <Name>Washington, D.C. (United States of America)</Name>
+                <Level>12</Level>
+                <Latitude>38.907192</Latitude>
+                <Longitude>-77.036871</Longitude>
             </Point>
             <Point>
                 <Name>Wellington (New Zealand)</Name>

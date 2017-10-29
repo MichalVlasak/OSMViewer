@@ -11,14 +11,6 @@ class GridLayer : public BaseLayer
     public:
         void paintEvent(QPaintEvent * paintEvent);
 
-    public:
-        enum LatLonInfo
-        {
-            Latitude, Longitude
-        };
-
-        static QString getPrintableDegree(double degree, LatLonInfo latLon, bool showFullNumber = false, bool showSecDecimals = false);
-
     private:
         double DegreeUnit = 360 * 60 * 60; // pocet sekund v celom kruhu
 

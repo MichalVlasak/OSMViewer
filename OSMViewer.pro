@@ -46,7 +46,8 @@ SOURCES += src/main.cpp\
     src/DeleteOldMapsUtils.cpp \
     src/CenterPointsManager.cpp \
     src/CenterPointsWidget.cpp \
-    src/CenterPointEditDialog.cpp
+    src/CenterPointEditDialog.cpp \
+    src/WgsConversion.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -72,7 +73,8 @@ HEADERS  += src/MainWindow.h \
     src/CenterPointStruct.h \
     src/CenterPointsManager.h \
     src/CenterPointsWidget.h \
-    src/CenterPointEditDialog.h
+    src/CenterPointEditDialog.h \
+    src/WgsConversion.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -87,3 +89,6 @@ FORMS    += resources/MainWindow.ui \
 
 RESOURCES += \
     resources/resources.qrc
+
+SUBDIRS += \
+    UnitTest.pro

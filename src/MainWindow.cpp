@@ -1,10 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "OSMDirectoryPathDialog.h"
-#include "Layers/GridLayer.h"
 #include "Layers/OSMLayer.h"
 #include "OSMDownloadAreaDialog.h"
 #include "AboutDialog.h"
+#include "WgsConversion.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -195,8 +195,8 @@ void MainWindow::zoomChanged()
 
 void MainWindow::mouseCursorWgsChanged(double lat, double lon)
 {
-    QString latString = GridLayer::getPrintableDegree(lat * 60. * 60., GridLayer::Latitude, true, true);
-    QString lonString = GridLayer::getPrintableDegree(lon * 60. * 60., GridLayer::Longitude, true, true);
+    QString latString = WgsConversion::convertDoubleDegToWgs(lat, WgsConversion::Latitude, true, true);
+    QString lonString = WgsConversion::convertDoubleDegToWgs(lon, WgsConversion::Longitude, true, true);
 
     int level = _ui->paintWidget->getMapSettings().zoom.getCurrentZoomLevel();
     int column = _ui->paintWidget->getMapSettings().long2tilex(lon, level);

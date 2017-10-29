@@ -25,6 +25,7 @@ class MapContextMenu : public QWidget
         void setEnableDownloading(bool enabled);
         void addToCenterPoint();
         void setAsHomePoint();
+        void pointToClipboard();
 
     private:
         bool getDeleteMapsSettings(DeleteOldMapsWidget::DeleteSettings & settings);

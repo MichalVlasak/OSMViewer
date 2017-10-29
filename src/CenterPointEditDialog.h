@@ -19,6 +19,10 @@ class CenterPointEditDialog : public QDialog
 
         CenterPointStruct getCenterPoint();
 
+    private slots:
+        void refreshWgsLine();
+        void refreshLatLonSpinBox();
+
     private:
         Ui::CenterPointEditDialog * _ui;
 };

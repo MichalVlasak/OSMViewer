@@ -1,5 +1,6 @@
 #include "GridLayer.h"
 #include "OSMLayer.h"
+#include "../WgsConversion.h"
 
 #include <QPainter>
 #include <QWidget>
@@ -28,78 +29,6 @@ void GridLayer::paintEvent(QPaintEvent *paintEvent)
     paintGrid(_gridLevel[2]);
     paintGrid(_gridLevel[1]);
     paintGrid(_gridLevel[0]);
-}
-
-QString GridLayer::getPrintableDegree(double degree, LatLonInfo latLon, bool showFullNumber, bool showSecDecimals)
-{
-    QString retval;
-    QString hemi;
-
-    if(degree < 0)
-    {
-        if(latLon == Latitude)
-        {
-            hemi = "S";
-        }
-        else
-        {
-            hemi = "W";
-        }
-    }
-    else
-    {
-        if(latLon == Latitude)
-        {
-            hemi = "N";
-        }
-        else
-        {
-            hemi = "E";
-        }
-    }
-
-    degree = fabs(degree);
-    int deg = int(degree / (60. * 60.));
-
-    degree -= deg * 60. * 60.;
-    int min = int(degree / 60.);
-
-    degree -= min * 60.;
-    int sec = int(degree);
-
-    double secDec = degree;
-
-    retval = QString::number(deg) + "º";
-
-    if(min != 0)
-    {
-        retval += ((min < 10) ? "0" : "") + QString::number(min) + "'";
-    }
-
-    if(sec != 0 || showFullNumber == true)
-    {
-        if(min == 0)
-        {
-            retval += "00'";
-        }
-
-        QString secString;
-
-        if(showSecDecimals == true)
-        {
-            secString = QString::number(secDec, 'f', 3);
-        }
-        else
-        {
-            secString = QString::number(sec);
-        }
-
-        retval += ((sec < 10) ? "0" : "") + secString + "\"";
-    }
-
-    retval += hemi;
-
-    return retval;
 }
 
 void GridLayer::paintGrid(GridLevelInfo levelInfo)
@@ -205,7 +134,7 @@ void GridLayer::paintGrid(GridLevelInfo levelInfo)
         {
             painter.drawLine(posX, posYStart, posX, posYStop);
 
-            QString label = getPrintableDegree(lonUnit, Longitude);
+            QString label = WgsConversion::convertDoubleSecToWgs(lonUnit, WgsConversion::Longitude);
             int labelWidth = fontMetrics.width(label);
 
             if((lastLabelPosX + 5 + labelWidth) < posX || lon == -180.)
@@ -254,7 +183,7 @@ void GridLayer::paintGrid(GridLevelInfo levelInfo)
         else if(posY >= 0 && posY <= wHeight)
         {
             painter.drawLine(posXStart, posY, posXStop, posY);
-            QString label = getPrintableDegree(latUnit, Latitude);
+            QString label = WgsConversion::convertDoubleSecToWgs(latUnit, WgsConversion::Latitude);
             int labelWidth = fontMetrics.width(label);
 
             painter.drawText(QPointF(labelPosX - (labelWidth / 2), posY + 13), label);
