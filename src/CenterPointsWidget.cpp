@@ -138,6 +138,7 @@ void CenterPointsWidget::centerToPointFromList(QModelIndex index)
                     if(mainWindow != nullptr)
                     {
                         mainWindow->centerToPoint(point);
+                        mainWindow->setFocus();
                     }
                 }
             }
@@ -152,6 +153,13 @@ void CenterPointsWidget::clickedToList(QModelIndex index)
         _ui->centerButton->setEnabled(true);
         _ui->editButton->setEnabled(true);
         _ui->deleteButton->setEnabled(true);
+
+        MainWindow * mainWindow = MainWindow::getInstance();
+
+        if(mainWindow != nullptr)
+        {
+            mainWindow->setFocus();
+        }
     }
 }
 
