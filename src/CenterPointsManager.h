@@ -15,6 +15,7 @@ class CenterPointsManager : public QObject
 
     public:
         typedef std::vector<CenterPointStruct> CenterPointsVector;
+        typedef std::map<QString, CenterPointsVector> CenterPointsMap; // meno skupiny, zoznam bodov pre skupinu
 
     public:
         CenterPointsManager(QObject * parent = nullptr);
@@ -22,18 +23,24 @@ class CenterPointsManager : public QObject
     public:
         const CenterPointStruct & getHomeCenterPoint() const;
         void setHomeCenterPoint(const CenterPointStruct & point);
-        const CenterPointsVector & getCenterPointsVector() const;
-        void addCenterPoint(const CenterPointStruct & centerPoint);
-        void removeCenterPoint(const CenterPointStruct & centerPoint);
+        const CenterPointsVector * getCenterPointsVector(const QString & groupName) const;
+        const CenterPointsMap & getCenterPointsMap() const;
+        void addCenterPoint(const QString & groupName, const CenterPointStruct & centerPoint, bool emitSignal);
+        void removeCenterPoint(const QString & groupName, const CenterPointStruct & centerPoint, bool emitSignal);
         void removeAllCenterPoints();
 
         void importPoints();
-        void exportPoints();
+        void exportAllGroups();
+        void exportGroup(const QString & groupName);
 
         const QString & getImportExportLastPath() const;
         void setImportExportLastPath(const QString & path);
 
         static void storePoint(const CenterPointStruct & point, QDomElement & element, QDomDocument & doc);
+
+        bool createNewGroup(const QString & groupName);
+        bool changeGroupName(const QString & oldGroupName, const QString & newGroupName);
+        bool removeGroup(const QString & groupName);
 
     signals:
         void homePointWasChanged();
@@ -41,8 +48,12 @@ class CenterPointsManager : public QObject
         void pointsWasRemoved();
 
     private:
+        void prepareXmlDocument(const QString & fileName, QDomDocument & doc, QDomElement & groupsElement);
+        void savePointsToXml(CenterPointsMap::iterator it, QDomDocument & doc, QDomElement & groupsElement);
+
+    private:
         CenterPointStruct _homePosition;
-        CenterPointsVector _pointsVector;
+        CenterPointsMap _pointsMap;
         QString _importExportLastPath;
 };
 

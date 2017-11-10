@@ -20,6 +20,8 @@ class CenterPointsWidget : public QWidget
 
     public:
         void setLastAdded(const QString & pointName);
+        QString getCurrentGroupName() const;
+        void fillPointsList();
 
     private slots:
         void centerHome();
@@ -32,10 +34,18 @@ class CenterPointsWidget : public QWidget
         void editPointFromCenterList();
         void removePointFromCenterList();
         void removeAllPointsFromCenterList();
-        void refreshPointsList();
         void importPoints();
-        void exportPoints();
+        void exportCurrentGroup();
+        void exportAllGroups();
         void findTextChanged(const QString & findText);
+        void changeGroup(const QString & groupName);
+        void refreshCurrentGroup();
+        void addGroup();
+        void editGroup();
+        void removeGroup();
+
+    private:
+        QStringList getPointsListForGroup(const QString & groupName);
 
     private:
         Ui::CenterPointsWidget * _ui;

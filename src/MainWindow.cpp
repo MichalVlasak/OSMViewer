@@ -138,6 +138,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_downloaderPrepare, SIGNAL(allIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
 
     _appSettings.restoreCenterPoints(_centerPointsManager);
+
+    _centerPointsWidget->fillPointsList();
 }
 
 MainWindow::~MainWindow()

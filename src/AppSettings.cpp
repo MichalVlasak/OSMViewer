@@ -454,17 +454,34 @@ void AppSettings::storeCenterPoints(CenterPointsManager *pointsManager)
 
         CenterPointsManager::storePoint(homePoint, homePointElement, _doc);
 
-        QDomElement pointsListElement = _doc.createElement("Points");
-        centerPointsElement.appendChild(pointsListElement);
+        QDomElement groupsElement = _doc.createElement("Groups");
+        centerPointsElement.appendChild(groupsElement);
 
-        const CenterPointsManager::CenterPointsVector & points = pointsManager->getCenterPointsVector();
+        const CenterPointsManager::CenterPointsMap & pointsMap = pointsManager->getCenterPointsMap();
+        CenterPointsManager::CenterPointsMap::const_iterator it, end = pointsMap.end();
 
-        for(const CenterPointStruct & point : points)
+        for(it = pointsMap.begin(); it != end; ++it)
         {
-            QDomElement pointElement = _doc.createElement("Point");
-            pointsListElement.appendChild(pointElement);
+            QDomElement groupElement = _doc.createElement("Group");
+            groupsElement.appendChild(groupElement);
 
-            CenterPointsManager::storePoint(point, pointElement, _doc);
+            QDomElement groupNameElement = _doc.createElement("Name");
+            groupElement.appendChild(groupNameElement);
+            QDomText groupPointNameText = _doc.createTextNode(it->first);
+            groupNameElement.appendChild(groupPointNameText);
+
+            QDomElement pointsListElement = _doc.createElement("Points");
+            groupElement.appendChild(pointsListElement);
+
+            const CenterPointsManager::CenterPointsVector & points = it->second;
+
+            for(const CenterPointStruct & point : points)
+            {
+                QDomElement pointElement = _doc.createElement("Point");
+                pointsListElement.appendChild(pointElement);
+
+                CenterPointsManager::storePoint(point, pointElement, _doc);
+            }
         }
     }
 }
@@ -532,38 +549,60 @@ bool AppSettings::restoreCenterPoints(CenterPointsManager *pointsManager)
                     }
                 }
 
-                QDomNodeList pointsNodeList = centerPointsNode.toElement().elementsByTagName("Points");
+                QDomNodeList groupsNodeList = centerPointsNode.toElement().elementsByTagName("Groups");
 
-                for(int iPoints = 0; iPoints < pointsNodeList.size(); iPoints++)
+                for(int iGroups = 0; iGroups < groupsNodeList.size(); iGroups++)
                 {
-                    QDomNode pointsNode = pointsNodeList.at(iPoints);
+                    QDomNode groupsNode = groupsNodeList.at(iGroups);
 
-                    if(pointsNode.isNull() == false)
+                    if(groupsNode.isNull() == false)
                     {
-                        QDomNodeList pointNode = pointsNode.toElement().elementsByTagName("Point");
+                        QDomNodeList groupNodeList = groupsNode.toElement().elementsByTagName("Group");
 
-                        for(int iPoint = 0; iPoint < pointNode.size(); iPoint++)
+                        for(int iGroup = 0; iGroup < groupNodeList.size(); iGroup++)
                         {
-                            QDomNode pPointNode = pointNode.at(iPoint);
+                            QDomNode groupNode = groupNodeList.at(iGroup);
 
-                            if(pPointNode.isNull() == false)
+                            if(groupNode.isNull() == false)
                             {
-                                QString name = getValueString(pPointNode, "Name");
-                                QString level = getValueString(pPointNode, "Level");
-                                QString lat = getValueString(pPointNode, "Latitude");
-                                QString lon = getValueString(pPointNode, "Longitude");
+                                QString groupName = AppSettings::getValueString(groupNode, "Name");
 
-                                if(name.isEmpty() == false && level.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
+                                QDomNodeList pointsNodeList = groupNode.toElement().elementsByTagName("Points");
+
+                                for(int iPoints = 0; iPoints < pointsNodeList.size(); iPoints++)
                                 {
-                                    CenterPointStruct point;
+                                    QDomNode pointsNode = pointsNodeList.at(iPoints);
 
-                                    point.name = name;
-                                    point.level = level.toInt();
-                                    point.position = QPointF(lon.toDouble(), lat.toDouble());
+                                    if(pointsNode.isNull() == false)
+                                    {
+                                        QDomNodeList pointNode = pointsNode.toElement().elementsByTagName("Point");
 
-                                    pointsManager->addCenterPoint(point);
+                                        for(int iPoint = 0; iPoint < pointNode.size(); iPoint++)
+                                        {
+                                            QDomNode pPointNode = pointNode.at(iPoint);
 
-                                    result = true;
+                                            if(pPointNode.isNull() == false)
+                                            {
+                                                QString name = getValueString(pPointNode, "Name");
+                                                QString level = getValueString(pPointNode, "Level");
+                                                QString lat = getValueString(pPointNode, "Latitude");
+                                                QString lon = getValueString(pPointNode, "Longitude");
+
+                                                if(name.isEmpty() == false && level.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
+                                                {
+                                                    CenterPointStruct point;
+
+                                                    point.name = name;
+                                                    point.level = level.toInt();
+                                                    point.position = QPointF(lon.toDouble(), lat.toDouble());
+
+                                                    pointsManager->addCenterPoint(groupName, point, false);
+
+                                                    result = true;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

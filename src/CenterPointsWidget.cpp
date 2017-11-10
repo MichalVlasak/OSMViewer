@@ -3,11 +3,13 @@
 
 #include "MainWindow.h"
 #include "CenterPointEditDialog.h"
+#include "GroupEditDialog.h"
 
 #include <QListView>
 #include <QMessageBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QComboBox>
 
 CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWidget *parent) :
     QWidget(parent),
@@ -21,8 +23,6 @@ CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWid
     _listModel = new QStringListModel(this);
     _ui->listView->setModel(_listModel);
 
-    refreshPointsList();
-
     QObject::connect(_ui->centerHomeButton, SIGNAL(clicked(bool)), SLOT(centerHome()));
     QObject::connect(_ui->editHomeButton, SIGNAL(clicked(bool)), SLOT(editHome()));
     QObject::connect(_ui->centerButton, SIGNAL(clicked(bool)), SLOT(centerToPointFromList()));
@@ -31,13 +31,18 @@ CenterPointsWidget::CenterPointsWidget(CenterPointsManager * pointsManager, QWid
     QObject::connect(_ui->deleteButton, SIGNAL(clicked(bool)), SLOT(removePointFromCenterList()));
     QObject::connect(_ui->deleteAllButton, SIGNAL(clicked(bool)), SLOT(removeAllPointsFromCenterList()));
     QObject::connect(_ui->importButton, SIGNAL(clicked(bool)), SLOT(importPoints()));
-    QObject::connect(_ui->exportButton, SIGNAL(clicked(bool)), SLOT(exportPoints()));
+    QObject::connect(_ui->exportAllButton, SIGNAL(clicked(bool)), SLOT(exportAllGroups()));
+    QObject::connect(_ui->exportButton, SIGNAL(clicked(bool)), SLOT(exportCurrentGroup()));
     QObject::connect(_ui->listView, SIGNAL(clicked(QModelIndex)), SLOT(clickedToList(QModelIndex)));
     QObject::connect(_ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(centerToPointFromList(QModelIndex)));
     QObject::connect(_pointsManager, SIGNAL(homePointWasChanged()), SLOT(changeHome()));
-    QObject::connect(_pointsManager, SIGNAL(pointsWasAdded()), SLOT(refreshPointsList()));
-    QObject::connect(_pointsManager, SIGNAL(pointsWasRemoved()), SLOT(refreshPointsList()));
+    QObject::connect(_pointsManager, SIGNAL(pointsWasAdded()), SLOT(refreshCurrentGroup()));
+    QObject::connect(_pointsManager, SIGNAL(pointsWasRemoved()), SLOT(refreshCurrentGroup()));
     QObject::connect(_ui->findLineEdit, SIGNAL(textChanged(QString)), SLOT(findTextChanged(QString)));
+    QObject::connect(_ui->groupComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(changeGroup(QString)));
+    QObject::connect(_ui->addGroup, SIGNAL(clicked(bool)), SLOT(addGroup()));
+    QObject::connect(_ui->editGroup, SIGNAL(clicked(bool)), SLOT(editGroup()));
+    QObject::connect(_ui->removeGroup, SIGNAL(clicked(bool)), SLOT(removeGroup()));
 
     _ui->centerButton->setEnabled(false);
     _ui->editButton->setEnabled(false);
@@ -49,47 +54,63 @@ CenterPointsWidget::~CenterPointsWidget()
     delete _ui;
 }
 
-void CenterPointsWidget::refreshPointsList()
+void CenterPointsWidget::refreshCurrentGroup()
+{
+    changeGroup(_ui->groupComboBox->currentText());
+}
+
+void CenterPointsWidget::fillPointsList()
 {
     _listModel->removeRows(0, _listModel->rowCount());
 
-    const CenterPointsManager::CenterPointsVector & points = _pointsManager->getCenterPointsVector();
+    const CenterPointsManager::CenterPointsMap & pointsMap = _pointsManager->getCenterPointsMap();
+    CenterPointsManager::CenterPointsMap::const_iterator it, end = pointsMap.end();
 
-    QStringList pointsNameList;
+    _ui->groupComboBox->clear();
 
-    int row = -1;
-    int i = 0;
-
-    for(const CenterPointStruct & point : points)
+    for(it = pointsMap.begin(); it != end; ++it)
     {
-        if(_findText.isEmpty() == true)
-        {
-            pointsNameList << point.name;
+        const CenterPointsManager::CenterPointsVector & points = it->second;
+        _ui->groupComboBox->addItem(it->first);
+        _ui->groupComboBox->setCurrentText(it->first);
+        _ui->groupComboBox->model()->sort(0);
 
-            if(_lastAdded.isEmpty() == false)
-            {
-                if(point.name.compare(_lastAdded) == 0)
-                {
-                    row = i;
-                }
+        QStringList pointsNameList;
 
-                i++;
-            }
-        }
-        else
+        int row = -1;
+        int i = 0;
+
+        for(const CenterPointStruct & point : points)
         {
-            if(point.name.indexOf(_findText, 0, Qt::CaseInsensitive) >= 0)
+            if(_findText.isEmpty() == true)
             {
                 pointsNameList << point.name;
+
+                if(_lastAdded.isEmpty() == false)
+                {
+                    if(point.name.compare(_lastAdded) == 0)
+                    {
+                        row = i;
+                    }
+
+                    i++;
+                }
+            }
+            else
+            {
+                if(point.name.indexOf(_findText, 0, Qt::CaseInsensitive) >= 0)
+                {
+                    pointsNameList << point.name;
+                }
             }
         }
-    }
 
-    _listModel->setStringList(pointsNameList);
+        _listModel->setStringList(pointsNameList);
 
-    if(row != -1)
-    {
-        _ui->listView->selectionModel()->setCurrentIndex(_listModel->index(row), QItemSelectionModel::Select);
+        if(row != -1)
+        {
+            _ui->listView->selectionModel()->setCurrentIndex(_listModel->index(row), QItemSelectionModel::Select);
+        }
     }
 }
 
@@ -125,20 +146,24 @@ void CenterPointsWidget::centerToPointFromList(QModelIndex index)
     {
         if(index.isValid() == true)
         {
-            QString name = _listModel->data(index).toString();
+            QString pointName = _listModel->data(index).toString();
+            QString groupName = _ui->groupComboBox->currentText();
 
-            const CenterPointsManager::CenterPointsVector & points = _pointsManager->getCenterPointsVector();
+            const CenterPointsManager::CenterPointsVector * points = _pointsManager->getCenterPointsVector(groupName);
 
-            for(const CenterPointStruct & point : points)
+            if(points != nullptr)
             {
-                if(name.compare(point.name) == 0)
+                for(const CenterPointStruct & point : *points)
                 {
-                    MainWindow * mainWindow = MainWindow::getInstance();
-
-                    if(mainWindow != nullptr)
+                    if(pointName.compare(point.name) == 0)
                     {
-                        mainWindow->centerToPoint(point);
-                        mainWindow->setFocus();
+                        MainWindow * mainWindow = MainWindow::getInstance();
+
+                        if(mainWindow != nullptr)
+                        {
+                            mainWindow->centerToPoint(point);
+                            mainWindow->setFocus();
+                        }
                     }
                 }
             }
@@ -178,7 +203,9 @@ void CenterPointsWidget::addPointToCenterList()
     {
         CenterPointStruct point = dialog->getCenterPoint();
         _lastAdded = point.name;
-        _pointsManager->addCenterPoint(point);
+        QString groupName = _ui->groupComboBox->currentText();
+
+        _pointsManager->addCenterPoint(groupName, point, true);
     }
 }
 
@@ -194,23 +221,27 @@ void CenterPointsWidget::editPointFromCenterList()
 
             if(index.isValid() == true)
             {
-                QString name = _listModel->data(index).toString();
+                QString pointName = _listModel->data(index).toString();
+                QString groupName = _ui->groupComboBox->currentText();
 
-                const CenterPointsManager::CenterPointsVector & points = _pointsManager->getCenterPointsVector();
+                const CenterPointsManager::CenterPointsVector * points = _pointsManager->getCenterPointsVector(groupName);
 
-                for(const CenterPointStruct & point : points)
+                if(points != nullptr)
                 {
-                    if(name.compare(point.name) == 0)
+                    for(const CenterPointStruct & point : *points)
                     {
-                        CenterPointEditDialog * dialog = new CenterPointEditDialog(point, this);
-
-                        if(dialog->exec() == QDialog::Accepted)
+                        if(pointName.compare(point.name) == 0)
                         {
-                            _pointsManager->removeCenterPoint(point);
-                            _pointsManager->addCenterPoint(dialog->getCenterPoint());
-                        }
+                            CenterPointEditDialog * dialog = new CenterPointEditDialog(point, this);
 
-                        delete dialog;
+                            if(dialog->exec() == QDialog::Accepted)
+                            {
+                                _pointsManager->removeCenterPoint(groupName, point, true);
+                                _pointsManager->addCenterPoint(groupName, dialog->getCenterPoint(), true);
+                            }
+
+                            delete dialog;
+                        }
                     }
                 }
             }
@@ -230,26 +261,30 @@ void CenterPointsWidget::removePointFromCenterList()
 
             if(index.isValid() == true)
             {
-                QString name = _listModel->data(index).toString();
+                QString pointName = _listModel->data(index).toString();
+                QString groupName = _ui->groupComboBox->currentText();
 
-                const CenterPointsManager::CenterPointsVector & points = _pointsManager->getCenterPointsVector();
+                const CenterPointsManager::CenterPointsVector * points = _pointsManager->getCenterPointsVector(groupName);
 
-                for(const CenterPointStruct & point : points)
+                if(points != nullptr)
                 {
-                    if(name.compare(point.name) == 0)
+                    for(const CenterPointStruct & point : *points)
                     {
-                        QMessageBox::StandardButton reply;
-
-                        reply = QMessageBox::question(this, tr("Delete Point"), tr("Are You sure to delete point \"") + point.name + tr("\"?"));
-
-                        if(reply == QMessageBox::Yes)
+                        if(pointName.compare(point.name) == 0)
                         {
-                            _pointsManager->removeCenterPoint(point);
+                            QMessageBox::StandardButton reply;
 
-                            // po vymazani bodu musim ukoncit cyklus, pretoze sa mi
-                            // zmenil vektor na ktory mam referenciu a teda zostanem
-                            // v nekonzistentnom stave.
-                            break;
+                            reply = QMessageBox::question(this, tr("Delete Point"), tr("Are You sure to delete point \"") + point.name + tr("\"?"));
+
+                            if(reply == QMessageBox::Yes)
+                            {
+                                _pointsManager->removeCenterPoint(groupName, point, true);
+
+                                // po vymazani bodu musim ukoncit cyklus, pretoze sa mi
+                                // zmenil vektor na ktory mam referenciu a teda zostanem
+                                // v nekonzistentnom stave.
+                                break;
+                            }
                         }
                     }
                 }
@@ -271,6 +306,13 @@ void CenterPointsWidget::removeAllPointsFromCenterList()
             _pointsManager->removeAllCenterPoints();
         }
     }
+
+    fillPointsList();
+}
+
+QString CenterPointsWidget::getCurrentGroupName() const
+{
+    return _ui->groupComboBox->currentText();
 }
 
 void CenterPointsWidget::importPoints()
@@ -279,13 +321,23 @@ void CenterPointsWidget::importPoints()
     {
         _pointsManager->importPoints();
     }
+
+    fillPointsList();
 }
 
-void CenterPointsWidget::exportPoints()
+void CenterPointsWidget::exportAllGroups()
 {
     if(_pointsManager != nullptr)
     {
-        _pointsManager->exportPoints();
+        _pointsManager->exportAllGroups();
+    }
+}
+
+void CenterPointsWidget::exportCurrentGroup()
+{
+    if(_pointsManager != nullptr)
+    {
+        _pointsManager->exportGroup(_ui->groupComboBox->currentText());
     }
 }
 
@@ -294,10 +346,147 @@ void CenterPointsWidget::findTextChanged(const QString &findText)
     _findText = findText;
     _lastAdded.clear();
 
-    refreshPointsList();
+    QStringList pointsNameList = getPointsListForGroup(_ui->groupComboBox->currentText());
+    QStringList newPointsNameList;
+
+    for(const QString & pointName : pointsNameList)
+    {
+        if(pointName.indexOf(_findText, 0, Qt::CaseInsensitive) >= 0)
+        {
+            newPointsNameList << pointName;
+        }
+    }
+
+    _listModel->setStringList(newPointsNameList);
 }
 
 void CenterPointsWidget::setLastAdded(const QString &pointName)
 {
     _lastAdded = pointName;
+}
+
+void CenterPointsWidget::changeGroup(const QString &groupName)
+{
+    _listModel->removeRows(0, _listModel->rowCount());
+    QStringList pointsNameList = getPointsListForGroup(groupName);
+    QStringList newPointsNameList;
+    int row = -1;
+    int i = 0;
+
+    for(const QString & pointName : pointsNameList)
+    {
+        if(_findText.isEmpty() == true)
+        {
+            newPointsNameList << pointName;
+
+            if(_lastAdded.isEmpty() == false)
+            {
+                if(pointName.compare(_lastAdded) == 0)
+                {
+                    row = i;
+                }
+
+                i++;
+            }
+        }
+        else
+        {
+            if(pointName.indexOf(_findText, 0, Qt::CaseInsensitive) >= 0)
+            {
+                newPointsNameList << pointName;
+            }
+        }
+    }
+
+    _listModel->setStringList(newPointsNameList);
+
+    if(row != -1)
+    {
+        _ui->listView->selectionModel()->setCurrentIndex(_listModel->index(row), QItemSelectionModel::Select);
+        _ui->centerButton->setEnabled(true);
+        _ui->editButton->setEnabled(true);
+        _ui->deleteButton->setEnabled(true);
+    }
+}
+
+QStringList CenterPointsWidget::getPointsListForGroup(const QString &groupName)
+{
+    const CenterPointsManager::CenterPointsMap & pointsMap = _pointsManager->getCenterPointsMap();
+    CenterPointsManager::CenterPointsMap::const_iterator it = pointsMap.find(groupName);
+
+    QStringList pointsNameList;
+
+    if(it != pointsMap.end())
+    {
+        const CenterPointsManager::CenterPointsVector & points = it->second;
+
+        for(const CenterPointStruct & point : points)
+        {
+            pointsNameList << point.name;
+        }
+
+        _listModel->setStringList(pointsNameList);
+    }
+
+    return pointsNameList;
+}
+
+void CenterPointsWidget::addGroup()
+{
+    GroupEditDialog * dialog = new GroupEditDialog("", this);
+
+    if(dialog->exec() == QDialog::Accepted)
+    {
+        QString groupName = dialog->getGroupName();
+
+        if(_pointsManager->createNewGroup(groupName) == true)
+        {
+            _ui->groupComboBox->addItem(groupName);
+            _ui->groupComboBox->setCurrentText(groupName);
+            _ui->groupComboBox->model()->sort(0);
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Cannot create new group!\nGroup \"") + groupName + tr("\" is exists!"));
+        }
+    }
+}
+
+void CenterPointsWidget::editGroup()
+{
+    QString oldGroupName = _ui->groupComboBox->currentText();
+    GroupEditDialog * dialog = new GroupEditDialog(oldGroupName, this);
+
+    if(dialog->exec() == QDialog::Accepted)
+    {
+        QString groupName = dialog->getGroupName();
+
+        if(_pointsManager->changeGroupName(oldGroupName, groupName) == true)
+        {
+            fillPointsList();
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Cannot change \"") + oldGroupName + tr("\" to group \"") + groupName + tr("\" group!\nGroup \"") + groupName + tr("\" is exists!"));
+        }
+    }
+}
+
+void CenterPointsWidget::removeGroup()
+{
+    QString groupName = _ui->groupComboBox->currentText();
+
+    QMessageBox::StandardButton btn = QMessageBox::question(this, tr("Remove group"), tr("Are you sure to remove group \"") + groupName + tr("\"?"));
+
+    if(btn == QMessageBox::Ok || btn == QMessageBox::Yes)
+    {
+        if(_pointsManager->removeGroup(groupName) == true)
+        {
+            fillPointsList();
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Cannot remove group \"") + groupName + tr("\"!"));
+        }
+    }
 }

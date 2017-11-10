@@ -158,10 +158,11 @@ void MapContextMenu::addToCenterPoint()
 
                 if(pointsWidget != nullptr)
                 {
-                    pointsWidget->setLastAdded(point.name);
-                }
+                    QString groupName = pointsWidget->getCurrentGroupName();
 
-                pointsManager->addCenterPoint(point);
+                    pointsWidget->setLastAdded(point.name);
+                    pointsManager->addCenterPoint(groupName, point, true);
+                }
             }
         }
     }

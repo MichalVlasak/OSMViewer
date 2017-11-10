@@ -29,9 +29,21 @@ void CenterPointsManager::setHomeCenterPoint(const CenterPointStruct & point)
     emit homePointWasChanged();
 }
 
-const CenterPointsManager::CenterPointsVector & CenterPointsManager::getCenterPointsVector() const
+const CenterPointsManager::CenterPointsVector * CenterPointsManager::getCenterPointsVector(const QString & groupName) const
 {
-    return _pointsVector;
+    CenterPointsMap::const_iterator it = _pointsMap.find(groupName);
+
+    if(it != _pointsMap.cend())
+    {
+        return &(it->second);
+    }
+
+    return nullptr;
+}
+
+const CenterPointsManager::CenterPointsMap & CenterPointsManager::getCenterPointsMap() const
+{
+    return _pointsMap;
 }
 
 bool compare(const CenterPointStruct & p1, const CenterPointStruct & p2)
@@ -39,56 +51,81 @@ bool compare(const CenterPointStruct & p1, const CenterPointStruct & p2)
     return (p1.name.compare(p2.name) < 0) ? true : false;
 }
 
-void CenterPointsManager::addCenterPoint(const CenterPointStruct &centerPoint)
+void CenterPointsManager::addCenterPoint(const QString & groupName, const CenterPointStruct &centerPoint, bool emitSignal)
 {
-    bool isPointPresent = false;
+    CenterPointsMap::iterator it = _pointsMap.find(groupName);
 
-    for(const CenterPointStruct & point : _pointsVector)
+    if(it == _pointsMap.end())
     {
-        if(point.name.compare(centerPoint.name) == 0)
-        {
-            isPointPresent = true;
-            break;
-        }
+        CenterPointsVector points;
+        _pointsMap[groupName] = points;
+        it = _pointsMap.find(groupName);
     }
 
-    if(isPointPresent == false)
+    if(it != _pointsMap.end())
     {
-        _pointsVector.push_back(centerPoint);
+        CenterPointsVector & points = it->second;
+        bool isPointPresent = false;
 
-        std::sort(_pointsVector.begin(), _pointsVector.end(), compare);
+        for(const CenterPointStruct & point : points)
+        {
+            if(point.name.compare(centerPoint.name) == 0)
+            {
+                isPointPresent = true;
+                break;
+            }
+        }
 
-        emit pointsWasAdded();
+        if(isPointPresent == false)
+        {
+            points.push_back(centerPoint);
+
+            std::sort(points.begin(), points.end(), compare);
+
+            if(emitSignal == true)
+            {
+                emit pointsWasAdded();
+            }
+        }
     }
 }
 
-void CenterPointsManager::removeCenterPoint(const CenterPointStruct &centerPoint)
+void CenterPointsManager::removeCenterPoint(const QString & groupName, const CenterPointStruct &centerPoint, bool emitSignal)
 {
-    bool isPointPresent = false;
-    size_t i = 0;
+    CenterPointsMap::iterator it = _pointsMap.find(groupName);
 
-    for(i = 0; i < _pointsVector.size(); i++)
+    if(it != _pointsMap.end())
     {
-        if(_pointsVector[i].name.compare(centerPoint.name) == 0)
+        CenterPointsVector & points = it->second;
+        bool isPointPresent = false;
+        size_t i = 0;
+
+        for(i = 0; i < points.size(); i++)
         {
-            isPointPresent = true;
-            break;
+            if(points[i].name.compare(centerPoint.name) == 0)
+            {
+                isPointPresent = true;
+                break;
+            }
         }
-    }
 
-    if(isPointPresent == true)
-    {
-        _pointsVector.erase(_pointsVector.begin() + i);
+        if(isPointPresent == true)
+        {
+            points.erase(points.begin() + i);
 
-        std::sort(_pointsVector.begin(), _pointsVector.end(), compare);
+            std::sort(points.begin(), points.end(), compare);
 
-        emit pointsWasRemoved();
+            if(emitSignal == true)
+            {
+                emit pointsWasRemoved();
+            }
+        }
     }
 }
 
 void CenterPointsManager::removeAllCenterPoints()
 {
-    _pointsVector.clear();
+    _pointsMap.clear();
 
     emit pointsWasRemoved();
 }
@@ -131,37 +168,58 @@ void CenterPointsManager::importPoints()
 
             if(centerPointsNode.isNull() == false)
             {
+                QDomNodeList groupsNodeList = centerPointsNode.toElement().elementsByTagName("Groups");
 
-                QDomNodeList pointsNodeList = centerPointsNode.toElement().elementsByTagName("Points");
-
-                for(int iPoints = 0; iPoints < pointsNodeList.size(); iPoints++)
+                for(int iGroups = 0; iGroups < groupsNodeList.size(); iGroups++)
                 {
-                    QDomNode pointsNode = pointsNodeList.at(iPoints);
+                    QDomNode groupsNode = groupsNodeList.at(iGroups);
 
-                    if(pointsNode.isNull() == false)
+                    if(groupsNode.isNull() == false)
                     {
-                        QDomNodeList pointNode = pointsNode.toElement().elementsByTagName("Point");
+                        QDomNodeList groupNodeList = groupsNode.toElement().elementsByTagName("Group");
 
-                        for(int iPoint = 0; iPoint < pointNode.size(); iPoint++)
+                        for(int iGroup = 0; iGroup < groupNodeList.size(); iGroup++)
                         {
-                            QDomNode pPointNode = pointNode.at(iPoint);
+                            QDomNode groupNode = groupNodeList.at(iGroup);
 
-                            if(pPointNode.isNull() == false)
+                            if(groupNode.isNull() == false)
                             {
-                                QString name = AppSettings::getValueString(pPointNode, "Name");
-                                QString level = AppSettings::getValueString(pPointNode, "Level");
-                                QString lat = AppSettings::getValueString(pPointNode, "Latitude");
-                                QString lon = AppSettings::getValueString(pPointNode, "Longitude");
+                                QString groupName = AppSettings::getValueString(groupNode, "Name");
 
-                                if(name.isEmpty() == false && level.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
+                                QDomNodeList pointsNodeList = groupNode.toElement().elementsByTagName("Points");
+
+                                for(int iPoints = 0; iPoints < pointsNodeList.size(); iPoints++)
                                 {
-                                    CenterPointStruct point;
+                                    QDomNode pointsNode = pointsNodeList.at(iPoints);
 
-                                    point.name = name;
-                                    point.level = level.toInt();
-                                    point.position = QPointF(lon.toDouble(), lat.toDouble());
+                                    if(pointsNode.isNull() == false)
+                                    {
+                                        QDomNodeList pointNode = pointsNode.toElement().elementsByTagName("Point");
 
-                                    addCenterPoint(point);
+                                        for(int iPoint = 0; iPoint < pointNode.size(); iPoint++)
+                                        {
+                                            QDomNode pPointNode = pointNode.at(iPoint);
+
+                                            if(pPointNode.isNull() == false)
+                                            {
+                                                QString name = AppSettings::getValueString(pPointNode, "Name");
+                                                QString level = AppSettings::getValueString(pPointNode, "Level");
+                                                QString lat = AppSettings::getValueString(pPointNode, "Latitude");
+                                                QString lon = AppSettings::getValueString(pPointNode, "Longitude");
+
+                                                if(name.isEmpty() == false && level.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
+                                                {
+                                                    CenterPointStruct point;
+
+                                                    point.name = name;
+                                                    point.level = level.toInt();
+                                                    point.position = QPointF(lon.toDouble(), lat.toDouble());
+
+                                                    addCenterPoint(groupName, point, false);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -195,7 +253,47 @@ void CenterPointsManager::storePoint(const CenterPointStruct & point, QDomElemen
     homePointLongitudeElement.appendChild(homePointLongitudeText);
 }
 
-void CenterPointsManager::exportPoints()
+void CenterPointsManager::prepareXmlDocument(const QString & fileName, QDomDocument & doc, QDomElement & groupsElement)
+{
+    QDomElement rootElement;
+    QDomNode xmlNode = doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
+
+    doc.insertBefore(xmlNode, doc.firstChild());
+
+    rootElement = doc.createElement("OSMViewerCenterPoints");
+
+    doc.appendChild(rootElement);
+
+    QDomElement centerPointsElement = doc.createElement("CenterPoints");
+    rootElement.appendChild(centerPointsElement);
+
+    groupsElement = doc.createElement("Groups");
+    centerPointsElement.appendChild(groupsElement);
+}
+
+void CenterPointsManager::savePointsToXml(CenterPointsMap::iterator it, QDomDocument & doc, QDomElement & groupsElement)
+{
+    QDomElement groupElement = doc.createElement("Group");
+    groupsElement.appendChild(groupElement);
+
+    QDomElement groupNameElement = doc.createElement("Name");
+    groupElement.appendChild(groupNameElement);
+    QDomText groupPointNameText = doc.createTextNode(it->first);
+    groupNameElement.appendChild(groupPointNameText);
+
+    QDomElement pointsListElement = doc.createElement("Points");
+    groupElement.appendChild(pointsListElement);
+
+    for(const CenterPointStruct & point : it->second)
+    {
+        QDomElement pointElement = doc.createElement("Point");
+        pointsListElement.appendChild(pointElement);
+
+        storePoint(point, pointElement, doc);
+    }
+}
+
+void CenterPointsManager::exportAllGroups()
 {
     QWidget * widget = qobject_cast<QWidget*>(parent());
 
@@ -207,27 +305,51 @@ void CenterPointsManager::exportPoints()
     }
 
     QDomDocument doc;
-    QDomElement _rootElement;
-    QDomNode xmlNode = doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
+    QDomElement groupsElement;
 
-    doc.insertBefore(xmlNode, doc.firstChild());
+    prepareXmlDocument(fileName, doc, groupsElement);
 
-    _rootElement = doc.createElement("OSMViewerCenterPoints");
+    CenterPointsMap::iterator it, end = _pointsMap.end();
 
-    doc.appendChild(_rootElement);
-
-    QDomElement centerPointsElement = doc.createElement("CenterPoints");
-    _rootElement.appendChild(centerPointsElement);
-
-    QDomElement pointsListElement = doc.createElement("Points");
-    centerPointsElement.appendChild(pointsListElement);
-
-    for(const CenterPointStruct & point : _pointsVector)
+    for(it = _pointsMap.begin(); it != end; ++it)
     {
-        QDomElement pointElement = doc.createElement("Point");
-        pointsListElement.appendChild(pointElement);
+        savePointsToXml(it, doc, groupsElement);
+    }
 
-        storePoint(point, pointElement, doc);
+    QFile file(fileName);
+
+    if(file.open(QIODevice::WriteOnly) == true)
+    {
+        QTextStream out(&file);
+        doc.save(out, 4);
+        file.close();
+
+        QFileInfo fileInfo(fileName);
+        _importExportLastPath = fileInfo.dir().path();
+    }
+}
+
+void CenterPointsManager::exportGroup(const QString &groupName)
+{
+    QWidget * widget = qobject_cast<QWidget*>(parent());
+
+    QString fileName = QFileDialog::getSaveFileName(widget, tr("Export Center Points"), _importExportLastPath, tr("XML (*.xml)"));
+
+    if(fileName.isEmpty() == true)
+    {
+        return;
+    }
+
+    QDomDocument doc;
+    QDomElement groupsElement;
+
+    prepareXmlDocument(fileName, doc, groupsElement);
+
+    CenterPointsMap::iterator it = _pointsMap.find(groupName);
+
+    if(it != _pointsMap.end())
+    {
+        savePointsToXml(it, doc, groupsElement);
     }
 
     QFile file(fileName);
@@ -251,4 +373,54 @@ const QString & CenterPointsManager::getImportExportLastPath() const
 void CenterPointsManager::setImportExportLastPath(const QString &path)
 {
     _importExportLastPath = path;
+}
+
+bool CenterPointsManager::createNewGroup(const QString &groupName)
+{
+    CenterPointsMap::iterator it = _pointsMap.find(groupName);
+
+    if(it == _pointsMap.end())
+    {
+        CenterPointsVector points;
+
+        _pointsMap[groupName] = points;
+
+        return true;
+    }
+
+    return false;
+}
+
+bool CenterPointsManager::changeGroupName(const QString & oldGroupName, const QString & newGroupName)
+{
+    CenterPointsMap::iterator itOld = _pointsMap.find(oldGroupName);
+
+    if(itOld != _pointsMap.end())
+    {
+        CenterPointsMap::iterator itNew = _pointsMap.find(newGroupName);
+
+        if(itNew == _pointsMap.end())
+        {
+            _pointsMap[newGroupName] = itOld->second;
+            _pointsMap.erase(itOld);
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CenterPointsManager::removeGroup(const QString &groupName)
+{
+    CenterPointsMap::iterator it = _pointsMap.find(groupName);
+
+    if(it != _pointsMap.end())
+    {
+        _pointsMap.erase(it);
+
+        return true;
+    }
+
+    return false;
 }
