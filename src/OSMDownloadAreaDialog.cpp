@@ -1,15 +1,19 @@
 #include "OSMDownloadAreaDialog.h"
 #include "ui_OSMDownloadAreaDialog.h"
-
+#include "MainWindow.h"
+#include "OSMDownloadProjectModel.h"
+#include "ProjectNameDialog.h"
 #include "Layers/ZoomInfo.h"
 
 #include <QSpinBox>
 #include <QPushButton>
+#include <QMessageBox>
 
-OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, QWidget *parent) :
+OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, const QString & projectName, QWidget *parent) :
     QDialog(parent),
     _ui(new Ui::OSMDownloadAreaDialog),
-    _setup(setup)
+    _setup(setup),
+    _projectName(projectName)
 {
     _ui->setupUi(this);
 
@@ -65,6 +69,8 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, QWidget *parent) :
 
     QObject::connect(_ui->setFromMinimum, SIGNAL(clicked(bool)), SLOT(setFromMinimum()));
     QObject::connect(_ui->setToMaximum, SIGNAL(clicked(bool)), SLOT(setToMaximum()));
+
+    QObject::connect(_ui->saveAsProject, SIGNAL(clicked(bool)), SLOT(saveAsProject()));
 }
 
 OSMDownloadAreaDialog::~OSMDownloadAreaDialog()
@@ -134,4 +140,37 @@ void OSMDownloadAreaDialog::setFromMinimum()
 void OSMDownloadAreaDialog::setToMaximum()
 {
     _ui->levelTo->setValue(_ui->levelTo->maximum());
+}
+
+void OSMDownloadAreaDialog::saveAsProject()
+{
+    MainWindow * mainWindow = MainWindow::getInstance();
+
+    if(mainWindow != nullptr)
+    {
+        ProjectNameDialog * dialog = new ProjectNameDialog(_projectName, this);
+
+        if(dialog->exec() == QDialog::Accepted)
+        {
+            OSMDownloadProjectModel & projectModel = mainWindow->getOSMDownloadProjectModel();
+            OSMDownloadProjectModel::Project project;
+
+            project.setup = getCurrenSetup();
+            project.name = dialog->getProjectName();
+
+            if(projectModel.addProject(project) == false) // projekt sa uz nachadza v zozname
+            {
+                QMessageBox::StandardButton reply;
+
+                reply = QMessageBox::question(this, tr("Overwrite Project"), tr("Are You sure to overwrite project \"") + project.name + tr("\"?"));
+
+                if(reply == QMessageBox::Yes)
+                {
+                    projectModel.updateProject(project);
+                }
+            }
+        }
+
+        delete dialog;
+    }
 }

@@ -13,6 +13,8 @@
 #include "Layers/DownloadAreaHighlight.h"
 #include "CenterPointsManager.h"
 #include "CenterPointsWidget.h"
+#include "OSMDownloadProjectWidget.h"
+#include "OSMDownloadProjectModel.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +43,8 @@ class MainWindow : public QMainWindow
         CenterPointsWidget * getCenterPointsWidget();
         void centerToPoint(const CenterPointStruct & point);
         MapSettings & getMapSettings();
+        OSMDownloadProjectModel & getOSMDownloadProjectModel();
+        void showDownloadAreaDialog(OSMDownloadAreaDialog::Setup & setup, const QString & projectName = "");
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -60,9 +64,11 @@ class MainWindow : public QMainWindow
         OSMTileDownloader * _downloader = nullptr;
         QDockWidget * _downloaderInfoDock = nullptr;
         QDockWidget * _downloaderSetupDock = nullptr;
+        QDockWidget * _downloadProjectDock = nullptr;
         OSMTileDownloaderInfoWidget * _downloaderInfoWidget = nullptr;
         OSMTileDownloaderPrepare * _downloaderPrepare = nullptr;
         OSMTileDownloaderSetupWidget * _downloaderSetupWidget = nullptr;
+        OSMDownloadProjectWidget * _downloadProjectWidget = nullptr;
         QString _applicationName;
         DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
 
@@ -77,6 +83,7 @@ class MainWindow : public QMainWindow
         CenterPointsManager * _centerPointsManager = nullptr;
         CenterPointsWidget * _centerPointsWidget = nullptr;
         QDockWidget * _centerPointsDock = nullptr;
+        OSMDownloadProjectModel _downloadProjectModel;
 };
 
 #endif // MAINWINDOW_H

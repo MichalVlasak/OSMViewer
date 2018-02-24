@@ -31,6 +31,9 @@ class AppSettings
         void storeCenterPoints(class CenterPointsManager * pointsManager);
         bool restoreCenterPoints(class CenterPointsManager * pointsManager);
 
+        void storeProjects(class OSMDownloadProjectModel * projectsModel);
+        bool restoreProjects(class OSMDownloadProjectModel * projectsModel);
+
     private:
         QString _settingsFileName;
         QDomDocument _doc;

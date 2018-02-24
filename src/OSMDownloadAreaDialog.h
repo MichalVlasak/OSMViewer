@@ -28,7 +28,7 @@ class OSMDownloadAreaDialog : public QDialog
         };
 
     public:
-        explicit OSMDownloadAreaDialog(Setup & setup, QWidget *parent = 0);
+        explicit OSMDownloadAreaDialog(Setup & setup, const QString & projectName, QWidget *parent = 0);
         ~OSMDownloadAreaDialog();
 
         Setup getCurrenSetup();
@@ -46,9 +46,12 @@ class OSMDownloadAreaDialog : public QDialog
         void setFromMinimum();
         void setToMaximum();
 
+        void saveAsProject();
+
     private:
         Ui::OSMDownloadAreaDialog *_ui;
         Setup _setup;
+        QString _projectName;
 };
 
 #endif // OSMDOWNLOADAREADIALOG_H

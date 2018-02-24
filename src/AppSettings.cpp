@@ -614,3 +614,110 @@ bool AppSettings::restoreCenterPoints(CenterPointsManager *pointsManager)
 
     return result;
 }
+
+void AppSettings::storeProjects(OSMDownloadProjectModel *projectsModel)
+{
+    if(projectsModel != nullptr)
+    {
+        QDomElement projectsElement = _doc.createElement("Projects");
+        _rootElement.appendChild(projectsElement);
+
+        const OSMDownloadProjectModel::ProjectVector & projects = projectsModel->getProjects();
+
+        for(const OSMDownloadProjectModel::Project & project : projects)
+        {
+            QDomElement projectElement = _doc.createElement("Project");
+            projectsElement.appendChild(projectElement);
+
+            OSMDownloadProjectModel::storeProject(project, projectElement, _doc);
+        }
+    }
+}
+
+bool AppSettings::restoreProjects(OSMDownloadProjectModel *projectsModel)
+{
+    bool result = true;
+    QFile file(_settingsFileName);
+
+    QDomDocument document;
+    if (document.setContent(&file) == false)
+    {
+        /*std::cerr << "Error: Parse error at line " << errorLine << ", "
+                  << "column " << errorColumn << ": "
+                  << qPrintable(errorStr) << std::endl;*/
+        return false;
+    }
+
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList projectsNodes = rootElem.elementsByTagName("Projects");
+
+        for(int iProjects = 0; iProjects < projectsNodes.size(); iProjects++)
+        {
+            QDomNode projectsNode = projectsNodes.at(iProjects);
+
+            if(projectsNode.isNull() == false)
+            {
+                QDomNodeList projectNodeList = projectsNode.toElement().elementsByTagName("Project");
+
+                for(int iProject = 0; iProject < projectNodeList.size(); iProject++)
+                {
+                    QDomNode projectNode = projectNodeList.at(iProject);
+
+                    if(projectNode.isNull() == false)
+                    {
+                        QString projectName = AppSettings::getValueString(projectNode, "Name");
+                        QString levelFrom = getValueString(projectNode, "LevelFrom");
+                        QString levelTo = getValueString(projectNode, "LevelTo");
+                        QString latFrom = getValueString(projectNode, "LatitudeFrom");
+                        QString lonFrom = getValueString(projectNode, "LongitudeFrom");
+                        QString latTo = getValueString(projectNode, "LatitudeTo");
+                        QString lonTo = getValueString(projectNode, "LongitudeTo");
+
+                        if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false &&
+                           latFrom.isEmpty() == false && latTo.isEmpty() == false &&
+                           lonFrom.isEmpty() == false && lonTo.isEmpty() == false)
+                        {
+                            OSMDownloadProjectModel::Project project;
+                            bool isOK;
+
+                            project.name = projectName;
+                            project.setup.levelFrom = levelFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.levelTo = levelTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.latFrom = latFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.latTo = latTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.lonFrom = lonFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.lonTo = lonTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            if(projectsModel != nullptr)
+                            {
+                                result &= projectsModel->addProject(project);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}

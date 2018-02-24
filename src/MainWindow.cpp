@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderInfoWidget = new OSMTileDownloaderInfoWidget(_downloader, this);
     _downloaderPrepare = new OSMTileDownloaderPrepare(_downloader, _downloaderInfoWidget, this);
     _downloaderSetupWidget = new OSMTileDownloaderSetupWidget(_downloader, this);
+    _downloadProjectWidget = new OSMDownloadProjectWidget(this);
 
     _centerPointsManager = new CenterPointsManager(this);
     _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
@@ -65,9 +66,17 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloaderSetupDock->setFloating(true);
     _downloaderSetupDock->setObjectName(tr("Downloader Setup"));
 
+    _downloadProjectDock = new QDockWidget(tr("Download Project"), this);
+    _downloadProjectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _downloadProjectDock->setWidget(_downloadProjectWidget);
+    _downloadProjectDock->hide();
+    _downloadProjectDock->setFloating(true);
+    _downloadProjectDock->setObjectName(tr("Download Project"));
+
     addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderSetupDock);
+    addDockWidget(Qt::RightDockWidgetArea, _downloadProjectDock);
 
     QObject::connect(_ui->action_CenterPoints, SIGNAL(triggered(bool)), _centerPointsDock, SLOT(setVisible(bool)));
     QObject::connect(_centerPointsDock, SIGNAL(visibilityChanged(bool)), _ui->action_CenterPoints, SLOT(setChecked(bool)));
@@ -77,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(_ui->action_DownloaderSetup, SIGNAL(triggered(bool)), _downloaderSetupDock, SLOT(setVisible(bool)));
     QObject::connect(_downloaderSetupDock, SIGNAL(visibilityChanged(bool)), _ui->action_DownloaderSetup, SLOT(setChecked(bool)));
+
+    QObject::connect(_ui->action_Projects, SIGNAL(triggered(bool)), _downloadProjectDock, SLOT(setVisible(bool)));
+    QObject::connect(_downloadProjectDock, SIGNAL(visibilityChanged(bool)), _ui->action_Projects, SLOT(setChecked(bool)));
 
     OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
 
@@ -138,6 +150,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_downloaderPrepare, SIGNAL(allIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
 
     _appSettings.restoreCenterPoints(_centerPointsManager);
+    _appSettings.restoreProjects(&_downloadProjectModel);
 
     _centerPointsWidget->fillPointsList();
 }
@@ -150,6 +163,7 @@ MainWindow::~MainWindow()
     _appSettings.storeDownloadSettings(_downloader);
     _appSettings.storeDownloadAreaHighlightSettings(_downloadAreaHighlight);
     _appSettings.storeCenterPoints(_centerPointsManager);
+    _appSettings.storeProjects(&_downloadProjectModel);
 
     //while(_downloader2->isRunning() == true);
 
@@ -174,6 +188,11 @@ void MainWindow::initialize()
     if(_downloaderInfoWidget != nullptr)
     {
         _downloaderInfoWidget->initialize();
+    }
+
+    if(_downloadProjectWidget != nullptr)
+    {
+        _downloadProjectWidget->initialize();
     }
 }
 
@@ -231,6 +250,28 @@ void MainWindow::setOSMTileDownloaderEnable(bool enable)
     }
 }
 
+void MainWindow::showDownloadAreaDialog(OSMDownloadAreaDialog::Setup &setup, const QString & projectName)
+{
+    OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(setup, projectName, this);
+
+    if(downloadAreaDialog->exec() == QDialog::Accepted)
+    {
+        setup = downloadAreaDialog->getCurrenSetup();
+
+        _downloaderPrepare->setDownloadParameters(setup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
+        _downloaderInfoDock->show();
+
+        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
+    }
+    else
+    {
+        if(_downloadAreaHighlight != nullptr)
+        {
+            _downloadAreaHighlight->resetDownloadParams();
+        }
+    }
+}
+
 void MainWindow::downloadArea()
 {
     OSMDownloadAreaDialog::Setup downloadSetup;
@@ -246,24 +287,7 @@ void MainWindow::downloadArea()
 
     downloadSetup.deleteSettings = _deleteSettings;
 
-    OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
-
-    if(downloadAreaDialog->exec() == QDialog::Accepted)
-    {
-        downloadSetup = downloadAreaDialog->getCurrenSetup();
-
-        _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
-        _downloaderInfoDock->show();
-
-        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
-    }
-    else
-    {
-        if(_downloadAreaHighlight != nullptr)
-        {
-            _downloadAreaHighlight->resetDownloadParams();
-        }
-    }
+    showDownloadAreaDialog(downloadSetup);
 }
 
 void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
@@ -291,24 +315,7 @@ void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
         std::swap(downloadSetup.lonFrom, downloadSetup.lonTo);
     }
 
-    OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(downloadSetup, this);
-
-    if(downloadAreaDialog->exec() == QDialog::Accepted)
-    {
-        downloadSetup = downloadAreaDialog->getCurrenSetup();
-
-        _downloaderPrepare->setDownloadParameters(downloadSetup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
-        _downloaderInfoDock->show();
-
-        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
-    }
-    else
-    {
-        if(_downloadAreaHighlight != nullptr)
-        {
-            _downloadAreaHighlight->resetDownloadParams();
-        }
-    }
+    showDownloadAreaDialog(downloadSetup);
 }
 
 void MainWindow::showAbout()
@@ -355,4 +362,9 @@ void MainWindow::centerToPoint(const CenterPointStruct & point)
 MapSettings & MainWindow::getMapSettings()
 {
     return _ui->paintWidget->getMapSettings();
+}
+
+OSMDownloadProjectModel & MainWindow::getOSMDownloadProjectModel()
+{
+    return _downloadProjectModel;
 }

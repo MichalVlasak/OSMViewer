@@ -48,7 +48,10 @@ SOURCES += src/main.cpp\
     src/CenterPointsWidget.cpp \
     src/CenterPointEditDialog.cpp \
     src/WgsConversion.cpp \
-    src/GroupEditDialog.cpp
+    src/GroupEditDialog.cpp \
+    src/OSMDownloadProjectWidget.cpp \
+    src/OSMDownloadProjectModel.cpp \
+    src/ProjectNameDialog.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -76,7 +79,10 @@ HEADERS  += src/MainWindow.h \
     src/CenterPointsWidget.h \
     src/CenterPointEditDialog.h \
     src/WgsConversion.h \
-    src/GroupEditDialog.h
+    src/GroupEditDialog.h \
+    src/OSMDownloadProjectWidget.h \
+    src/OSMDownloadProjectModel.h \
+    src/ProjectNameDialog.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -88,7 +94,9 @@ FORMS    += resources/MainWindow.ui \
     resources/DeleteOldMapsDialog.ui \
     resources/CenterPointsWidget.ui \
     resources/CenterPointEditDialog.ui \
-    resources/GroupEditDialog.ui
+    resources/GroupEditDialog.ui \
+    resources/OSMDownloadProjectWidget.ui \
+    resources/ProjectNameDialog.ui
 
 RESOURCES += \
     resources/resources.qrc
