@@ -3,8 +3,9 @@
 
 #include "BaseLayer.h"
 #include "src/DeleteOldMapsWidget.h"
+#include "src/StoreConfigInterface.h"
 
-class OSMLayer : public BaseLayer
+class OSMLayer : public BaseLayer, public StoreConfigInterface
 {
     public:
         explicit OSMLayer(MapSettings & mapSettings);
@@ -18,6 +19,10 @@ class OSMLayer : public BaseLayer
         QString getOSMDirectorypath();
         void setOSMTileDownloader(class OSMTileDownloader * downloader);
         void setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings);
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     private:
         QString _tilesPath;

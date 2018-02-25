@@ -1,4 +1,5 @@
 #include "DownloadAreaHighlight.h"
+#include "../AppSettings.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -60,4 +61,45 @@ void DownloadAreaHighlight::setVisible(bool value)
 bool DownloadAreaHighlight::isVisible()
 {
     return _isVisible;
+}
+
+void DownloadAreaHighlight::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement downloaderElement = document.createElement("DownloadAreaHighlight");
+    rootElement.appendChild(downloaderElement);
+
+    QDomElement downloadEnableElement = document.createElement("VisibleDownloadAreaHighlight");
+    downloaderElement.appendChild(downloadEnableElement);
+    QDomText downloadEnableText = document.createTextNode(QString::number(this->isVisible()));
+    downloadEnableElement.appendChild(downloadEnableText);
+}
+
+bool DownloadAreaHighlight::restoreConfig(QDomDocument &document)
+{
+    bool result = false;
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList downloadSettingsNodes = rootElem.elementsByTagName("DownloadAreaHighlight");
+
+        for(int iMap = 0; iMap < downloadSettingsNodes.size(); iMap++)
+        {
+            QDomNode downloadSettingNode = downloadSettingsNodes.at(iMap);
+
+            if(downloadSettingNode.isNull() == false)
+            {
+                QString value = AppSettings::getValueString(downloadSettingNode, "VisibleDownloadAreaHighlight");
+
+                if(value.isEmpty() == false)
+                {
+                    int isVisible = value.toInt();
+                    setVisible((isVisible > 0) ? true : false);
+                    result = true;
+                }
+            }
+        }
+    }
+
+    return result;
 }

@@ -1,5 +1,6 @@
 #include "MapSettings.h"
 #include "OSMLayer.h"
+#include "src/AppSettings.h"
 
 #ifdef __linux__
 #include <cmath>
@@ -141,6 +142,72 @@ int MapSettings::windowPixelToMapPixelY(int pix)
 {
     int mapSize = int(pow(2, zoom.getCurrentZoomLevel())) * OSMLayer::TileSize;
     return pix - worldCenter.y() + (mapSize / 2);
+}
+
+void MapSettings::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement mapElement = document.createElement("MapSettings");
+    rootElement.appendChild(mapElement);
+
+    QDomElement zoomElement = document.createElement("ZoomLevel");
+    mapElement.appendChild(zoomElement);
+    QDomText zoomText = document.createTextNode(QString::number(zoom.getCurrentZoomLevel()));
+    zoomElement.appendChild(zoomText);
+
+    QDomElement centerXElement = document.createElement("CenterX");
+    mapElement.appendChild(centerXElement);
+    QDomText centerXText = document.createTextNode(QString::number(worldCenter.x()));
+    centerXElement.appendChild(centerXText);
+
+    QDomElement centerYElement = document.createElement("CenterY");
+    mapElement.appendChild(centerYElement);
+    QDomText centerYText = document.createTextNode(QString::number(worldCenter.y()));
+    centerYElement.appendChild(centerYText);
+}
+
+bool MapSettings::restoreConfig(QDomDocument &document)
+{
+    bool result = false;
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList mapNodes = rootElem.elementsByTagName("MapSettings");
+
+        for(int iMap = 0; iMap < mapNodes.size(); iMap++)
+        {
+            QDomNode mapNode = mapNodes.at(iMap);
+
+            if(mapNode.isNull() == false)
+            {
+                QString value = AppSettings::getValueString(mapNode, "ZoomLevel");
+
+                if(value.isEmpty() == false)
+                {
+                    zoom.setCurrentZoomLevel(value.toUInt());
+                    result = true;
+                }
+
+                value = AppSettings::getValueString(mapNode, "CenterX");
+
+                if(value.isEmpty() == false)
+                {
+                    worldCenter.rx() = value.toFloat();
+                    result = true;
+                }
+
+                value = AppSettings::getValueString(mapNode, "CenterY");
+
+                if(value.isEmpty() == false)
+                {
+                    worldCenter.ry() = value.toFloat();
+                    result = true;
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 /*       C#

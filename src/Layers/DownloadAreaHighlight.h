@@ -3,10 +3,11 @@
 
 #include "BaseLayer.h"
 #include "../OSMDownloadAreaDialog.h"
+#include "../StoreConfigInterface.h"
 
 #include <QObject>
 
-class DownloadAreaHighlight : public QObject, public BaseLayer
+class DownloadAreaHighlight : public QObject, public BaseLayer, public StoreConfigInterface
 {
         Q_OBJECT
 
@@ -18,6 +19,10 @@ class DownloadAreaHighlight : public QObject, public BaseLayer
         void setDownloadParams(OSMDownloadAreaDialog::Setup setup);
         void setVisible(bool value);
         bool isVisible();
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     public slots:
         void resetDownloadParams();

@@ -15,12 +15,13 @@
 #include "CenterPointsWidget.h"
 #include "OSMDownloadProjectWidget.h"
 #include "OSMDownloadProjectModel.h"
+#include "StoreConfigInterface.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public StoreConfigInterface
 {
         Q_OBJECT
 
@@ -45,6 +46,10 @@ class MainWindow : public QMainWindow
         MapSettings & getMapSettings();
         OSMDownloadProjectModel & getOSMDownloadProjectModel();
         void showDownloadAreaDialog(OSMDownloadAreaDialog::Setup & setup, const QString & projectName = "");
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     private:
         void keyPressEvent(QKeyEvent * event);

@@ -1,4 +1,5 @@
 #include "OSMDownloadProjectModel.h"
+#include "AppSettings.h"
 
 OSMDownloadProjectModel::OSMDownloadProjectModel()
 {
@@ -98,4 +99,92 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
     element.appendChild(projectLongitudeToElement);
     QDomText projectLongitudeToText = doc.createTextNode(QString::number(project.setup.lonTo, 'g', 13));
     projectLongitudeToElement.appendChild(projectLongitudeToText);
+}
+
+void OSMDownloadProjectModel::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement projectsElement = document.createElement("Projects");
+    rootElement.appendChild(projectsElement);
+
+    for(const OSMDownloadProjectModel::Project & project : _projects)
+    {
+        QDomElement projectElement = document.createElement("Project");
+        projectsElement.appendChild(projectElement);
+
+        OSMDownloadProjectModel::storeProject(project, projectElement, document);
+    }
+}
+
+bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
+{
+    bool result = true;
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList projectsNodes = rootElem.elementsByTagName("Projects");
+
+        for(int iProjects = 0; iProjects < projectsNodes.size(); iProjects++)
+        {
+            QDomNode projectsNode = projectsNodes.at(iProjects);
+
+            if(projectsNode.isNull() == false)
+            {
+                QDomNodeList projectNodeList = projectsNode.toElement().elementsByTagName("Project");
+
+                for(int iProject = 0; iProject < projectNodeList.size(); iProject++)
+                {
+                    QDomNode projectNode = projectNodeList.at(iProject);
+
+                    if(projectNode.isNull() == false)
+                    {
+                        QString projectName = AppSettings::getValueString(projectNode, "Name");
+                        QString levelFrom = AppSettings::getValueString(projectNode, "LevelFrom");
+                        QString levelTo = AppSettings::getValueString(projectNode, "LevelTo");
+                        QString latFrom = AppSettings::getValueString(projectNode, "LatitudeFrom");
+                        QString lonFrom = AppSettings::getValueString(projectNode, "LongitudeFrom");
+                        QString latTo = AppSettings::getValueString(projectNode, "LatitudeTo");
+                        QString lonTo = AppSettings::getValueString(projectNode, "LongitudeTo");
+
+                        if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false &&
+                           latFrom.isEmpty() == false && latTo.isEmpty() == false &&
+                           lonFrom.isEmpty() == false && lonTo.isEmpty() == false)
+                        {
+                            OSMDownloadProjectModel::Project project;
+                            bool isOK;
+
+                            project.name = projectName;
+                            project.setup.levelFrom = levelFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.levelTo = levelTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.latFrom = latFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.latTo = latTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.lonFrom = lonFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.lonTo = lonTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            result &= addProject(project);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
 }

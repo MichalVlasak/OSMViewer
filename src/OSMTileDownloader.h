@@ -4,7 +4,9 @@
 #include <QProcess>
 #include <QMutex>
 
-class OSMTileDownloader : public QObject
+#include "StoreConfigInterface.h"
+
+class OSMTileDownloader : public QObject, public StoreConfigInterface
 {
         Q_OBJECT
 
@@ -38,6 +40,10 @@ class OSMTileDownloader : public QObject
         bool isFreeQueue();
         unsigned getSessionDownloadCount();
         unsigned getAllDownloadCount();
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     public slots:
         void setDownloadingEnable(bool enabled);

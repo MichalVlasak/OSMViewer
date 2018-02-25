@@ -51,7 +51,8 @@ SOURCES += src/main.cpp\
     src/GroupEditDialog.cpp \
     src/OSMDownloadProjectWidget.cpp \
     src/OSMDownloadProjectModel.cpp \
-    src/ProjectNameDialog.cpp
+    src/ProjectNameDialog.cpp \
+    src/StoreConfigInterface.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -82,7 +83,8 @@ HEADERS  += src/MainWindow.h \
     src/GroupEditDialog.h \
     src/OSMDownloadProjectWidget.h \
     src/OSMDownloadProjectModel.h \
-    src/ProjectNameDialog.h
+    src/ProjectNameDialog.h \
+    src/StoreConfigInterface.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

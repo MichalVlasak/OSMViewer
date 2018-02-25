@@ -6,8 +6,9 @@
 #include <vector>
 
 #include "OSMDownloadAreaDialog.h"
+#include "StoreConfigInterface.h"
 
-class OSMDownloadProjectModel : public QObject
+class OSMDownloadProjectModel : public QObject, public StoreConfigInterface
 {
         Q_OBJECT
     public:
@@ -39,6 +40,10 @@ class OSMDownloadProjectModel : public QObject
         void deleteProject(const QString & projectName);
 
         static void storeProject(const Project & project, QDomElement & element, QDomDocument & doc);
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     signals:
         void modelChanged();

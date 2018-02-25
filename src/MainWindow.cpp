@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
             QObject::connect(_downloader, SIGNAL(downloadingEnable(bool)), _ui->action_EnableDownloading, SLOT(setChecked(bool)));
             QObject::connect(_downloader, SIGNAL(downloadingEnable(bool)), _ui->paintWidget, SLOT(repaint()));
 
-            _appSettings.restoreDownloadSettings(_downloader);
+            _appSettings.restoreConfig(_downloader);
         }
     }
 
@@ -119,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_ui->action_EnableDownloading, SIGNAL(triggered(bool)), _ui->paintWidget, SLOT(repaint()));
     QObject::connect(_ui->action_AboutOSMViewer, SIGNAL(triggered(bool)), SLOT(showAbout()));
 
-    if(_appSettings.restoreMainWindowSettings(this) == false)
+    if(_appSettings.restoreConfig(this) == false)
     {
         QDesktopWidget desktop;
 
@@ -138,32 +138,32 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _ui->paintWidget->setCenterPosition(center);
 
-    _appSettings.restoreMapSettings(_ui->paintWidget->getMapSettings());
-    _appSettings.restoreOSMDirectoryPath(_ui->paintWidget->getOSMLayer());
+    _appSettings.restoreConfig(&(_ui->paintWidget->getMapSettings()));
+    _appSettings.restoreConfig(_ui->paintWidget->getOSMLayer());
     zoomChanged();
 
     _downloadAreaHighlight = new DownloadAreaHighlight(_ui->paintWidget->getMapSettings(), this);
     _ui->paintWidget->addLayer(_downloadAreaHighlight, "DownloadAreaHighlight");
     _downloaderPrepare->setDownloadAreaHighlight(_downloadAreaHighlight);
-    _appSettings.restoreDownloadAreaHighlightSettings(_downloadAreaHighlight);
+    _appSettings.restoreConfig(_downloadAreaHighlight);
 
     QObject::connect(_downloaderPrepare, SIGNAL(allIsDownloaded()), _downloadAreaHighlight, SLOT(resetDownloadParams()));
 
-    _appSettings.restoreCenterPoints(_centerPointsManager);
-    _appSettings.restoreProjects(&_downloadProjectModel);
+    _appSettings.restoreConfig(_centerPointsManager);
+    _appSettings.restoreConfig(&_downloadProjectModel);
 
     _centerPointsWidget->fillPointsList();
 }
 
 MainWindow::~MainWindow()
 {
-    _appSettings.storeMapSettings(_ui->paintWidget->getMapSettings());
-    _appSettings.storeMainWindowSettings(this);
-    _appSettings.storeOSMDirectoryPath(_ui->paintWidget->getOSMLayer());
-    _appSettings.storeDownloadSettings(_downloader);
-    _appSettings.storeDownloadAreaHighlightSettings(_downloadAreaHighlight);
-    _appSettings.storeCenterPoints(_centerPointsManager);
-    _appSettings.storeProjects(&_downloadProjectModel);
+    _appSettings.storeConfig(&(_ui->paintWidget->getMapSettings()));
+    _appSettings.storeConfig(this);
+    _appSettings.storeConfig(_ui->paintWidget->getOSMLayer());
+    _appSettings.storeConfig(_downloader);
+    _appSettings.storeConfig(_downloadAreaHighlight);
+    _appSettings.storeConfig(_centerPointsManager);
+    _appSettings.storeConfig(&_downloadProjectModel);
 
     //while(_downloader2->isRunning() == true);
 
@@ -367,4 +367,127 @@ MapSettings & MainWindow::getMapSettings()
 OSMDownloadProjectModel & MainWindow::getOSMDownloadProjectModel()
 {
     return _downloadProjectModel;
+}
+
+void MainWindow::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement mainWindowElement = document.createElement("MainWindowSettings");
+    rootElement.appendChild(mainWindowElement);
+
+    QByteArray save = saveState().toHex();
+    std::string buffState(save.data(), save.size());
+    QDomElement windowStateElement = document.createElement("WindowState");
+    mainWindowElement.appendChild(windowStateElement);
+    QDomText windowStateText = document.createTextNode(QString::fromStdString(buffState));
+    windowStateElement.appendChild(windowStateText);
+
+    save = saveGeometry().toHex();
+    std::string buffGeometry(save.data(), save.size());
+    QDomElement windowGeometryElement = document.createElement("WindowGeometry");
+    mainWindowElement.appendChild(windowGeometryElement);
+    QDomText windowGeometryText = document.createTextNode(QString::fromStdString(buffGeometry));
+    windowGeometryElement.appendChild(windowGeometryText);
+
+    QDomElement deleteTilesEnabled = document.createElement("DeleteTilesEnabled");
+    mainWindowElement.appendChild(deleteTilesEnabled);
+    QDomText deleteTilesEnabledText = document.createTextNode(QString::number(getDeleteSettings().deleteEnabled));
+    deleteTilesEnabled.appendChild(deleteTilesEnabledText);
+
+    QDomElement deleteTilesType = document.createElement("DeleteTilesType");
+    mainWindowElement.appendChild(deleteTilesType);
+    QDomText deleteTilesTypeText = document.createTextNode(QString::number(getDeleteSettings().deleteType));
+    deleteTilesType.appendChild(deleteTilesTypeText);
+
+    QDomElement deleteTilesTime = document.createElement("DeleteTilesTime");
+    mainWindowElement.appendChild(deleteTilesTime);
+    QDomText deleteTilesTimeText = document.createTextNode(getDeleteSettings().deleteTime.toString(Qt::DateFormat::ISODate));
+    deleteTilesTime.appendChild(deleteTilesTimeText);
+}
+
+bool MainWindow::restoreConfig(QDomDocument &document)
+{
+    bool result = true;
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList mainWindowNodes = rootElem.elementsByTagName("MainWindowSettings");
+
+        for(int iMap = 0; iMap < mainWindowNodes.size(); iMap++)
+        {
+            QDomNode mapNode = mainWindowNodes.at(iMap);
+
+            if(mapNode.isNull() == false)
+            {
+                QString value = AppSettings::getValueString(mapNode, "WindowState");
+
+                if(value.isEmpty() == false)
+                {
+                    QByteArray state = QByteArray(value.toStdString().data(), value.size());
+
+                    state = QByteArray::fromHex(state);
+
+                    if(restoreState(state) == false)
+                    {
+                        std::cerr << "Cannot restore Main Window state!" << std::endl;
+                        result |= false;
+                    }
+                }
+
+                value = AppSettings::getValueString(mapNode, "WindowGeometry");
+
+                if(value.isEmpty() == false)
+                {
+                    QByteArray state = QByteArray(value.toStdString().data(), value.size());
+
+                    state = QByteArray::fromHex(state);
+
+                    if(restoreGeometry(state) == false)
+                    {
+                        std::cerr << "Cannot restore Main Window geometry!" << std::endl;
+                        result |= false;
+                    }
+                }
+
+                DeleteOldMapsWidget::DeleteSettings deleteSettings;
+                value = AppSettings::getValueString(mapNode, "DeleteTilesEnabled");
+
+                if(value.isEmpty() == false)
+                {
+                    bool deleteTiles = (value.toInt() == 0) ? false : true;
+                    deleteSettings.deleteEnabled = deleteTiles;
+                }
+                else
+                {
+                    deleteSettings.deleteEnabled = false;
+                }
+
+                value = AppSettings::getValueString(mapNode, "DeleteTilesType");
+
+                if(value.isEmpty() == false)
+                {
+                    deleteSettings.deleteType = DeleteOldMapsWidget::DeleteType(value.toInt());
+                }
+                else
+                {
+                    deleteSettings.deleteType = DeleteOldMapsWidget::DeleteOldAsTime;
+                }
+
+                value = AppSettings::getValueString(mapNode, "DeleteTilesTime");
+
+                if(value.isEmpty() == false)
+                {
+                    deleteSettings.deleteTime = QDateTime::fromString(value, Qt::DateFormat::ISODate);
+                }
+                else
+                {
+                    deleteSettings.deleteTime = QDateTime::currentDateTime();
+                }
+
+                setDeleteSettings(deleteSettings);
+            }
+        }
+    }
+
+    return result;
 }

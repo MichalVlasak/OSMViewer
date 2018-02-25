@@ -55,6 +55,8 @@ void OSMDownloadProjectWidget::reloadProjects()
             projectsName << project.name;
         }
 
+        projectsName.sort();
+
         _listModel->setStringList(projectsName);
     }
 }

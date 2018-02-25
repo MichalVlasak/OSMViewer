@@ -1,4 +1,5 @@
 #include "OSMTileDownloader.h"
+#include "AppSettings.h"
 
 #include <QDir>
 #include <QThread>
@@ -297,4 +298,58 @@ unsigned OSMTileDownloader::getSessionDownloadCount()
 unsigned OSMTileDownloader::getAllDownloadCount()
 {
     return _allDownloadCount;
+}
+
+void OSMTileDownloader::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement downloaderElement = document.createElement("OSMDownloaderSettings");
+    rootElement.appendChild(downloaderElement);
+
+    QDomElement downloadEnableElement = document.createElement("EnabledDownloading");
+    downloaderElement.appendChild(downloadEnableElement);
+    QDomText downloadEnableText = document.createTextNode(QString::number(isDownloadingEnable()));
+    downloadEnableElement.appendChild(downloadEnableText);
+
+    QDomElement threadsCountElement = document.createElement("ThreadsCount");
+    downloaderElement.appendChild(threadsCountElement);
+    QDomText threadsCountText = document.createTextNode(QString::number(getThreads()));
+    threadsCountElement.appendChild(threadsCountText);
+}
+
+bool OSMTileDownloader::restoreConfig(QDomDocument &document)
+{
+    bool result = false;
+
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList downloadSettingsNodes = rootElem.elementsByTagName("OSMDownloaderSettings");
+
+        for(int iMap = 0; iMap < downloadSettingsNodes.size(); iMap++)
+        {
+            QDomNode downloadSettingNode = downloadSettingsNodes.at(iMap);
+
+            if(downloadSettingNode.isNull() == false)
+            {
+                QString value = AppSettings::getValueString(downloadSettingNode, "EnabledDownloading");
+
+                if(value.isEmpty() == false)
+                {
+                    setDownloadingEnable(value.toInt());
+                    result = true;
+                }
+
+                value = AppSettings::getValueString(downloadSettingNode, "ThreadsCount");
+
+                if(value.isEmpty() == false)
+                {
+                    setThreads(value.toInt());
+                    result = true;
+                }
+            }
+        }
+    }
+
+    return result;
 }

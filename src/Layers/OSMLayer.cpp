@@ -1,6 +1,7 @@
 #include "OSMLayer.h"
 #include "src/OSMTileDownloader.h"
 #include "src/DeleteOldMapsUtils.h"
+#include "src/AppSettings.h"
 
 #include <QPainter>
 #include <QWidget>
@@ -115,4 +116,44 @@ void OSMLayer::paintEvent(QPaintEvent *paintEvent)
 void OSMLayer::setDeleteSettings(DeleteOldMapsWidget::DeleteSettings settings)
 {
     _settings = settings;
+}
+
+void OSMLayer::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    QDomElement layerElement = document.createElement("OSMLayerSettings");
+    rootElement.appendChild(layerElement);
+
+    QDomElement directoryPathElement = document.createElement("OSMDirectoryPath");
+    layerElement.appendChild(directoryPathElement);
+    QDomText direcotryPathText = document.createTextNode(getOSMDirectorypath());
+    directoryPathElement.appendChild(direcotryPathText);
+}
+
+bool OSMLayer::restoreConfig(QDomDocument &document)
+{
+    bool result = false;
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList osmLayerNodes = rootElem.elementsByTagName("OSMLayerSettings");
+
+        for(int iMap = 0; iMap < osmLayerNodes.size(); iMap++)
+        {
+            QDomNode layerNode = osmLayerNodes.at(iMap);
+
+            if(layerNode.isNull() == false)
+            {
+                QString value = AppSettings::getValueString(layerNode, "OSMDirectoryPath");
+
+                if(value.isEmpty() == false)
+                {
+                    setOSMDirectorypath(value);
+                    result = true;
+                }
+            }
+        }
+    }
+
+    return result;
 }

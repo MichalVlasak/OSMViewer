@@ -2,6 +2,7 @@
 #define CENTERPOINTSMANAGER_H
 
 #include "CenterPointStruct.h"
+#include "StoreConfigInterface.h"
 
 #include <vector>
 
@@ -9,7 +10,7 @@
 #include <QtXml>
 
 
-class CenterPointsManager : public QObject
+class CenterPointsManager : public QObject, public StoreConfigInterface
 {
         Q_OBJECT
 
@@ -41,6 +42,10 @@ class CenterPointsManager : public QObject
         bool createNewGroup(const QString & groupName);
         bool changeGroupName(const QString & oldGroupName, const QString & newGroupName);
         bool removeGroup(const QString & groupName);
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     signals:
         void homePointWasChanged();
