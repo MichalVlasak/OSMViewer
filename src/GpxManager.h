@@ -9,6 +9,18 @@ class GpxManager : public StoreConfigInterface
 {
     public:
         GpxManager();
+        virtual ~GpxManager() = default;
+
+        static const int ErrorId = -1;
+
+        struct GpxItem
+        {
+                QString filePath;
+                QString description;
+                int fileId = ErrorId;
+        };
+
+        typedef std::vector<GpxItem> GpxVector;
 
     public:
         // interface zo StoreConfigInterface
@@ -17,11 +29,21 @@ class GpxManager : public StoreConfigInterface
 
     public:
         const QString & getLastPathToGpxFiles() const;
+        const GpxVector & getGpxVector() const;
 
-        void loadGpxFiles(const QStringList & fileNames);
+        void loadGpxFile(const QString & filePath);
+        void loadGpxFiles(const QStringList & filePaths);
+
+        void removeGpxFile(int fileId);
+        void removeAll();
+
+    private:
+        int getNextItemId();
 
     private:
         QString _lastPathToGpxFiles;
+        GpxVector _gpxVector;
+        static int itemIdCounter;
 };
 
 #endif // GPXMANAGER_H

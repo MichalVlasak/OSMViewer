@@ -45,7 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _centerPointsManager = new CenterPointsManager(this);
     _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
+
     _gpxManager = new GpxManager();
+    _appSettings.restoreConfig(_gpxManager);
     _gpxWidget = new GpxWidget(_gpxManager, this);
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
@@ -165,7 +167,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _appSettings.restoreConfig(_centerPointsManager);
     _appSettings.restoreConfig(&_downloadProjectModel);
-    _appSettings.restoreConfig(_gpxManager);
 
     _centerPointsWidget->fillPointsList();
 

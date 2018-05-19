@@ -7,6 +7,7 @@ class StoreConfigInterface
 {
     public:
         StoreConfigInterface();
+        virtual ~StoreConfigInterface() = default;
 
     public:
         virtual void storeConfig(QDomDocument & document, QDomElement & rootElement) = 0;
