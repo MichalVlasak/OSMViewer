@@ -105,11 +105,11 @@ void OSMTileDownloaderPrepare::run()
                         _downloader->addUrlToDownload(item, false);
                     }
                 }
-            }
 
-            if(_runPrepare == true)
-            {
-                emit columnIsPrepared();
+                if(_runPrepare == true)
+                {
+                    emit columnIsPrepared();
+                }
             }
         }
     }

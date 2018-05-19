@@ -19,7 +19,7 @@ OSMTileDownloader::OSMTileDownloader(QObject *parent)
 
     _baseWebRootUrl = _baseWebRootUrllist.at(0);
 
-    for(int i = 0; i < _threads; i++)
+    for(size_t i = 0; i < _threads; i++)
     {
         _processVector.push_back(newProcess());
     }
@@ -267,7 +267,7 @@ void OSMTileDownloader::setThreads(size_t threads)
     // pridanie dalsich "vlakien" mozem urobit hned, odobratie budem riesit ked sa niektory z procesov ukonci
     if(threads > _processVector.size())
     {
-        for(int i = _processVector.size(); i < _threads; i++)
+        for(size_t i = _processVector.size(); i < _threads; i++)
         {
             _processVector.push_back(newProcess());
         }
@@ -275,7 +275,7 @@ void OSMTileDownloader::setThreads(size_t threads)
 
     lock.unlock();
 
-    for(int i = 0; i < threads; i++)
+    for(size_t i = 0; i < threads; i++)
     {
         startDownload();
     }
