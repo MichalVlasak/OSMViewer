@@ -52,7 +52,9 @@ SOURCES += src/main.cpp\
     src/OSMDownloadProjectWidget.cpp \
     src/OSMDownloadProjectModel.cpp \
     src/ProjectNameDialog.cpp \
-    src/StoreConfigInterface.cpp
+    src/StoreConfigInterface.cpp \
+    src/GpxWidget.cpp \
+    src/GpxManager.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -84,7 +86,9 @@ HEADERS  += src/MainWindow.h \
     src/OSMDownloadProjectWidget.h \
     src/OSMDownloadProjectModel.h \
     src/ProjectNameDialog.h \
-    src/StoreConfigInterface.h
+    src/StoreConfigInterface.h \
+    src/GpxWidget.h \
+    src/GpxManager.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -98,7 +102,8 @@ FORMS    += resources/MainWindow.ui \
     resources/CenterPointEditDialog.ui \
     resources/GroupEditDialog.ui \
     resources/OSMDownloadProjectWidget.ui \
-    resources/ProjectNameDialog.ui
+    resources/ProjectNameDialog.ui \
+    resources/GpxWidget.ui
 
 RESOURCES += \
     resources/resources.qrc

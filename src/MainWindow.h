@@ -89,6 +89,9 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         CenterPointsWidget * _centerPointsWidget = nullptr;
         QDockWidget * _centerPointsDock = nullptr;
         OSMDownloadProjectModel _downloadProjectModel;
+        class GpxWidget * _gpxWidget = nullptr;
+        QDockWidget * _gpxDock = nullptr;
+        class GpxManager * _gpxManager = nullptr;
 };
 
 #endif // MAINWINDOW_H

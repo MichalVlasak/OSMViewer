@@ -5,6 +5,7 @@
 #include "OSMDownloadAreaDialog.h"
 #include "AboutDialog.h"
 #include "WgsConversion.h"
+#include "GpxWidget.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -44,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _centerPointsManager = new CenterPointsManager(this);
     _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
+    _gpxManager = new GpxManager();
+    _gpxWidget = new GpxWidget(_gpxManager, this);
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
     _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -73,10 +76,18 @@ MainWindow::MainWindow(QWidget *parent) :
     _downloadProjectDock->setFloating(true);
     _downloadProjectDock->setObjectName(tr("Download Project"));
 
+    _gpxDock = new QDockWidget(tr("GPX List"), this);
+    _gpxDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _gpxDock->setWidget(_gpxWidget);
+    _gpxDock->hide();
+    _gpxDock->setFloating(true);
+    _gpxDock->setObjectName(tr("GPX List"));
+
     addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderSetupDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloadProjectDock);
+    addDockWidget(Qt::RightDockWidgetArea, _gpxDock);
 
     QObject::connect(_ui->action_CenterPoints, SIGNAL(triggered(bool)), _centerPointsDock, SLOT(setVisible(bool)));
     QObject::connect(_centerPointsDock, SIGNAL(visibilityChanged(bool)), _ui->action_CenterPoints, SLOT(setChecked(bool)));
@@ -89,6 +100,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(_ui->action_Projects, SIGNAL(triggered(bool)), _downloadProjectDock, SLOT(setVisible(bool)));
     QObject::connect(_downloadProjectDock, SIGNAL(visibilityChanged(bool)), _ui->action_Projects, SLOT(setChecked(bool)));
+
+    QObject::connect(_ui->action_GPXfiles, SIGNAL(triggered(bool)), _gpxDock, SLOT(setVisible(bool)));
+    QObject::connect(_gpxDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXfiles, SLOT(setChecked(bool)));
 
     OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
 
@@ -151,8 +165,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _appSettings.restoreConfig(_centerPointsManager);
     _appSettings.restoreConfig(&_downloadProjectModel);
+    _appSettings.restoreConfig(_gpxManager);
 
     _centerPointsWidget->fillPointsList();
+
+#ifdef NDEBUG
+    _ui->action_GPXfiles->setVisible(false);
+ #else
+  // debug code
+ #endif
 }
 
 MainWindow::~MainWindow()
@@ -164,9 +185,11 @@ MainWindow::~MainWindow()
     _appSettings.storeConfig(_downloadAreaHighlight);
     _appSettings.storeConfig(_centerPointsManager);
     _appSettings.storeConfig(&_downloadProjectModel);
+    _appSettings.storeConfig(_gpxManager);
 
     //while(_downloader2->isRunning() == true);
 
+    delete _gpxManager;
     delete _downloader;
     delete _ui;
 }
