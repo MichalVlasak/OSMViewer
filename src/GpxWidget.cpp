@@ -109,6 +109,19 @@ void GpxWidget::reloadGpx()
             tableItem.fileName = fileInfo.fileName();
             tableItem.fileId = gpxItem.fileId;
             tableItem.description = gpxItem.description;
+            tableItem.name = gpxItem.name;
+            tableItem.authorName = gpxItem.authorName;
+
+            if(gpxItem.time.isNull() == false)
+            {
+                QDateTime time = gpxItem.time.toDateTime();
+
+                tableItem.time = time.toString("dd.MM.yyyy HH:mm");
+            }
+            else
+            {
+                tableItem.time = "--";
+            }
 
             _tableModel->addNewItem(tableItem);
         }
@@ -116,6 +129,8 @@ void GpxWidget::reloadGpx()
         _ui->deleteAllFile->setDisabled(gpxVector.empty());
         _ui->deleteFile->setDisabled(true);
     }
+
+    _ui->tableView->resizeColumnsToContents();
 }
 
 void GpxWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)

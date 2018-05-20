@@ -1,7 +1,10 @@
 #include "GpxManager.h"
 #include "AppSettings.h"
+#include "MainWindow.h"
 
+#include <iostream>
 #include <QFileInfo>
+#include <QMessageBox>
 
 int GpxManager::itemIdCounter = 0;
 
@@ -124,6 +127,8 @@ void GpxManager::loadGpxFile(const QString &filePath)
             item.filePath = filePath;
             item.fileId = getNextItemId();
 
+            loadXml(filePath, item);
+
             _gpxVector.push_back(item);
         }
     }
@@ -151,3 +156,130 @@ void GpxManager::removeAll()
 {
     _gpxVector.clear();
 }
+
+QString getValueFromNode(QDomNode & node, const QString & nodeName)
+{
+    QDomNodeList nameNodeList = node.toElement().elementsByTagName(nodeName);
+    QString value;
+
+    if(nameNodeList.size() > 0)
+    {
+        QDomNode nameNode = nameNodeList.at(0);
+
+        if(nameNode.isNull() == false)
+        {
+            value = nameNode.toElement().text();
+        }
+    }
+
+    return value;
+}
+
+void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
+{
+    QDomDocument document;
+    QFile file(filePath);
+
+    if (document.setContent(&file) == false)
+    {
+        QMessageBox::warning(MainWindow::getInstance(), QObject::tr("Cannot load!"), QObject::tr("Cannot load file") + filePath + QObject::tr("!"));
+
+        return;
+    }
+
+    QDomElement rootElem = document.firstChildElement("gpx");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList metadataNodes = rootElem.elementsByTagName("metadata");
+
+        if(metadataNodes.size() > 0)
+        {
+            QDomNode metadataNode = metadataNodes.at(0);
+
+            if(metadataNode.isNull() == false)
+            {
+                gpxItem.name = getValueFromNode(metadataNode, "name");
+                gpxItem.description = getValueFromNode(metadataNode, "desc");
+                QString timeString = getValueFromNode(metadataNode, "time");
+
+                if(timeString.isEmpty() == false)
+                {
+                    QDateTime time = QDateTime::fromString(timeString, Qt::ISODate);
+                    gpxItem.time = time;
+                }
+
+                QDomNodeList authorNodeList = metadataNode.toElement().elementsByTagName("author");
+
+                if(authorNodeList.size() > 0)
+                {
+                    QDomNode authorNode = authorNodeList.at(0);
+
+                    if(authorNode.isNull() == false)
+                    {
+                        gpxItem.authorName = getValueFromNode(authorNode, "name");
+                    }
+                }
+            }
+        }
+
+        QDomNodeList trkNodes = rootElem.elementsByTagName("trk");
+
+        if(trkNodes.size() > 0)
+        {
+            QDomNode trkNode = trkNodes.at(0);
+
+            if(trkNode.isNull() == false)
+            {
+                if(gpxItem.name.isEmpty() == true)
+                {
+                    gpxItem.name = getValueFromNode(trkNode, "name");
+                }
+
+                QDomNodeList trksegNodes = rootElem.elementsByTagName("trkseg");
+
+                if(trksegNodes.size() > 0)
+                {
+                    QDomNode trksegNode = trksegNodes.at(0);
+
+                    if(trksegNode.isNull() == false)
+                    {
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

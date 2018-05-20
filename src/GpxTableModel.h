@@ -14,7 +14,7 @@ class GpxTableModel : public QStandardItemModel
          */
         enum class HeaderTableEnum
         {
-            FileName, Description, Last
+            FileName, Description, Name, AuthorName, Time, Last
         };
 
         static const int ERROR_INDEX = -1;
@@ -27,6 +27,9 @@ class GpxTableModel : public QStandardItemModel
         {
                 QString fileName = "???";
                 QString description = "???";
+                QString name = "???";
+                QString authorName = "???";
+                QString time = "???";
                 int fileId = ERROR_INDEX;
         };
 

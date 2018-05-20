@@ -16,7 +16,10 @@ class GpxManager : public StoreConfigInterface
         struct GpxItem
         {
                 QString filePath;
+                QString name;
+                QString authorName;
                 QString description;
+                QVariant time;
                 int fileId = ErrorId;
         };
 
@@ -39,6 +42,7 @@ class GpxManager : public StoreConfigInterface
 
     private:
         int getNextItemId();
+        void loadXml(const QString & filePath, GpxItem & gpxItem);
 
     private:
         QString _lastPathToGpxFiles;
