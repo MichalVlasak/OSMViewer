@@ -4,9 +4,9 @@ GpxTableModel::GpxTableModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     _headerMap[HeaderTableEnum::FileName]    = {0, QObject::tr("File Name")};
-    _headerMap[HeaderTableEnum::AuthorName]  = {1, QObject::tr("Author Name")};
-    _headerMap[HeaderTableEnum::Name]        = {2, QObject::tr("Name")};
-    _headerMap[HeaderTableEnum::Time]        = {3, QObject::tr("Time")};
+    _headerMap[HeaderTableEnum::Time]        = {1, QObject::tr("Time")};
+    _headerMap[HeaderTableEnum::AuthorName]  = {2, QObject::tr("Author Name")};
+    _headerMap[HeaderTableEnum::Name]        = {3, QObject::tr("Name")};
     _headerMap[HeaderTableEnum::Description] = {4, QObject::tr("Description")};
 
     initializeTableHeader();

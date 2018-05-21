@@ -13,6 +13,19 @@ class GpxManager : public StoreConfigInterface
 
         static const int ErrorId = -1;
 
+        struct Point
+        {
+                double lat = 0.;
+                double lon = 0.;
+                double elevation = 0.;
+                QVariant time;
+                int temperature = 0;
+                int cadention = 0;
+                int heartRate = 0;
+        };
+
+        typedef std::vector<Point> PointVector;
+
         struct GpxItem
         {
                 QString filePath;
@@ -21,6 +34,7 @@ class GpxManager : public StoreConfigInterface
                 QString description;
                 QVariant time;
                 int fileId = ErrorId;
+                PointVector pointVector;
         };
 
         typedef std::vector<GpxItem> GpxVector;

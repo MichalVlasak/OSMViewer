@@ -236,7 +236,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                     gpxItem.name = getValueFromNode(trkNode, "name");
                 }
 
-                QDomNodeList trksegNodes = rootElem.elementsByTagName("trkseg");
+                QDomNodeList trksegNodes = trkNode.toElement().elementsByTagName("trkseg");
 
                 if(trksegNodes.size() > 0)
                 {
@@ -244,42 +244,129 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
                     if(trksegNode.isNull() == false)
                     {
+                        QDomNodeList trkptNodes = trksegNode.toElement().elementsByTagName("trkpt");
+
+                        int size = trkptNodes.size();
+
+                        for(int i = 0; i < size; i++)
+                        {
+                            QDomNode trkptNode = trkptNodes.at(i);
+
+                            if(trkptNode.isNull() == false)
+                            {
+                                if(i == 0 && gpxItem.time.isNull() == true)
+                                {
+                                    QString timeString = getValueFromNode(trkptNode, "time");
+
+                                    if(timeString.isEmpty() == false)
+                                    {
+                                        QDateTime time = QDateTime::fromString(timeString, Qt::ISODate);
+                                        gpxItem.time = time;
+                                    }
+                                }
+
+                                QString elevationString = getValueFromNode(trkptNode, "ele");
+                                QString timeString = getValueFromNode(trkptNode, "time");
+                                Point point;
+
+                                if(elevationString.isEmpty() == false)
+                                {
+                                    bool isOk = false;
+                                    double elevation = elevationString.toDouble(&isOk);
+
+                                    if(isOk == true)
+                                    {
+                                        point.elevation = elevation;
+                                    }
+                                }
+
+                                if(timeString.isEmpty() == false)
+                                {
+                                    QDateTime time = QDateTime::fromString(timeString, Qt::ISODate);
+                                    point.time = time;
+                                }
+
+                                QString latString = trkptNode.attributes().namedItem("lat").nodeValue();
+                                QString lonString = trkptNode.attributes().namedItem("lon").nodeValue();
+
+                                if(latString.isEmpty() == false && lonString.isEmpty() == false)
+                                {
+                                    bool isLatOk = false;
+                                    bool isLonOk = false;
+
+                                    double lat = latString.toDouble(&isLatOk);
+                                    double lon = latString.toDouble(&isLonOk);
+
+                                    if(isLatOk == true && isLonOk == true)
+                                    {
+                                        point.lat = lat;
+                                        point.lon = lon;
+                                    }
+                                }
+
+                                QDomNodeList extensionsNodes = trkptNode.toElement().elementsByTagName("extensions");
+
+                                if(extensionsNodes.size() > 0)
+                                {
+                                    QDomNode extensionsNode = extensionsNodes.at(0);
+
+                                    if(extensionsNode.isNull() == false)
+                                    {
+                                        QDomNodeList trkptExtensionNodes = extensionsNode.toElement().elementsByTagName("gpxtpx:TrackPointExtension");
+
+                                        if(trkptExtensionNodes.size() > 0)
+                                        {
+                                            QDomNode trkptExtensionNode = trkptExtensionNodes.at(0);
+
+                                            if(trkptExtensionNode.isNull() == false)
+                                            {
+                                                QString temperatureString = getValueFromNode(trkptExtensionNode, "gpxtpx:atemp");
+                                                QString heartRateString = getValueFromNode(trkptExtensionNode, "gpxtpx:hr");
+                                                QString cadentionString = getValueFromNode(trkptExtensionNode, "gpxtpx:cad");
+
+                                                if(temperatureString.isEmpty() == false)
+                                                {
+                                                    bool isOk = false;
+                                                    int temperature = temperatureString.toInt(&isOk);
+
+                                                    if(isOk == true)
+                                                    {
+                                                        point.temperature = temperature;
+                                                    }
+                                                }
+
+                                                if(heartRateString.isEmpty() == false)
+                                                {
+                                                    bool isOk = false;
+                                                    int heartRate = heartRateString.toInt(&isOk);
+
+                                                    if(isOk == true)
+                                                    {
+                                                        point.heartRate = heartRate;
+                                                    }
+                                                }
+
+                                                if(cadentionString.isEmpty() == false)
+                                                {
+                                                    bool isOk = false;
+                                                    int cadention = cadentionString.toInt(&isOk);
+
+                                                    if(isOk == true)
+                                                    {
+                                                        point.cadention = cadention;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                gpxItem.pointVector.push_back(point);
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
