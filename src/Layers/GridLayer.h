@@ -9,7 +9,7 @@ class GridLayer : public BaseLayer
         explicit GridLayer(MapSettings & mapSettings);
 
     public:
-        void paintEvent(QPaintEvent * paintEvent);
+        void paintEvent(QPainter & painter);
 
     private:
         double DegreeUnit = 360 * 60 * 60; // pocet sekund v celom kruhu
@@ -34,7 +34,7 @@ class GridLayer : public BaseLayer
         typedef std::vector<GridLevelInfo> GridLevels;
         GridLevels _gridLevel;
 
-        void paintGrid(GridLevelInfo levelInfo);
+        void paintGrid(GridLevelInfo levelInfo, QPainter & painter);
 };
 
 #endif // GRIDLAYER_H

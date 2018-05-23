@@ -12,11 +12,11 @@ class BaseLayer
         explicit BaseLayer(MapSettings & mapSettings);
 
     public:
-        virtual void paintEvent(QPaintEvent * paintEvent) = 0;
-        void wheelEvent(QWheelEvent * wheelEvent);
-        void mouseMoveEvent(QMouseEvent * mouseEvent);
-        void mousePressEvent(QMouseEvent * mouseEvent);
-        void keyPressEvent(QKeyEvent * keyEvent);
+        virtual void paintEvent(QPainter & painter) = 0;
+        virtual void wheelEvent(QWheelEvent * wheelEvent);
+        virtual void mouseMoveEvent(QMouseEvent * mouseEvent);
+        virtual void mousePressEvent(QMouseEvent * mouseEvent);
+        virtual void keyPressEvent(QKeyEvent * keyEvent);
 
     protected:
         MapSettings & _mapSettings;

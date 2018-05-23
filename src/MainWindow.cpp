@@ -46,9 +46,12 @@ MainWindow::MainWindow(QWidget *parent) :
     _centerPointsManager = new CenterPointsManager(this);
     _centerPointsWidget = new CenterPointsWidget(_centerPointsManager, this);
 
+    GpxLayer * gpxLayer = _ui->paintWidget->getGpxLayer();
+
     _gpxManager = new GpxManager();
+    gpxLayer->setGpxManager(_gpxManager);
     _appSettings.restoreConfig(_gpxManager);
-    _gpxWidget = new GpxWidget(_gpxManager, this);
+    _gpxWidget = new GpxWidget(_gpxManager, gpxLayer, this);
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
     _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -514,4 +517,9 @@ bool MainWindow::restoreConfig(QDomDocument &document)
     }
 
     return result;
+}
+
+GpxManager * MainWindow::getGpxManager()
+{
+    return _gpxManager;
 }

@@ -21,17 +21,17 @@ GridLayer::GridLayer(MapSettings & mapSettings)
     _gridLevel.push_back(GridLevelInfo(QColor(Qt::black)  , 1.0, 1.             , 5, false));
 }
 
-void GridLayer::paintEvent(QPaintEvent *paintEvent)
+void GridLayer::paintEvent(QPainter & painter)
 {
-    paintGrid(_gridLevel[5]);
-    paintGrid(_gridLevel[4]);
-    paintGrid(_gridLevel[3]);
-    paintGrid(_gridLevel[2]);
-    paintGrid(_gridLevel[1]);
-    paintGrid(_gridLevel[0]);
+    paintGrid(_gridLevel[5], painter);
+    paintGrid(_gridLevel[4], painter);
+    paintGrid(_gridLevel[3], painter);
+    paintGrid(_gridLevel[2], painter);
+    paintGrid(_gridLevel[1], painter);
+    paintGrid(_gridLevel[0], painter);
 }
 
-void GridLayer::paintGrid(GridLevelInfo levelInfo)
+void GridLayer::paintGrid(GridLevelInfo levelInfo, QPainter & painter)
 {
     int wWidth = _mapSettings.widget->width();
     int wHeight = _mapSettings.widget->height();
@@ -48,7 +48,6 @@ void GridLayer::paintGrid(GridLevelInfo levelInfo)
         }
     }
 
-    QPainter painter(_mapSettings.widget);
     QFontMetrics fontMetrics = painter.fontMetrics();
 
     float degToPix =  OSMLayer::TileSize / _mapSettings.zoom.getCurrentDegreeForTile();

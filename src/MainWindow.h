@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         // interface zo StoreConfigInterface
         void storeConfig(QDomDocument & document, QDomElement & rootElement);
         bool restoreConfig(QDomDocument & document);
+        class GpxManager * getGpxManager();
 
     private:
         void keyPressEvent(QKeyEvent * event);

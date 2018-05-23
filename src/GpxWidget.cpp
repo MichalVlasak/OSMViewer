@@ -3,10 +3,11 @@
 
 #include <QFileDialog>
 
-GpxWidget::GpxWidget(GpxManager * gpxManager, QWidget *parent) :
+GpxWidget::GpxWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxWidget),
-    _gpxManager(gpxManager)
+    _gpxManager(gpxManager),
+    _gpxLayer(gpxLayer)
 {
     _ui->setupUi(this);
 
@@ -42,6 +43,32 @@ void GpxWidget::addFile()
     }
 }
 
+int GpxWidget::getId(const QModelIndex & index)
+{
+    if(index.isValid() == true)
+    {
+        int fileNameColumnIndex = _tableModel->getColumnIndex(GpxTableModel::HeaderTableEnum::FileName);
+
+        if(fileNameColumnIndex != GpxTableModel::ERROR_INDEX)
+        {
+            QString stringId = _tableModel->data(index, Qt::UserRole + 1).toString();
+
+            if(stringId.isEmpty() == false)
+            {
+                bool isOk = false;
+                int id = stringId.toInt(&isOk);
+
+                if(isOk == true)
+                {
+                    return id;
+                }
+            }
+        }
+    }
+
+    return GpxManager::ErrorId;
+}
+
 void GpxWidget::deleteFile()
 {
     if(_gpxManager != nullptr)
@@ -51,29 +78,15 @@ void GpxWidget::deleteFile()
 
         for(const QModelIndex & index : indexes)
         {
-            if(index.isValid() == true)
+            int id = getId(index);
+
+            if(id != GpxManager::ErrorId)
             {
-                int fileNameColumnIndex = _tableModel->getColumnIndex(GpxTableModel::HeaderTableEnum::FileName);
-
-                if(fileNameColumnIndex != GpxTableModel::ERROR_INDEX)
+                for(const GpxManager::GpxItem & gpxItem : gpxVector)
                 {
-                    QString stringId = _tableModel->data(index, Qt::UserRole + 1).toString();
-
-                    if(stringId.isEmpty() == false)
+                    if(gpxItem.fileId == id)
                     {
-                        bool isOk = false;
-                        int id = stringId.toInt(&isOk);
-
-                        if(isOk == true)
-                        {
-                            for(const GpxManager::GpxItem & gpxItem : gpxVector)
-                            {
-                                if(gpxItem.fileId == id)
-                                {
-                                    _gpxManager->removeGpxFile(id);
-                                }
-                            }
-                        }
+                        _gpxManager->removeGpxFile(id);
                     }
                 }
             }
@@ -136,4 +149,22 @@ void GpxWidget::reloadGpx()
 void GpxWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
 {
     _ui->deleteFile->setDisabled(selected.isEmpty());
+
+    QModelIndexList indexes =  selected.indexes();
+    GpxManager::GpxIdVector selectedGpx;
+
+    for(const QModelIndex & index : indexes)
+    {
+        int id = getId(index);
+
+        if(id != GpxManager::ErrorId)
+        {
+            selectedGpx.push_back(id);
+        }
+    }
+
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->setCurrentGpxIndexes(selectedGpx);
+    }
 }

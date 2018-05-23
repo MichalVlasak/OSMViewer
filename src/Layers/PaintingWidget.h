@@ -23,6 +23,7 @@ class PaintingWidget : public QWidget
         void addLayer(BaseLayer * layer, QString layerName);
 
         class OSMLayer * getOSMLayer();
+        class GpxLayer * getGpxLayer();
 
         QPointF getTopLeft();
         QPointF getBottomRight();
@@ -79,6 +80,8 @@ class PaintingWidget : public QWidget
         QPoint _startPointSelectArea;
         QPoint _endPointSelectArea;
         SelectedAreaState _selectedAreaState;
+        class OSMLayer * _osmLayer = nullptr;
+        class GpxLayer * _gpxLayer = nullptr;
 };
 
 #endif // PAINTINGWIDGET_H

@@ -14,7 +14,7 @@ class OSMLayer : public BaseLayer, public StoreConfigInterface
         static const QString DefaultMapDirectory;
 
     public:
-        void paintEvent(QPaintEvent * paintEvent);
+        void paintEvent(QPainter & painter);
         void setOSMDirectorypath(QString dirPath);
         QString getOSMDirectorypath();
         void setOSMTileDownloader(class OSMTileDownloader * downloader);

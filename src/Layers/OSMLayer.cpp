@@ -38,12 +38,10 @@ void OSMLayer::setOSMTileDownloader(OSMTileDownloader *downloader)
     _downloader = downloader;
 }
 
-void OSMLayer::paintEvent(QPaintEvent *paintEvent)
+void OSMLayer::paintEvent(QPainter & painter)
 {
     //std::cout << "paint" << std::endl;
     //std::cout << "paintEvent center " << _mapSettings.center.x() << " " << _mapSettings.center.y() << std::endl;
-
-    QPainter painter(_mapSettings.widget);
 
     unsigned level = _mapSettings.zoom.getCurrentZoomLevel();
     unsigned count = pow(2., level);

@@ -19,7 +19,7 @@ class GpxManager : public StoreConfigInterface
                 double lon = 0.;
                 double elevation = 0.;
                 QVariant time;
-                int temperature = 0;
+                float temperature = 0;
                 int cadention = 0;
                 int heartRate = 0;
         };
@@ -38,6 +38,7 @@ class GpxManager : public StoreConfigInterface
         };
 
         typedef std::vector<GpxItem> GpxVector;
+        typedef std::vector<int> GpxIdVector;
 
     public:
         // interface zo StoreConfigInterface

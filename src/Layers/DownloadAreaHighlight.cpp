@@ -11,12 +11,10 @@ DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings, QObject 
     clearDownloadParams();
 }
 
-void DownloadAreaHighlight::paintEvent(QPaintEvent *paintEvent)
+void DownloadAreaHighlight::paintEvent(QPainter & painter)
 {
     if(_isDownloadParamsSetupEnable == true && _isVisible == true)
     {
-        QPainter painter(_mapSettings.widget);
-
         QPoint startPointSelectArea(_mapSettings.getPixelForLon(_setup.lonFrom), _mapSettings.getPixelForLat(_setup.latFrom));
         QPoint endPointSelectArea(_mapSettings.getPixelForLon(_setup.lonTo), _mapSettings.getPixelForLat(_setup.latTo));
 

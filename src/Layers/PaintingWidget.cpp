@@ -1,6 +1,7 @@
 #include "PaintingWidget.h"
 #include "OSMLayer.h"
 #include "GridLayer.h"
+#include "GpxLayer.h"
 #include "src/MapContextMenu.h"
 #include "src/CenterPointsManager.h"
 #include "src/MainWindow.h"
@@ -21,10 +22,16 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     _startPointSelectArea = QPoint(0, 0);
     _endPointSelectArea = QPoint(0, 0);
 
-    _layers.push_back(LayerInfo(new OSMLayer(_mapSettings), "OSM"));
+    _osmLayer = new OSMLayer(_mapSettings);
+    _gpxLayer = new GpxLayer(_mapSettings, this);
+
+    _layers.push_back(LayerInfo(_osmLayer, "OSM"));
+    _layers.push_back(LayerInfo(_gpxLayer, "GPX"));
     _layers.push_back(LayerInfo(new GridLayer(_mapSettings), "Grid"));
 
     setMouseTracking(true);
+
+    QObject::connect(_gpxLayer, SIGNAL(refreshView()), SLOT(repaint()));
 }
 
 void PaintingWidget::addLayer(BaseLayer *layer, QString layerName)
@@ -36,21 +43,24 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
 {
     QWidget::paintEvent(paintEvent);
 
-    for(size_t i = 0; i < _layers.size(); i++)
-    {
-        if(_layers[i].layer != nullptr)
-        {
-            _layers[i].layer->paintEvent(paintEvent);
-        }
-    }
-
-    if(_selectedAreaState == Selecting)
+    if(paintEvent->type() == QPaintEvent::Paint)
     {
         QPainter painter(_mapSettings.widget);
 
-        QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
+        for(size_t i = 0; i < _layers.size(); i++)
+        {
+            if(_layers[i].layer != nullptr)
+            {
+                _layers[i].layer->paintEvent(painter);
+            }
+        }
 
-        painter.drawRect(rect);
+        if(_selectedAreaState == Selecting)
+        {
+            QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
+
+            painter.drawRect(rect);
+        }
     }
 }
 
@@ -62,6 +72,14 @@ void PaintingWidget::startSelectArea()
 void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     QWidget::mouseMoveEvent(mouseEvent);
+
+    for(size_t i = 0; i < _layers.size(); i++)
+    {
+        if(_layers[i].layer != nullptr)
+        {
+            _layers[i].layer->mouseMoveEvent(mouseEvent);
+        }
+    }
 
     if(_selectedAreaState == Selecting)
     {
@@ -291,44 +309,25 @@ void PaintingWidget::setCenterPosition(const QPointF & center)
 
 void PaintingWidget::setOSMDirectoryPath(QString path)
 {
-    OSMLayer * osmLayer = getOSMLayer();
-
-    if(osmLayer != nullptr)
+    if(_osmLayer != nullptr)
     {
-        osmLayer->setOSMDirectorypath(path);
+        _osmLayer->setOSMDirectorypath(path);
     }
 }
 
 QString PaintingWidget::getOSMDirectoryPath()
 {
-    OSMLayer * osmLayer = getOSMLayer();
-
-    if(osmLayer != nullptr)
+    if(_osmLayer != nullptr)
     {
-        return osmLayer->getOSMDirectorypath();
+        return _osmLayer->getOSMDirectorypath();
     }
 
     return QString();
 }
 
-OSMLayer * PaintingWidget::getOSMLayer()
+OSMLayer * PaintingWidget:: getOSMLayer()
 {
-    for(LayerInfo layerInfo : _layers)
-    {
-        BaseLayer * layer = layerInfo.layer;
-
-        if(layer != nullptr)
-        {
-            OSMLayer * osmLayer = dynamic_cast<OSMLayer*>(layer);
-
-            if(osmLayer != nullptr)
-            {
-                return osmLayer;
-            }
-        }
-    }
-
-    return nullptr;
+    return _osmLayer;
 }
 
 QPointF PaintingWidget::getBottomRight()
@@ -356,4 +355,9 @@ void PaintingWidget::centerMapToPixels(QPoint pos)
     double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(pixY));
 
     centerToWgs(lon, lat);
+}
+
+GpxLayer * PaintingWidget::getGpxLayer()
+{
+    return _gpxLayer;
 }

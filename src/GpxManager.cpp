@@ -295,7 +295,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                     bool isLonOk = false;
 
                                     double lat = latString.toDouble(&isLatOk);
-                                    double lon = latString.toDouble(&isLonOk);
+                                    double lon = lonString.toDouble(&isLonOk);
 
                                     if(isLatOk == true && isLonOk == true)
                                     {
@@ -327,7 +327,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                                 if(temperatureString.isEmpty() == false)
                                                 {
                                                     bool isOk = false;
-                                                    int temperature = temperatureString.toInt(&isOk);
+                                                    float temperature = temperatureString.toFloat(&isOk);
 
                                                     if(isOk == true)
                                                     {

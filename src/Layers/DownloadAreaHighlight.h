@@ -15,7 +15,7 @@ class DownloadAreaHighlight : public QObject, public BaseLayer, public StoreConf
         explicit DownloadAreaHighlight(MapSettings & mapSettings, QObject * parent = nullptr);
 
     public:
-        void paintEvent(QPaintEvent * paintEvent);
+        void paintEvent(QPainter & painter);
         void setDownloadParams(OSMDownloadAreaDialog::Setup setup);
         void setVisible(bool value);
         bool isVisible();

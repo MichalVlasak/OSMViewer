@@ -55,7 +55,8 @@ SOURCES += src/main.cpp\
     src/StoreConfigInterface.cpp \
     src/GpxWidget.cpp \
     src/GpxManager.cpp \
-    src/GpxTableModel.cpp
+    src/GpxTableModel.cpp \
+    src/Layers/GpxLayer.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -90,7 +91,8 @@ HEADERS  += src/MainWindow.h \
     src/StoreConfigInterface.h \
     src/GpxWidget.h \
     src/GpxManager.h \
-    src/GpxTableModel.h
+    src/GpxTableModel.h \
+    src/Layers/GpxLayer.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
