@@ -2,6 +2,8 @@
 #include "ui_GpxWidget.h"
 
 #include <QFileDialog>
+#include <QTableView>
+#include <QPushButton>
 
 GpxWidget::GpxWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
@@ -18,10 +20,12 @@ GpxWidget::GpxWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *pare
     QObject::connect(_ui->addFile, SIGNAL(clicked(bool)), SLOT(addFile()));
     QObject::connect(_ui->deleteFile, SIGNAL(clicked(bool)), SLOT(deleteFile()));
     QObject::connect(_ui->deleteAllFile, SIGNAL(clicked(bool)), SLOT(deleteAllFile()));
+    QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelection()));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
 
     _ui->deleteFile->setDisabled(true);
     _ui->deleteAllFile->setDisabled(true);
+    _ui->clearSelection->setDisabled(true);
 
     reloadGpx();
 }
@@ -141,6 +145,7 @@ void GpxWidget::reloadGpx()
 
         _ui->deleteAllFile->setDisabled(gpxVector.empty());
         _ui->deleteFile->setDisabled(true);
+        _ui->clearSelection->setDisabled(true);
     }
 
     _ui->tableView->resizeColumnsToContents();
@@ -149,8 +154,9 @@ void GpxWidget::reloadGpx()
 void GpxWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
 {
     _ui->deleteFile->setDisabled(selected.isEmpty());
+    _ui->clearSelection->setDisabled(selected.isEmpty());
 
-    QModelIndexList indexes =  selected.indexes();
+    QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
     GpxManager::GpxIdVector selectedGpx;
 
     for(const QModelIndex & index : indexes)
@@ -167,4 +173,9 @@ void GpxWidget::selectionChanged(QItemSelection selected, QItemSelection deselec
     {
         _gpxLayer->setCurrentGpxIndexes(selectedGpx);
     }
+}
+
+void GpxWidget::clearSelection()
+{
+    _ui->tableView->selectionModel()->clear();
 }

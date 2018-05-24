@@ -172,12 +172,6 @@ MainWindow::MainWindow(QWidget *parent) :
     _appSettings.restoreConfig(&_downloadProjectModel);
 
     _centerPointsWidget->fillPointsList();
-
-#ifdef NDEBUG
-    _ui->action_GPXfiles->setVisible(false);
- #else
-  // debug code
- #endif
 }
 
 MainWindow::~MainWindow()

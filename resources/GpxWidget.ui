@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
+    <width>391</width>
     <height>138</height>
    </rect>
   </property>
@@ -47,6 +47,13 @@
       <widget class="QPushButton" name="deleteAllFile">
        <property name="text">
         <string>Delete All</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clearSelection">
+       <property name="text">
+        <string>Clear Selection</string>
        </property>
       </widget>
      </item>

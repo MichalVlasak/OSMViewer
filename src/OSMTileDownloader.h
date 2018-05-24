@@ -69,7 +69,7 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         typedef std::vector<QProcess*> ProcessVector;
 
     private:
-        bool _isDownloadingEnable = false;
+        bool _isDownloadingEnable = true;
         DownloadItemsVector _itemsToDownload;
         ProcessVector _processVector;
         QMutex _mutex;

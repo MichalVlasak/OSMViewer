@@ -24,6 +24,7 @@ class GpxWidget : public QWidget
         void deleteFile();
         void deleteAllFile();
         void selectionChanged(QItemSelection selected, QItemSelection deselected);
+        void clearSelection();
 
     private:
         void reloadGpx();

@@ -22,60 +22,110 @@ void GpxLayer::paintEvent(QPainter & painter)
     {
         const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
 
-        for(int id : _currentGpx)
+        if(gpxVector.size() > 0)
         {
-            for(const GpxManager::GpxItem & item : gpxVector)
+            float maxDistance = 5;
+            size_t posIdx;
+            int gpxId = -1;
+            bool isFinded = false;
+
+            for(int id : _currentGpx)
             {
-                if(id == item.fileId)
+                for(const GpxManager::GpxItem & item : gpxVector)
                 {
-                    const GpxManager::PointVector & points = item.pointVector;
-                    QPolygon polygon;
-
-                    int maxDistance = 5;
-                    size_t idx;
-                    bool isFinded = false;
-
-                    for(size_t i = 0; i < points.size(); i++)
+                    if(id == item.fileId)
                     {
-                        int pxX = _mapSettings.getPixelForLon(points[i].lon);
-                        int pxY = _mapSettings.getPixelForLat(points[i].lat);
+                        const GpxManager::PointVector & points = item.pointVector;
+                        QPolygon polygon;
+                        QPoint start;
+                        QPoint stop;
+                        size_t count = points.size();
 
-                        int newDistance = sqrt(pow(fabs(pxX - _mouseX), 2) + pow(fabs(pxY - _mouseY), 2));
-
-                        if(newDistance < maxDistance)
+                        for(size_t i = 0; i < count; i++)
                         {
-                            maxDistance = newDistance;
-                            idx = i;
-                            isFinded = true;
+                            int pxX = _mapSettings.getPixelForLon(points[i].lon);
+                            int pxY = _mapSettings.getPixelForLat(points[i].lat);
+
+                            if(i == 0)
+                            {
+                                start = QPoint(pxX, pxY);
+                            }
+                            else if(i == count - 1)
+                            {
+                                stop = QPoint(pxX, pxY);
+                            }
+
+                            float newDistance = sqrt(pow(fabs(pxX - _mouseX), 2.) + pow(fabs(pxY - _mouseY), 2.));
+
+                            if(newDistance < maxDistance)
+                            {
+                                maxDistance = newDistance;
+                                posIdx = i;
+                                gpxId = id;;
+
+                                isFinded = true;
+                            }
+
+                            polygon.push_back(QPoint(pxX, pxY));
                         }
 
-                        polygon.push_back(QPoint(pxX, pxY));
+                        painter.setPen(QPen(QColor(255, 0, 0, 255), 3));
+
+                        painter.drawPolyline(polygon);
+
+                        painter.setBrush(QColor(0, 255, 0));
+                        painter.drawEllipse(start, 8, 8);
+
+                        painter.setBrush(QColor(255, 0, 0));
+                        painter.drawEllipse(stop, 8, 8);
                     }
+                }
+            }
 
-                    painter.setPen(QPen(QColor(255, 0, 0, 255), 3));
-
-                    painter.drawPolygon(polygon);
-
-                    if(isFinded == true)
+            if(isFinded == true)
+            {
+                for(const GpxManager::GpxItem & item : gpxVector)
+                {
+                    if(gpxId == item.fileId)
                     {
-                        QPoint point = polygon.at(idx);
+                        int pxX = _mapSettings.getPixelForLon(item.pointVector[posIdx].lon);
+                        int pxY = _mapSettings.getPixelForLat(item.pointVector[posIdx].lat);
+
+                        QPoint point = QPoint(pxX, pxY);
                         QPoint topLeft = point;
                         QFontMetrics fontMetrics = painter.fontMetrics();
 
                         painter.setBrush(QColor(255, 0, 0));
                         painter.drawEllipse(point, 5, 5);
 
-                        QString heightStr = "Height: " + QString::number(item.pointVector[idx].elevation);
-                        QString cadention = "Cadention: " + QString::number(item.pointVector[idx].cadention);
-                        QString heartRate = "Hearth Rate: " + QString::number(item.pointVector[idx].heartRate);
-                        QString temperature = "Temperature: " + QString::number(item.pointVector[idx].temperature);
-                        QString time = "Time: ";
+                        QString heightStr = "Height: " + QString::number(item.pointVector[posIdx].elevation, 'f', 1) + " m";
+                        QString cadention = "Cadention: " + QString::number(item.pointVector[posIdx].cadention);
+                        QString heartRate = "Hearth Rate: " + QString::number(item.pointVector[posIdx].heartRate) + " bpm";
+                        QString temperature = "Temperature: " + QString::number(item.pointVector[posIdx].temperature) + " °C";
+                        QString dayTime = "Day Time: ";
+                        QString tripTime = "Trip Time: ";
 
-                        if(item.pointVector[idx].time.isNull() == false)
+                        if(item.pointVector[posIdx].time.isNull() == false)
                         {
-                            QDateTime dateTime = item.pointVector[idx].time.toDateTime();
+                            QDateTime dateTime = item.pointVector[posIdx].time.toDateTime();
 
-                            time += dateTime.toString("HH:mm");
+                            dayTime += dateTime.toString("HH:mm");
+                        }
+
+                        if(item.pointVector[posIdx].time.isNull() == false && item.time.isNull() == false)
+                        {
+                            QDateTime dateTime = item.pointVector[posIdx].time.toDateTime();
+                            QDateTime startDateTime = item.time.toDateTime();
+
+                            time_t time = dateTime.toTime_t() - startDateTime.toTime_t();
+
+                            int hour = int(time / 3600);
+                            time -= hour * 3600;
+                            int min = int(time / 60);
+                            time -= min * 60;
+                            int sec = time;
+
+                            tripTime += QString("%1:%2:%3").arg(hour).arg(min, 2,'f', 0,'0').arg(sec, 2,'f', 0,'0');
                         }
 
                         int height = fontMetrics.height();
@@ -83,7 +133,8 @@ void GpxLayer::paintEvent(QPainter & painter)
                         width = std::max(width, fontMetrics.width(cadention));
                         width = std::max(width, fontMetrics.width(heartRate));
                         width = std::max(width, fontMetrics.width(temperature));
-                        width = std::max(width, fontMetrics.width(time));
+                        width = std::max(width, fontMetrics.width(dayTime));
+                        width = std::max(width, fontMetrics.width(tripTime));
 
                         point.rx() = point.rx() + 10;
 
@@ -93,7 +144,7 @@ void GpxLayer::paintEvent(QPainter & painter)
                         QPoint bottomRight = point;
 
                         bottomRight.rx() = bottomRight.rx() + width + 5;
-                        bottomRight.ry() = bottomRight.ry() + 4 * height + height / 2;
+                        bottomRight.ry() = bottomRight.ry() + 5 * height + height / 2;
 
                         QRect rect = QRect(topLeft, bottomRight);
 
@@ -112,7 +163,12 @@ void GpxLayer::paintEvent(QPainter & painter)
                         painter.drawText(point, temperature);
 
                         point.ry() = point.ry() + height;
-                        painter.drawText(point, time);
+                        painter.drawText(point, dayTime);
+
+                        point.ry() = point.ry() + height;
+                        painter.drawText(point, tripTime);
+
+                        break;
                     }
                 }
             }
