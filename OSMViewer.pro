@@ -55,8 +55,10 @@ SOURCES += src/main.cpp\
     src/StoreConfigInterface.cpp \
     src/GpxManager.cpp \
     src/Layers/GpxLayer.cpp \
-    src/GpxTableListModel.cpp \
-    src/GpxFileListWidget.cpp
+    src/GpxFilesListModel.cpp \
+    src/GpxInfoFileModel.cpp \
+    src/GpxInfoFileWidget.cpp \
+    src/GpxFilesListWidget.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -91,8 +93,10 @@ HEADERS  += src/MainWindow.h \
     src/StoreConfigInterface.h \
     src/GpxManager.h \
     src/Layers/GpxLayer.h \
-    src/GpxTableListModel.h \
-    src/GpxFileListWidget.h
+    src/GpxFilesListModel.h \
+    src/GpxInfoFileModel.h \
+    src/GpxInfoFileWidget.h \
+    src/GpxFilesListWidget.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -107,7 +111,8 @@ FORMS    += resources/MainWindow.ui \
     resources/GroupEditDialog.ui \
     resources/OSMDownloadProjectWidget.ui \
     resources/ProjectNameDialog.ui \
-    resources/GpxFileListWidget.ui
+    resources/GpxFileListWidget.ui \
+    resources/GpxInfoFileWidget
 
 RESOURCES += \
     resources/resources.qrc

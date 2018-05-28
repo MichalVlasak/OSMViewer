@@ -1,6 +1,6 @@
-#include "GpxTableListModel.h"
+#include "GpxFilesListModel.h"
 
-GpxTableListModel::GpxTableListModel(QObject *parent)
+GpxFilesListModel::GpxFilesListModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     _headerMap[HeaderTableEnum::FileName]    = {0, QObject::tr("File Name")};
@@ -13,7 +13,7 @@ GpxTableListModel::GpxTableListModel(QObject *parent)
     initializeTableHeader();
 }
 
-void GpxTableListModel::initializeTableHeader()
+void GpxFilesListModel::initializeTableHeader()
 {
     this->setColumnCount(_headerMap.size());
     this->setRowCount(0);
@@ -24,7 +24,7 @@ void GpxTableListModel::initializeTableHeader()
     }
 }
 
-void GpxTableListModel::addNewItem(const TableItem &item)
+void GpxFilesListModel::addNewItem(const GpxManager::GpxItem & item)
 {
     insertRow(rowCount());
 
@@ -33,8 +33,10 @@ void GpxTableListModel::addNewItem(const TableItem &item)
 
     if(_headerMap.find(HeaderTableEnum::FileName) != _headerMap.end())
     {
+        QFileInfo fileInfo(item.filePath);
+
         index = this->index(row, _headerMap[HeaderTableEnum::FileName].col);
-        setData(index, item.fileName);
+        setData(index, fileInfo.fileName());
         setData(index, item.fileId, Qt::UserRole + 1); // ako identifikator pouzijem jedinecne generovane ID pre kazdygpx subor
     }
 
@@ -58,24 +60,54 @@ void GpxTableListModel::addNewItem(const TableItem &item)
 
     if(_headerMap.find(HeaderTableEnum::StartTime) != _headerMap.end())
     {
+        QString startTime = "--";
+
+        if(item.startTime.isNull() == false)
+        {
+            QDateTime time = item.startTime.toDateTime();
+
+            startTime = time.toString("dd.MM.yyyy HH:mm");
+        }
+
         index = this->index(row, _headerMap[HeaderTableEnum::StartTime].col);
-        setData(index, item.startTime);
+        setData(index, startTime);
     }
 
     if(_headerMap.find(HeaderTableEnum::TripTime) != _headerMap.end())
     {
+        QString startTimeString = "--";
+
+        if(item.pointVector.size() > 0)
+        {
+            if(item.pointVector[0].time.isNull() == false && item.pointVector[item.pointVector.size() - 1].time.isNull() == false)
+            {
+                QDateTime firstTime = item.pointVector[0].time.toDateTime();
+                QDateTime lastTime = item.pointVector[item.pointVector.size() - 1].time.toDateTime();
+
+                time_t tripTime = lastTime.toTime_t() - firstTime.toTime_t();
+
+                int hour = int(tripTime / 3600);
+                tripTime -= hour * 3600;
+                int min = int(tripTime / 60);
+                tripTime -= min * 60;
+                int sec = tripTime;
+
+                startTimeString = QString("%1:%2:%3").arg(hour).arg(min, 2,'f', 0,'0').arg(sec, 2,'f', 0,'0');;
+            }
+        }
+
         index = this->index(row, _headerMap[HeaderTableEnum::TripTime].col);
-        setData(index, item.tripTime);
+        setData(index, startTimeString);
     }
 }
 
-void GpxTableListModel::clear()
+void GpxFilesListModel::clear()
 {
     QStandardItemModel::clear();
     initializeTableHeader();
 }
 
-int GpxTableListModel::getColumnIndex(HeaderTableEnum headerItem) const
+int GpxFilesListModel::getColumnIndex(HeaderTableEnum headerItem) const
 {
     HeaderMap::const_iterator it = _headerMap.find(headerItem);
 

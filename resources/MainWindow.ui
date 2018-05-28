@@ -53,7 +53,8 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_CenterPoints"/>
-    <addaction name="action_GPXfiles"/>
+    <addaction name="action_GPXFiles"/>
+    <addaction name="action_GPXFileInfoTable"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -139,12 +140,20 @@
     <string>Projects</string>
    </property>
   </action>
-  <action name="action_GPXfiles">
+  <action name="action_GPXFiles">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>GPX files</string>
+    <string>GPX Files</string>
+   </property>
+  </action>
+  <action name="action_GPXFileInfoTable">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>GPX File Info Table</string>
    </property>
   </action>
  </widget>

@@ -1,11 +1,11 @@
-#include "GpxFileListWidget.h"
+#include "GpxFilesListWidget.h"
 #include "ui_GpxFileListWidget.h"
 
 #include <QFileDialog>
 #include <QTableView>
 #include <QPushButton>
 
-GpxFileListWidget::GpxFileListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
+GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxFileListWidget),
     _gpxManager(gpxManager),
@@ -13,7 +13,7 @@ GpxFileListWidget::GpxFileListWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
 {
     _ui->setupUi(this);
 
-    _tableModel = new GpxTableListModel(this);
+    _tableModel = new GpxFilesListModel(this);
 
     _ui->tableView->setModel(_tableModel);
 
@@ -30,12 +30,12 @@ GpxFileListWidget::GpxFileListWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     reloadGpx();
 }
 
-GpxFileListWidget::~GpxFileListWidget()
+GpxFilesListWidget::~GpxFilesListWidget()
 {
     delete _ui;
 }
 
-void GpxFileListWidget::addFile()
+void GpxFilesListWidget::addFile()
 {
     if(_gpxManager != nullptr)
     {
@@ -47,13 +47,13 @@ void GpxFileListWidget::addFile()
     }
 }
 
-int GpxFileListWidget::getId(const QModelIndex & index)
+int GpxFilesListWidget::getId(const QModelIndex & index)
 {
     if(index.isValid() == true)
     {
-        int fileNameColumnIndex = _tableModel->getColumnIndex(GpxTableListModel::HeaderTableEnum::FileName);
+        int fileNameColumnIndex = _tableModel->getColumnIndex(GpxFilesListModel::HeaderTableEnum::FileName);
 
-        if(fileNameColumnIndex != GpxTableListModel::ERROR_INDEX)
+        if(fileNameColumnIndex != GpxFilesListModel::ERROR_INDEX)
         {
             QString stringId = _tableModel->data(index, Qt::UserRole + 1).toString();
 
@@ -73,7 +73,7 @@ int GpxFileListWidget::getId(const QModelIndex & index)
     return GpxManager::ErrorId;
 }
 
-void GpxFileListWidget::deleteFile()
+void GpxFilesListWidget::deleteFile()
 {
     if(_gpxManager != nullptr)
     {
@@ -100,7 +100,7 @@ void GpxFileListWidget::deleteFile()
     reloadGpx();
 }
 
-void GpxFileListWidget::deleteAllFile()
+void GpxFilesListWidget::deleteAllFile()
 {
     if(_gpxManager != nullptr)
     {
@@ -110,7 +110,7 @@ void GpxFileListWidget::deleteAllFile()
     reloadGpx();
 }
 
-void GpxFileListWidget::reloadGpx()
+void GpxFilesListWidget::reloadGpx()
 {
     if(_gpxManager != nullptr)
     {
@@ -120,48 +120,7 @@ void GpxFileListWidget::reloadGpx()
 
         for(const GpxManager::GpxItem & gpxItem : gpxVector)
         {
-            QFileInfo fileInfo(gpxItem.filePath);
-            GpxTableListModel::TableItem tableItem;
-
-            tableItem.fileName = fileInfo.fileName();
-            tableItem.fileId = gpxItem.fileId;
-            tableItem.description = gpxItem.description;
-            tableItem.name = gpxItem.name;
-            tableItem.authorName = gpxItem.authorName;
-
-            if(gpxItem.startTime.isNull() == false)
-            {
-                QDateTime time = gpxItem.startTime.toDateTime();
-
-                tableItem.startTime = time.toString("dd.MM.yyyy HH:mm");
-            }
-            else
-            {
-                tableItem.startTime = "--";
-            }
-
-            if(gpxItem.pointVector.size() > 0)
-            {
-                time_t tripTime = 0;
-
-                if(gpxItem.pointVector[0].time.isNull() == false && gpxItem.pointVector[gpxItem.pointVector.size() - 1].time.isNull() == false)
-                {
-                    QDateTime firstTime = gpxItem.pointVector[0].time.toDateTime();
-                    QDateTime lastTime = gpxItem.pointVector[gpxItem.pointVector.size() - 1].time.toDateTime();
-
-                    tripTime = lastTime.toTime_t() - firstTime.toTime_t();
-
-                    int hour = int(tripTime / 3600);
-                    tripTime -= hour * 3600;
-                    int min = int(tripTime / 60);
-                    tripTime -= min * 60;
-                    int sec = tripTime;
-
-                    tableItem.tripTime = QString("%1:%2:%3").arg(hour).arg(min, 2,'f', 0,'0').arg(sec, 2,'f', 0,'0');;
-                }
-            }
-
-            _tableModel->addNewItem(tableItem);
+            _tableModel->addNewItem(gpxItem);
         }
 
         _ui->deleteAllFile->setDisabled(gpxVector.empty());
@@ -172,7 +131,7 @@ void GpxFileListWidget::reloadGpx()
     _ui->tableView->resizeColumnsToContents();
 }
 
-void GpxFileListWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
+void GpxFilesListWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
 {
     _ui->deleteFile->setDisabled(selected.isEmpty());
     _ui->clearSelection->setDisabled(selected.isEmpty());
@@ -194,9 +153,11 @@ void GpxFileListWidget::selectionChanged(QItemSelection selected, QItemSelection
     {
         _gpxLayer->setCurrentGpxIndexes(selectedGpx);
     }
+
+    emit changeSelectedGps(selectedGpx);
 }
 
-void GpxFileListWidget::clearSelection()
+void GpxFilesListWidget::clearSelection()
 {
     _ui->tableView->selectionModel()->clear();
 }

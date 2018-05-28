@@ -1,12 +1,14 @@
-#ifndef GPXTABLELISTMODEL_H
-#define GPXTABLELISTMODEL_H
+#ifndef GPXINFOFILEMODEL_H
+#define GPXINFOFILEMODEL_H
 
 #include <QStandardItemModel>
 
-class GpxTableListModel : public QStandardItemModel
+#include "GpxManager.h"
+
+class GpxInfoFileModel : public QStandardItemModel
 {
     public:
-        explicit GpxTableListModel(QObject *parent = nullptr);
+        explicit GpxInfoFileModel(QObject *parent = nullptr);
 
     public:
         /**
@@ -14,32 +16,17 @@ class GpxTableListModel : public QStandardItemModel
          */
         enum class HeaderTableEnum
         {
-            FileName, Description, Name, AuthorName, StartTime, TripTime, Last
+            Time, Latitude, Longitude, Elevation, HeartRate, Cadention, Last
         };
 
         static const int ERROR_INDEX = -1;
-
-        /**
-         * @brief The TableItem struct Struktura obsahujuca jeden riadok tabulky, ktory sa pouziva
-         * pri vkladani riadkov do tabulky cez metodu addNewItem.
-         */
-        struct TableItem
-        {
-                QString fileName = "???";
-                QString description = "???";
-                QString name = "???";
-                QString authorName = "???";
-                QString startTime = "???";
-                QString tripTime = "???";
-                int fileId = ERROR_INDEX;
-        };
 
     public:
         void initializeTableHeader();
         void clear();
 
         int getColumnIndex(HeaderTableEnum headerItem) const;
-        void addNewItem(const TableItem & item);
+        void addNewItem(const GpxManager::PointVector & points);
 
     private:
         /**
@@ -65,4 +52,4 @@ class GpxTableListModel : public QStandardItemModel
         HeaderMap _headerMap;
 };
 
-#endif // GPXTABLELISTMODEL_H
+#endif // GPXINFOFILEMODEL_H
