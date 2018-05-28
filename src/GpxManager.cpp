@@ -215,7 +215,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                 if(timeString.isEmpty() == false)
                 {
                     QDateTime time = QDateTime::fromString(timeString, Qt::ISODate);
-                    gpxItem.time = time;
+                    gpxItem.startTime = time;
                 }
 
                 QDomNodeList authorNodeList = metadataNode.toElement().elementsByTagName("author");
@@ -263,14 +263,14 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
                             if(trkptNode.isNull() == false)
                             {
-                                if(i == 0 && gpxItem.time.isNull() == true)
+                                if(i == 0 && gpxItem.startTime.isNull() == true)
                                 {
                                     QString timeString = getValueFromNode(trkptNode, "time");
 
                                     if(timeString.isEmpty() == false)
                                     {
                                         QDateTime time = QDateTime::fromString(timeString, Qt::ISODate);
-                                        gpxItem.time = time;
+                                        gpxItem.startTime = time;
                                     }
                                 }
 

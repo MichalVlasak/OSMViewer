@@ -112,10 +112,10 @@ void GpxLayer::paintEvent(QPainter & painter)
                             dayTime += dateTime.toString("HH:mm");
                         }
 
-                        if(item.pointVector[posIdx].time.isNull() == false && item.time.isNull() == false)
+                        if(item.pointVector[posIdx].time.isNull() == false && item.startTime.isNull() == false)
                         {
                             QDateTime dateTime = item.pointVector[posIdx].time.toDateTime();
-                            QDateTime startDateTime = item.time.toDateTime();
+                            QDateTime startDateTime = item.startTime.toDateTime();
 
                             time_t time = dateTime.toTime_t() - startDateTime.toTime_t();
 

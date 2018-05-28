@@ -129,15 +129,36 @@ void GpxWidget::reloadGpx()
             tableItem.name = gpxItem.name;
             tableItem.authorName = gpxItem.authorName;
 
-            if(gpxItem.time.isNull() == false)
+            if(gpxItem.startTime.isNull() == false)
             {
-                QDateTime time = gpxItem.time.toDateTime();
+                QDateTime time = gpxItem.startTime.toDateTime();
 
-                tableItem.time = time.toString("dd.MM.yyyy HH:mm");
+                tableItem.startTime = time.toString("dd.MM.yyyy HH:mm");
             }
             else
             {
-                tableItem.time = "--";
+                tableItem.startTime = "--";
+            }
+
+            if(gpxItem.pointVector.size() > 0)
+            {
+                time_t tripTime = 0;
+
+                if(gpxItem.pointVector[0].time.isNull() == false && gpxItem.pointVector[gpxItem.pointVector.size() - 1].time.isNull() == false)
+                {
+                    QDateTime firstTime = gpxItem.pointVector[0].time.toDateTime();
+                    QDateTime lastTime = gpxItem.pointVector[gpxItem.pointVector.size() - 1].time.toDateTime();
+
+                    tripTime = lastTime.toTime_t() - firstTime.toTime_t();
+
+                    int hour = int(tripTime / 3600);
+                    tripTime -= hour * 3600;
+                    int min = int(tripTime / 60);
+                    tripTime -= min * 60;
+                    int sec = tripTime;
+
+                    tableItem.tripTime = QString("%1:%2:%3").arg(hour).arg(min, 2,'f', 0,'0').arg(sec, 2,'f', 0,'0');;
+                }
             }
 
             _tableModel->addNewItem(tableItem);

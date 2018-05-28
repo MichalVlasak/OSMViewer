@@ -4,10 +4,11 @@ GpxTableModel::GpxTableModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     _headerMap[HeaderTableEnum::FileName]    = {0, QObject::tr("File Name")};
-    _headerMap[HeaderTableEnum::Time]        = {1, QObject::tr("Time")};
-    _headerMap[HeaderTableEnum::AuthorName]  = {2, QObject::tr("Author Name")};
-    _headerMap[HeaderTableEnum::Name]        = {3, QObject::tr("Name")};
-    _headerMap[HeaderTableEnum::Description] = {4, QObject::tr("Description")};
+    _headerMap[HeaderTableEnum::StartTime]   = {1, QObject::tr("Start Time")};
+    _headerMap[HeaderTableEnum::TripTime]    = {2, QObject::tr("Trip Time")};
+    _headerMap[HeaderTableEnum::AuthorName]  = {3, QObject::tr("Author Name")};
+    _headerMap[HeaderTableEnum::Name]        = {4, QObject::tr("Name")};
+    _headerMap[HeaderTableEnum::Description] = {5, QObject::tr("Description")};
 
     initializeTableHeader();
 }
@@ -55,10 +56,16 @@ void GpxTableModel::addNewItem(const TableItem &item)
         setData(index, item.authorName);
     }
 
-    if(_headerMap.find(HeaderTableEnum::Time) != _headerMap.end())
+    if(_headerMap.find(HeaderTableEnum::StartTime) != _headerMap.end())
     {
-        index = this->index(row, _headerMap[HeaderTableEnum::Time].col);
-        setData(index, item.time);
+        index = this->index(row, _headerMap[HeaderTableEnum::StartTime].col);
+        setData(index, item.startTime);
+    }
+
+    if(_headerMap.find(HeaderTableEnum::TripTime) != _headerMap.end())
+    {
+        index = this->index(row, _headerMap[HeaderTableEnum::TripTime].col);
+        setData(index, item.tripTime);
     }
 }
 

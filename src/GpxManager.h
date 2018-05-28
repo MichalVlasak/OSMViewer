@@ -32,7 +32,8 @@ class GpxManager : public StoreConfigInterface
                 QString name;
                 QString authorName;
                 QString description;
-                QVariant time;
+                QVariant startTime;
+                time_t tripTime = 0;
                 int fileId = ErrorId;
                 PointVector pointVector;
         };
