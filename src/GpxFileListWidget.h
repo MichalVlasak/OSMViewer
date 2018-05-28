@@ -1,23 +1,23 @@
-#ifndef GPXWIDGET_H
-#define GPXWIDGET_H
+#ifndef GPXFILELISTWIDGET_H
+#define GPXFILELISTWIDGET_H
 
 #include <QWidget>
 
 #include "GpxManager.h"
-#include "GpxTableModel.h"
+#include "GpxTableListModel.h"
 #include "Layers/GpxLayer.h"
 
 namespace Ui {
-class GpxWidget;
+class GpxFileListWidget;
 }
 
-class GpxWidget : public QWidget
+class GpxFileListWidget : public QWidget
 {
         Q_OBJECT
 
     public:
-        GpxWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
-        ~GpxWidget();
+        GpxFileListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
+        ~GpxFileListWidget();
 
     private slots:
         void addFile();
@@ -31,10 +31,10 @@ class GpxWidget : public QWidget
         int getId(const QModelIndex & index);
 
     private:
-        Ui::GpxWidget * _ui;
+        Ui::GpxFileListWidget * _ui;
         GpxManager * _gpxManager = nullptr;
-        GpxTableModel * _tableModel = nullptr;
+        GpxTableListModel * _tableModel = nullptr;
         GpxLayer * _gpxLayer = nullptr;
 };
 
-#endif // GPXWIDGET_H
+#endif // GPXFILELISTWIDGET_H

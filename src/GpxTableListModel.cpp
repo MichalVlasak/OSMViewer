@@ -1,6 +1,6 @@
-#include "GpxTableModel.h"
+#include "GpxTableListModel.h"
 
-GpxTableModel::GpxTableModel(QObject *parent)
+GpxTableListModel::GpxTableListModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     _headerMap[HeaderTableEnum::FileName]    = {0, QObject::tr("File Name")};
@@ -13,7 +13,7 @@ GpxTableModel::GpxTableModel(QObject *parent)
     initializeTableHeader();
 }
 
-void GpxTableModel::initializeTableHeader()
+void GpxTableListModel::initializeTableHeader()
 {
     this->setColumnCount(_headerMap.size());
     this->setRowCount(0);
@@ -24,7 +24,7 @@ void GpxTableModel::initializeTableHeader()
     }
 }
 
-void GpxTableModel::addNewItem(const TableItem &item)
+void GpxTableListModel::addNewItem(const TableItem &item)
 {
     insertRow(rowCount());
 
@@ -69,13 +69,13 @@ void GpxTableModel::addNewItem(const TableItem &item)
     }
 }
 
-void GpxTableModel::clear()
+void GpxTableListModel::clear()
 {
     QStandardItemModel::clear();
     initializeTableHeader();
 }
 
-int GpxTableModel::getColumnIndex(HeaderTableEnum headerItem) const
+int GpxTableListModel::getColumnIndex(HeaderTableEnum headerItem) const
 {
     HeaderMap::const_iterator it = _headerMap.find(headerItem);
 

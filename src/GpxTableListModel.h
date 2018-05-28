@@ -1,12 +1,12 @@
-#ifndef GPXTABLEMODEL_H
-#define GPXTABLEMODEL_H
+#ifndef GPXTABLELISTMODEL_H
+#define GPXTABLELISTMODEL_H
 
 #include <QStandardItemModel>
 
-class GpxTableModel : public QStandardItemModel
+class GpxTableListModel : public QStandardItemModel
 {
     public:
-        explicit GpxTableModel(QObject *parent = nullptr);
+        explicit GpxTableListModel(QObject *parent = nullptr);
 
     public:
         /**
@@ -65,4 +65,4 @@ class GpxTableModel : public QStandardItemModel
         HeaderMap _headerMap;
 };
 
-#endif // GPXTABLEMODEL_H
+#endif // GPXTABLELISTMODEL_H

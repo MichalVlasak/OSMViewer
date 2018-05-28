@@ -5,7 +5,7 @@
 #include "OSMDownloadAreaDialog.h"
 #include "AboutDialog.h"
 #include "WgsConversion.h"
-#include "GpxWidget.h"
+#include "GpxFileListWidget.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _gpxManager = new GpxManager();
     gpxLayer->setGpxManager(_gpxManager);
     _appSettings.restoreConfig(_gpxManager);
-    _gpxWidget = new GpxWidget(_gpxManager, gpxLayer, this);
+    _gpxWidget = new GpxFileListWidget(_gpxManager, gpxLayer, this);
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
     _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
