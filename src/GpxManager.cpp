@@ -191,6 +191,15 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
     if(rootElem.isNull() == false)
     {
+        QString attributes = rootElem.attribute("xmlns:gpxtpx");
+        QString nsPrefix = "gpxtpx";
+
+        if(attributes.isEmpty() == true)
+        {
+            attributes = rootElem.attribute("xmlns:ns3");
+            nsPrefix = "ns3";
+        }
+
         QDomNodeList metadataNodes = rootElem.elementsByTagName("metadata");
 
         if(metadataNodes.size() > 0)
@@ -312,7 +321,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
                                     if(extensionsNode.isNull() == false)
                                     {
-                                        QDomNodeList trkptExtensionNodes = extensionsNode.toElement().elementsByTagName("gpxtpx:TrackPointExtension");
+                                        QDomNodeList trkptExtensionNodes = extensionsNode.toElement().elementsByTagName(nsPrefix + ":TrackPointExtension");
 
                                         if(trkptExtensionNodes.size() > 0)
                                         {
@@ -320,9 +329,9 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
                                             if(trkptExtensionNode.isNull() == false)
                                             {
-                                                QString temperatureString = getValueFromNode(trkptExtensionNode, "gpxtpx:atemp");
-                                                QString heartRateString = getValueFromNode(trkptExtensionNode, "gpxtpx:hr");
-                                                QString cadentionString = getValueFromNode(trkptExtensionNode, "gpxtpx:cad");
+                                                QString temperatureString = getValueFromNode(trkptExtensionNode, nsPrefix + ":atemp");
+                                                QString heartRateString = getValueFromNode(trkptExtensionNode, nsPrefix + ":hr");
+                                                QString cadentionString = getValueFromNode(trkptExtensionNode, nsPrefix + ":cad");
 
                                                 if(temperatureString.isEmpty() == false)
                                                 {
