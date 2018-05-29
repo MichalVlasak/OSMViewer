@@ -54,7 +54,7 @@
     </property>
     <addaction name="action_CenterPoints"/>
     <addaction name="action_GPXFiles"/>
-    <addaction name="action_GPXFileInfoTable"/>
+    <addaction name="action_GPXFileInfoTables"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -148,12 +148,12 @@
     <string>GPX Files</string>
    </property>
   </action>
-  <action name="action_GPXFileInfoTable">
+  <action name="action_GPXFileInfoTables">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>GPX File Info Table</string>
+    <string>GPX File Info Tables</string>
    </property>
   </action>
  </widget>

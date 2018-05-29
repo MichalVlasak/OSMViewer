@@ -91,6 +91,8 @@ void GpxFilesListWidget::deleteFile()
                     if(gpxItem.fileId == id)
                     {
                         _gpxManager->removeGpxFile(id);
+
+                        emit deleteGpxSignal(id);
                     }
                 }
             }
@@ -108,6 +110,8 @@ void GpxFilesListWidget::deleteAllFile()
     }
 
     reloadGpx();
+
+    emit deleteAllSignal();;
 }
 
 void GpxFilesListWidget::reloadGpx()
@@ -154,7 +158,7 @@ void GpxFilesListWidget::selectionChanged(QItemSelection selected, QItemSelectio
         _gpxLayer->setCurrentGpxIndexes(selectedGpx);
     }
 
-    emit changeSelectedGps(selectedGpx);
+    emit changeSelectedGpsSignal(selectedGpx);
 }
 
 void GpxFilesListWidget::clearSelection()

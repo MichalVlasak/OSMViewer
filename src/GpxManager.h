@@ -36,6 +36,11 @@ class GpxManager : public StoreConfigInterface
                 time_t tripTime = 0;
                 int fileId = ErrorId;
                 PointVector pointVector;
+
+                int biggestElevetionIdx = -1;
+                int biggestTemperatureIdx = -1;
+                int biggestCadentionIdx = -1;
+                int biggestHeartRateIdx = -1;
         };
 
         typedef std::vector<GpxItem> GpxVector;

@@ -14,16 +14,23 @@ class GpxInfoFileWidget : public QWidget
         Q_OBJECT
 
     public:
-        GpxInfoFileWidget(GpxManager * gpxManager, QWidget *parent = 0);
+        GpxInfoFileWidget(GpxManager * gpxManager, int gpxId, QWidget *parent = 0);
         ~GpxInfoFileWidget();
 
-    public slots:
-        void changeSelectedGps(const GpxManager::GpxIdVector & ids);
+    private slots:
+        void selectMaxElevation();
+        void selectMaxCadention();
+        void selectMaxHeartRate();
+        void selectMaxTemperature();
+
+    private:
+        void fillTable();
 
     private:
         Ui::GpxInfoFileWidget * _ui = nullptr;
-        GpxInfoFileModel * _tableMode = nullptr;
+        GpxInfoFileModel * _tableModel = nullptr;
         GpxManager * _gpxManager = nullptr;
+        int _gpxId = GpxManager::ErrorId;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H

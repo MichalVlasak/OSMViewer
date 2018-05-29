@@ -256,6 +256,10 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                         QDomNodeList trkptNodes = trksegNode.toElement().elementsByTagName("trkpt");
 
                         int size = trkptNodes.size();
+                        double maxElevation = 0.;
+                        float maxTemperature = 0.;
+                        int maxCadention = 0;
+                        int maxHeartRate = 0;
 
                         for(int i = 0; i < size; i++)
                         {
@@ -286,6 +290,13 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                     if(isOk == true)
                                     {
                                         point.elevation = elevation;
+
+                                        if(maxElevation < elevation)
+                                        {
+                                            maxElevation = elevation;
+
+                                            gpxItem.biggestElevetionIdx = i;
+                                        }
                                     }
                                 }
 
@@ -341,6 +352,13 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                                     if(isOk == true)
                                                     {
                                                         point.temperature = temperature;
+
+                                                        if(maxTemperature < temperature)
+                                                        {
+                                                            maxTemperature = temperature;
+
+                                                            gpxItem.biggestTemperatureIdx = i;
+                                                        }
                                                     }
                                                 }
 
@@ -352,6 +370,13 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                                     if(isOk == true)
                                                     {
                                                         point.heartRate = heartRate;
+
+                                                        if(maxHeartRate < heartRate)
+                                                        {
+                                                            maxHeartRate = heartRate;
+
+                                                            gpxItem.biggestHeartRateIdx = i;
+                                                        }
                                                     }
                                                 }
 
@@ -363,6 +388,13 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                                     if(isOk == true)
                                                     {
                                                         point.cadention = cadention;
+
+                                                        if(maxCadention < cadention)
+                                                        {
+                                                            maxCadention = cadention;
+
+                                                            gpxItem.biggestCadentionIdx = i;
+                                                        }
                                                     }
                                                 }
                                             }

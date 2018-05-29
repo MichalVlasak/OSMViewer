@@ -92,8 +92,8 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         OSMDownloadProjectModel _downloadProjectModel;
         class GpxFilesListWidget * _gpxFileListWidget = nullptr;
         QDockWidget * _gpxFileListDock = nullptr;
-        class GpxInfoFileWidget * _gpxInfoFileWidget = nullptr;
-        QDockWidget * _gpxInfoFileDock = nullptr;
+        class GpxInfosWidget * _gpxInfosWidget = nullptr;
+        QDockWidget * _gpxInfosDock = nullptr;
         class GpxManager * _gpxManager = nullptr;
 };
 

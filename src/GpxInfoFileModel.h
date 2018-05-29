@@ -16,7 +16,7 @@ class GpxInfoFileModel : public QStandardItemModel
          */
         enum class HeaderTableEnum
         {
-            Time, Latitude, Longitude, Elevation, HeartRate, Cadention, Last
+            Time, Latitude, Longitude, Elevation, HeartRate, Cadention, Temperature, Last
         };
 
         static const int ERROR_INDEX = -1;
@@ -26,7 +26,7 @@ class GpxInfoFileModel : public QStandardItemModel
         void clear();
 
         int getColumnIndex(HeaderTableEnum headerItem) const;
-        void addNewItem(const GpxManager::PointVector & points);
+        void setItemPoints(const GpxManager::PointVector & points);
 
     private:
         /**

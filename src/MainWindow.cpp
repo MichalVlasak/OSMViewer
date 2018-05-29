@@ -6,7 +6,7 @@
 #include "AboutDialog.h"
 #include "WgsConversion.h"
 #include "GpxFilesListWidget.h"
-#include "GpxInfoFileWidget.h"
+#include "GpxInfosWidget.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -53,9 +53,11 @@ MainWindow::MainWindow(QWidget *parent) :
     gpxLayer->setGpxManager(_gpxManager);
     _appSettings.restoreConfig(_gpxManager);
     _gpxFileListWidget = new GpxFilesListWidget(_gpxManager, gpxLayer, this);
-    _gpxInfoFileWidget = new GpxInfoFileWidget(_gpxManager, this);
+    _gpxInfosWidget = new GpxInfosWidget(_gpxManager, this);
 
-    QObject::connect(_gpxFileListWidget, SIGNAL(changeSelectedGps(GpxManager::GpxIdVector)), _gpxInfoFileWidget, SLOT(changeSelectedGps(GpxManager::GpxIdVector)));
+    QObject::connect(_gpxFileListWidget, SIGNAL(changeSelectedGpsSignal(GpxManager::GpxIdVector)), _gpxInfosWidget, SLOT(changeSelectedGps(GpxManager::GpxIdVector)));
+    QObject::connect(_gpxFileListWidget, SIGNAL(deleteAllSignal()), _gpxInfosWidget, SLOT(deleteAll()));
+    QObject::connect(_gpxFileListWidget, SIGNAL(deleteGpxSignal(int)), _gpxInfosWidget, SLOT(deleteGpx(int)));
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
     _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -92,12 +94,12 @@ MainWindow::MainWindow(QWidget *parent) :
     _gpxFileListDock->setFloating(true);
     _gpxFileListDock->setObjectName(tr("GPX List"));
 
-    _gpxInfoFileDock = new QDockWidget(tr("GPX Info Table"), this);
-    _gpxInfoFileDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    _gpxInfoFileDock->setWidget(_gpxInfoFileWidget);
-    _gpxInfoFileDock->hide();
-    _gpxInfoFileDock->setFloating(true);
-    _gpxInfoFileDock->setObjectName(tr("GPX Info Table"));
+    _gpxInfosDock = new QDockWidget(tr("GPX Info Tables"), this);
+    _gpxInfosDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _gpxInfosDock->setWidget(_gpxInfosWidget);
+    _gpxInfosDock->hide();
+    _gpxInfosDock->setFloating(true);
+    _gpxInfosDock->setObjectName(tr("GPX Info Tables"));
 
     addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
@@ -120,8 +122,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_ui->action_GPXFiles, SIGNAL(triggered(bool)), _gpxFileListDock, SLOT(setVisible(bool)));
     QObject::connect(_gpxFileListDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFiles, SLOT(setChecked(bool)));
 
-    QObject::connect(_ui->action_GPXFileInfoTable, SIGNAL(triggered(bool)), _gpxInfoFileDock, SLOT(setVisible(bool)));
-    QObject::connect(_gpxInfoFileDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFileInfoTable, SLOT(setChecked(bool)));
+    QObject::connect(_ui->action_GPXFileInfoTables, SIGNAL(triggered(bool)), _gpxInfosDock, SLOT(setVisible(bool)));
+    QObject::connect(_gpxInfosDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFileInfoTables, SLOT(setChecked(bool)));
 
     OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
 

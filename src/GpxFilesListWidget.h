@@ -20,7 +20,9 @@ class GpxFilesListWidget : public QWidget
         ~GpxFilesListWidget();
 
     signals:
-        void changeSelectedGps(const GpxManager::GpxIdVector & ids);
+        void changeSelectedGpsSignal(const GpxManager::GpxIdVector & ids);
+        void deleteGpxSignal(int id);
+        void deleteAllSignal();
 
     private slots:
         void addFile();

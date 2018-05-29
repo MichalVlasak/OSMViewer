@@ -4,11 +4,12 @@ GpxInfoFileModel::GpxInfoFileModel(QObject * parent)
     : QStandardItemModel(parent)
 {
     _headerMap[HeaderTableEnum::Time]      = {0, QObject::tr("Time")};
-    _headerMap[HeaderTableEnum::Latitude]  = {1, QObject::tr("Latitude")};
-    _headerMap[HeaderTableEnum::Longitude] = {2, QObject::tr("Longitude")};
-    _headerMap[HeaderTableEnum::Elevation] = {3, QObject::tr("Elevation")};
-    _headerMap[HeaderTableEnum::HeartRate] = {4, QObject::tr("Heart Rate")};
-    _headerMap[HeaderTableEnum::Cadention] = {5, QObject::tr("Cadention")};
+    _headerMap[HeaderTableEnum::Elevation] = {1, QObject::tr("Elevation")};
+    _headerMap[HeaderTableEnum::HeartRate] = {2, QObject::tr("Heart Rate")};
+    _headerMap[HeaderTableEnum::Cadention] = {3, QObject::tr("Cadention")};
+    _headerMap[HeaderTableEnum::Temperature] = {4, QObject::tr("Temperature")};
+    _headerMap[HeaderTableEnum::Latitude]  = {5, QObject::tr("Latitude")};
+    _headerMap[HeaderTableEnum::Longitude] = {6, QObject::tr("Longitude")};
 
     initializeTableHeader();
 }
@@ -24,47 +25,64 @@ void GpxInfoFileModel::initializeTableHeader()
     }
 }
 
-void GpxInfoFileModel::addNewItem(const GpxManager::PointVector & points)
+void GpxInfoFileModel::setItemPoints(const GpxManager::PointVector & points)
 {
-    insertRow(rowCount());
+    clear();
 
-    int row = rowCount() - 1;
-    QModelIndex index;
-
-    if(_headerMap.find(HeaderTableEnum::Time) != _headerMap.end())
+    for(const GpxManager::Point & point : points)
     {
-        index = this->index(row, _headerMap[HeaderTableEnum::Time].col);
-        setData(index, "--");
-    }
+        insertRow(rowCount());
 
-    if(_headerMap.find(HeaderTableEnum::Latitude) != _headerMap.end())
-    {
-        index = this->index(row, _headerMap[HeaderTableEnum::Latitude].col);
-        setData(index, "--");
-    }
+        int row = rowCount() - 1;
+        QModelIndex index;
 
-    if(_headerMap.find(HeaderTableEnum::Longitude) != _headerMap.end())
-    {
-        index = this->index(row, _headerMap[HeaderTableEnum::Longitude].col);
-        setData(index, "--");
-    }
+        if(_headerMap.find(HeaderTableEnum::Time) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Time].col);
 
-    if(_headerMap.find(HeaderTableEnum::Elevation) != _headerMap.end())
-    {
-        index = this->index(row, _headerMap[HeaderTableEnum::Elevation].col);
-        setData(index, "--");
-    }
+            if(point.time.isNull() == false)
+            {
+                QDateTime time = point.time.toDateTime();
 
-    if(_headerMap.find(HeaderTableEnum::HeartRate) != _headerMap.end())
-    {
-        index = this->index(row, _headerMap[HeaderTableEnum::HeartRate].col);
-        setData(index, "--");
-    }
+                setData(index, time.toString("HH:mm:ss"));
+            }
+        }
 
-    if(_headerMap.find(HeaderTableEnum::Cadention) != _headerMap.end())
-    {
-        index = this->index(row, _headerMap[HeaderTableEnum::Cadention].col);
-        setData(index, "--");
+        if(_headerMap.find(HeaderTableEnum::Latitude) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Latitude].col);
+            setData(index, point.lat);
+        }
+
+        if(_headerMap.find(HeaderTableEnum::Longitude) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Longitude].col);
+            setData(index, point.lon);
+        }
+
+        if(_headerMap.find(HeaderTableEnum::Elevation) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Elevation].col);
+            setData(index, point.elevation);
+        }
+
+        if(_headerMap.find(HeaderTableEnum::HeartRate) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::HeartRate].col);
+            setData(index, point.heartRate);
+        }
+
+        if(_headerMap.find(HeaderTableEnum::Cadention) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Cadention].col);
+            setData(index, point.cadention);
+        }
+
+        if(_headerMap.find(HeaderTableEnum::Temperature) != _headerMap.end())
+        {
+            index = this->index(row, _headerMap[HeaderTableEnum::Temperature].col);
+            setData(index, point.temperature);
+        }
     }
 }
 
