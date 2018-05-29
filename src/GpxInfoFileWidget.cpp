@@ -19,6 +19,37 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, int gpxId, QWidget
     QObject::connect(_ui->maxTemperature, SIGNAL(clicked(bool)), SLOT(selectMaxTemperature()));
 
     fillTable();
+
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                if(item.biggestCadentionIdx == -1)
+                {
+                    _ui->maxCadention->setDisabled(true);
+                }
+
+                if(item.biggestElevetionIdx == -1)
+                {
+                    _ui->maxElevation->setDisabled(true);
+                }
+
+                if(item.biggestHeartRateIdx == -1)
+                {
+                    _ui->maxHeartRate->setDisabled(true);
+                }
+
+                if(item.biggestTemperatureIdx == -1)
+                {
+                    _ui->maxTemperature->setDisabled(true);
+                }
+            }
+        }
+    }
 }
 
 GpxInfoFileWidget::~GpxInfoFileWidget()

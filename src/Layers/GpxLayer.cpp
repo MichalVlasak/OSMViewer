@@ -98,10 +98,74 @@ void GpxLayer::paintEvent(QPainter & painter)
                         painter.setBrush(QColor(255, 0, 0));
                         painter.drawEllipse(point, 5, 5);
 
-                        QString heightStr = "Height: " + QString::number(item.pointVector[posIdx].elevation, 'f', 1) + " m";
-                        QString cadention = "Cadention: " + QString::number(item.pointVector[posIdx].cadention);
-                        QString heartRate = "Hearth Rate: " + QString::number(item.pointVector[posIdx].heartRate) + " bpm";
-                        QString temperature = "Temperature: " + QString::number(item.pointVector[posIdx].temperature) + " °C";
+                        QString heightStr = "Height: ";
+                        QString heightValueStr = "--";
+
+                        if(item.pointVector[posIdx].elevation.isNull() == false && item.pointVector[posIdx].elevation.canConvert<double>() == true)
+                        {
+                            bool isOk = false;
+
+                            double elevation = item.pointVector[posIdx].elevation.toDouble(&isOk);
+
+                            if(isOk == true)
+                            {
+                                heightValueStr = QString::number(elevation, 'f', 1) + " m";
+                            }
+                        }
+
+                        heightStr += heightValueStr;
+
+                        QString cadentionStr = "Cadention: ";
+                        QString cadentionValueStr = "--";
+
+                        if(item.pointVector[posIdx].cadention.isNull() == false && item.pointVector[posIdx].cadention.canConvert<int>() == true)
+                        {
+                            bool isOk = false;
+
+                            double cadention = item.pointVector[posIdx].cadention.toInt(&isOk);
+
+                            if(isOk == true)
+                            {
+                                cadentionValueStr = QString::number(cadention);
+                            }
+                        }
+
+                        cadentionStr += cadentionValueStr;
+
+                        QString heartRateStr = "Hearth Rate: ";
+                        QString heartRateValueStr = "--";
+
+                        if(item.pointVector[posIdx].heartRate.isNull() == false && item.pointVector[posIdx].heartRate.canConvert<int>() == true)
+                        {
+                            bool isOk = false;
+
+                            double heartRate = item.pointVector[posIdx].heartRate.toDouble(&isOk);
+
+                            if(isOk == true)
+                            {
+                                heartRateValueStr = QString::number(heartRate) + " bpm";
+                            }
+                        }
+
+                        heartRateStr += heartRateValueStr;
+
+                        QString temperatureStr = "Temperature: ";
+                        QString temperatureValueStr = "--";
+
+                        if(item.pointVector[posIdx].temperature.isNull() == false && item.pointVector[posIdx].temperature.canConvert<float>() == true)
+                        {
+                            bool isOk = false;
+
+                            double temperature = item.pointVector[posIdx].heartRate.toFloat(&isOk);
+
+                            if(isOk == true)
+                            {
+                                temperatureValueStr = QString::number(temperature) + " °C";
+                            }
+                        }
+
+                        temperatureStr += temperatureValueStr;
+
                         QString dayTime = "Day Time: ";
                         QString tripTime = "Trip Time: ";
 
@@ -130,9 +194,9 @@ void GpxLayer::paintEvent(QPainter & painter)
 
                         int height = fontMetrics.height();
                         int width = fontMetrics.width(heightStr);
-                        width = std::max(width, fontMetrics.width(cadention));
-                        width = std::max(width, fontMetrics.width(heartRate));
-                        width = std::max(width, fontMetrics.width(temperature));
+                        width = std::max(width, fontMetrics.width(cadentionStr));
+                        width = std::max(width, fontMetrics.width(heartRateStr));
+                        width = std::max(width, fontMetrics.width(temperatureStr));
                         width = std::max(width, fontMetrics.width(dayTime));
                         width = std::max(width, fontMetrics.width(tripTime));
 
@@ -154,13 +218,13 @@ void GpxLayer::paintEvent(QPainter & painter)
                         painter.drawText(point, heightStr);
 
                         point.ry() = point.ry() + height;
-                        painter.drawText(point, cadention);
+                        painter.drawText(point, cadentionStr);
 
                         point.ry() = point.ry() + height;
-                        painter.drawText(point, heartRate);
+                        painter.drawText(point, heartRateStr);
 
                         point.ry() = point.ry() + height;
-                        painter.drawText(point, temperature);
+                        painter.drawText(point, temperatureStr);
 
                         point.ry() = point.ry() + height;
                         painter.drawText(point, dayTime);

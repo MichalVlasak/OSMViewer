@@ -17,11 +17,11 @@ class GpxManager : public StoreConfigInterface
         {
                 double lat = 0.;
                 double lon = 0.;
-                double elevation = 0.;
+                QVariant elevation; // vklada sa double
                 QVariant time;
-                float temperature = 0;
-                int cadention = 0;
-                int heartRate = 0;
+                QVariant temperature; // vklada sa float
+                QVariant cadention; // vklada sa int
+                QVariant heartRate; // vklada sa int
         };
 
         typedef std::vector<Point> PointVector;

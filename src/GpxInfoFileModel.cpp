@@ -28,6 +28,7 @@ void GpxInfoFileModel::initializeTableHeader()
 void GpxInfoFileModel::setItemPoints(const GpxManager::PointVector & points)
 {
     clear();
+    QString undef = "--";
 
     for(const GpxManager::Point & point : points)
     {
@@ -40,11 +41,15 @@ void GpxInfoFileModel::setItemPoints(const GpxManager::PointVector & points)
         {
             index = this->index(row, _headerMap[HeaderTableEnum::Time].col);
 
-            if(point.time.isNull() == false)
+            if(point.time.isNull() == false && point.time.canConvert<QDateTime>() == true)
             {
                 QDateTime time = point.time.toDateTime();
 
                 setData(index, time.toString("HH:mm:ss"));
+            }
+            else
+            {
+                setData(index, undef);
             }
         }
 
@@ -63,25 +68,57 @@ void GpxInfoFileModel::setItemPoints(const GpxManager::PointVector & points)
         if(_headerMap.find(HeaderTableEnum::Elevation) != _headerMap.end())
         {
             index = this->index(row, _headerMap[HeaderTableEnum::Elevation].col);
-            setData(index, point.elevation);
+
+            if(point.elevation.isNull() == false && point.elevation.canConvert<double>() == true)
+            {
+                setData(index, point.elevation);
+            }
+            else
+            {
+                setData(index, undef);
+            }
         }
 
         if(_headerMap.find(HeaderTableEnum::HeartRate) != _headerMap.end())
         {
             index = this->index(row, _headerMap[HeaderTableEnum::HeartRate].col);
-            setData(index, point.heartRate);
+
+            if(point.heartRate.isNull() == false && point.heartRate.canConvert<int>() == true)
+            {
+                setData(index, point.heartRate);
+            }
+            else
+            {
+                setData(index, undef);
+            }
         }
 
         if(_headerMap.find(HeaderTableEnum::Cadention) != _headerMap.end())
         {
             index = this->index(row, _headerMap[HeaderTableEnum::Cadention].col);
-            setData(index, point.cadention);
+
+            if(point.cadention.isNull() == false && point.cadention.canConvert<int>() == true)
+            {
+                setData(index, point.cadention);
+            }
+            else
+            {
+                setData(index, undef);
+            }
         }
 
         if(_headerMap.find(HeaderTableEnum::Temperature) != _headerMap.end())
         {
             index = this->index(row, _headerMap[HeaderTableEnum::Temperature].col);
-            setData(index, point.temperature);
+
+            if(point.temperature.isNull() == false && point.temperature.canConvert<float>() == true)
+            {
+                setData(index, point.temperature);
+            }
+            else
+            {
+                setData(index, undef);
+            }
         }
     }
 }
