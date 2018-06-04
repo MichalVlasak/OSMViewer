@@ -53,11 +53,12 @@ MainWindow::MainWindow(QWidget *parent) :
     gpxLayer->setGpxManager(_gpxManager);
     _appSettings.restoreConfig(_gpxManager);
     _gpxFileListWidget = new GpxFilesListWidget(_gpxManager, gpxLayer, this);
-    _gpxInfosWidget = new GpxInfosWidget(_gpxManager, this);
+    _gpxInfosWidget = new GpxInfosWidget(_gpxManager, gpxLayer, this);
 
     QObject::connect(_gpxFileListWidget, SIGNAL(changeSelectedGpsSignal(GpxManager::GpxIdVector)), _gpxInfosWidget, SLOT(changeSelectedGps(GpxManager::GpxIdVector)));
     QObject::connect(_gpxFileListWidget, SIGNAL(deleteAllSignal()), _gpxInfosWidget, SLOT(deleteAll()));
     QObject::connect(_gpxFileListWidget, SIGNAL(deleteGpxSignal(int)), _gpxInfosWidget, SLOT(deleteGpx(int)));
+    QObject::connect(_gpxInfosWidget, SIGNAL(centerMap(QPoint)), _ui->paintWidget, SLOT(centerMapToPixels(QPoint)));
 
     _centerPointsDock = new QDockWidget(tr("Center Points"), this);
     _centerPointsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);

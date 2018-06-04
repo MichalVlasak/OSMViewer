@@ -1,11 +1,12 @@
 #include "GpxInfoFileWidget.h"
 #include "ui_GpxInfoFileWidget.h"
 
-GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, int gpxId, QWidget *parent) :
+GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfoFileWidget),
     _gpxManager(gpxManager),
-    _gpxId(gpxId)
+    _gpxId(gpxId),
+    _gpxLayer(gpxLayer)
 {
     _ui->setupUi(this);
 
@@ -17,6 +18,10 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, int gpxId, QWidget
     QObject::connect(_ui->maxElevation, SIGNAL(clicked(bool)), SLOT(selectMaxElevation()));
     QObject::connect(_ui->maxHeartRate, SIGNAL(clicked(bool)), SLOT(selectMaxHeartRate()));
     QObject::connect(_ui->maxTemperature, SIGNAL(clicked(bool)), SLOT(selectMaxTemperature()));
+    QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelectedPoint()));
+    QObject::connect(_ui->center, SIGNAL(clicked(bool)), SLOT(centerMap()));
+    QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    QObject::connect(_gpxLayer, SIGNAL(changeSelectedPoint(int,size_t)), SLOT(changeSelectedPoint(int,size_t)));
 
     fillTable();
 
@@ -54,6 +59,8 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, int gpxId, QWidget
 
 GpxInfoFileWidget::~GpxInfoFileWidget()
 {
+    clearSelectedPoint();
+
     delete _ui;
 }
 
@@ -146,6 +153,83 @@ void GpxInfoFileWidget::selectMaxTemperature()
                 if(item.biggestTemperatureIdx > -1 && size_t(item.biggestTemperatureIdx) < item.pointVector.size())
                 {
                     _ui->tableView->selectRow(item.biggestTemperatureIdx);
+                }
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
+{
+    QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
+    int prevColumn = -1;
+
+    for(const QModelIndex & index : indexes)
+    {
+        if(index.isValid() == true && index.column() != prevColumn)
+        {
+            prevColumn = index.column();
+
+            if(_gpxLayer != nullptr)
+            {
+                _gpxLayer->highlightSelectedPoint(_gpxId, index.row());
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::clearSelectedPoint()
+{
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->removeSelectedPoint(_gpxId);
+
+        _ui->tableView->clearSelection();
+    }
+}
+
+void GpxInfoFileWidget::changeSelectedPoint(int gpxId, size_t idx)
+{
+    if(gpxId == _gpxId)
+    {
+        QObject::disconnect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
+
+        _ui->tableView->selectRow(idx);
+
+        QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    }
+}
+
+void GpxInfoFileWidget::centerMap()
+{
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                QModelIndexList indexes = _ui->tableView->selectionModel()->selectedRows();
+
+                if(indexes.size() > 0)
+                {
+                    QModelIndex index = indexes.at(0);
+
+                    if(index.isValid() == true)
+                    {
+                        int row = index.row();
+
+                        if(_gpxLayer != nullptr)
+                        {
+                            if(row < int(item.pointVector.size()))
+                            {
+                                QPoint pos = _gpxLayer->getPixelPoint(item.pointVector[row].lat, item.pointVector[row].lon);
+
+                                emit centerMap(pos);
+                            }
+                        }
+                    }
                 }
             }
         }

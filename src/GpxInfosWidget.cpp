@@ -4,10 +4,11 @@
 
 #include <QTabWidget>
 
-GpxInfosWidget::GpxInfosWidget(GpxManager * gpxManager, QWidget *parent) :
+GpxInfosWidget::GpxInfosWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfosWidget),
-    _gpxManager(gpxManager)
+    _gpxManager(gpxManager),
+    _gpxLayer(gpxLayer)
 {
     _ui->setupUi(this);
 
@@ -22,6 +23,21 @@ GpxInfosWidget::~GpxInfosWidget()
 void GpxInfosWidget::changeSelectedGps(const GpxManager::GpxIdVector &ids)
 {
     _showedGpxIds = ids;
+
+    for(int i = 0; i < _ui->tabWidget->count(); i++)
+    {
+        QWidget * widget = _ui->tabWidget->widget(i);
+
+        if(widget != nullptr)
+        {
+            GpxInfoFileWidget * gpxWidget = dynamic_cast<GpxInfoFileWidget*>(widget);
+
+            if(gpxWidget != nullptr)
+            {
+                gpxWidget->clearSelectedPoint();
+            }
+        }
+    }
 
     _ui->tabWidget->clear();
 
@@ -39,7 +55,11 @@ void GpxInfosWidget::changeSelectedGps(const GpxManager::GpxIdVector &ids)
                     {
                         QFileInfo fileInfo(item.filePath);
 
-                        _ui->tabWidget->addTab(new GpxInfoFileWidget(_gpxManager, id, this), fileInfo.fileName());
+                        GpxInfoFileWidget * gpxWidget = new GpxInfoFileWidget(_gpxManager, _gpxLayer, id, this);
+
+                        QObject::connect(gpxWidget, SIGNAL(centerMap(QPoint)), SIGNAL(centerMap(QPoint)));
+
+                        _ui->tabWidget->addTab(gpxWidget, fileInfo.fileName());
                     }
                 }
             }
@@ -49,6 +69,21 @@ void GpxInfosWidget::changeSelectedGps(const GpxManager::GpxIdVector &ids)
 
 void GpxInfosWidget::deleteAll()
 {
+    for(int i = 0; i < _ui->tabWidget->count(); i++)
+    {
+        QWidget * widget = _ui->tabWidget->widget(i);
+
+        if(widget != nullptr)
+        {
+            GpxInfoFileWidget * gpxWidget = dynamic_cast<GpxInfoFileWidget*>(widget);
+
+            if(gpxWidget != nullptr)
+            {
+                QObject::disconnect(gpxWidget, SIGNAL(centerMap(QPoint)), this, SIGNAL(centerMap(QPoint)));
+            }
+        }
+    }
+
     _ui->tabWidget->clear();
 }
 

@@ -20,14 +20,25 @@ class GpxLayer : public QWidget, public BaseLayer
         void setCurrentGpxIndexes(const GpxManager::GpxIdVector & ids);
         void setGpxManager(GpxManager * gpxManager);
 
+        void highlightSelectedPoint(int gpxId, size_t idx);
+        void removeSelectedPoint(int gpxId);
+
+        QPoint getPixelPoint(double lat, double lon);
+
     signals:
         void refreshView();
+        void changeSelectedPoint(int gpxId, size_t idx);
+
+    private:
+        typedef std::map<int, size_t> SelectedPointsMap; // int - ID GPX suboru, size_t - index vybrany v tabulke bodov pre dany GPX
+        void paintPoint(QPainter & painter, const GpxManager::GpxItem & item, size_t posIdx);
 
     private:
         GpxManager * _gpxManager = nullptr;
         GpxManager::GpxIdVector _currentGpx;
         int _mouseX = -1;
         int _mouseY = -1;
+        SelectedPointsMap _selectedPoints;
 };
 
 #endif // GPXLAYER_H

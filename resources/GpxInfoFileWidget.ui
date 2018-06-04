@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>253</width>
-    <height>307</height>
+    <height>218</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,6 +57,20 @@
       <widget class="QPushButton" name="maxHeartRate">
        <property name="text">
         <string>Max Heart Rate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="clearSelection">
+       <property name="text">
+        <string>Clear Selection</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="center">
+       <property name="text">
+        <string>Center</string>
        </property>
       </widget>
      </item>
