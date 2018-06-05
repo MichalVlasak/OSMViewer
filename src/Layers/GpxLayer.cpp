@@ -190,7 +190,7 @@ void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, s
     {
         bool isOk = false;
 
-        double temperature = item.pointVector[posIdx].heartRate.toFloat(&isOk);
+        double temperature = item.pointVector[posIdx].temperature.toFloat(&isOk);
 
         if(isOk == true)
         {
