@@ -55,6 +55,9 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
             }
         }
     }
+
+    _ui->clearSelection->setDisabled(true);
+    _ui->center->setDisabled(true);
 }
 
 GpxInfoFileWidget::~GpxInfoFileWidget()
@@ -175,6 +178,17 @@ void GpxInfoFileWidget::selectionChanged(QItemSelection selected, QItemSelection
                 _gpxLayer->highlightSelectedPoint(_gpxId, index.row());
             }
         }
+    }
+
+    if(indexes.size() > 0)
+    {
+        _ui->clearSelection->setDisabled(false);
+        _ui->center->setDisabled(false);
+    }
+    else
+    {
+        _ui->clearSelection->setDisabled(true);
+        _ui->center->setDisabled(true);
     }
 }
 
