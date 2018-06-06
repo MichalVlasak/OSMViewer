@@ -68,7 +68,7 @@ void GpxLayer::paintEvent(QPainter & painter)
                             polygon.push_back(point);
                         }
 
-                        painter.setPen(QPen(QColor(255, 0, 0, 255), 3));
+                        painter.setPen(QPen(QColor(255, 0, 0), 3));
 
                         painter.drawPolyline(polygon);
 
@@ -120,6 +120,7 @@ void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, s
     int pxX = point.rx();
     int pxY = point.ry();
 
+    painter.setPen(QPen(QColor(255, 0, 0), 1));
     painter.setBrush(QColor(255, 0, 0));
     //painter.drawEllipse(point, 5, 5);
 

@@ -20,8 +20,9 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
 
         QRect rect = QRect(startPointSelectArea, endPointSelectArea);
 
+        painter.setPen(QPen(QColor(255, 0, 0, 50), 1));
+        painter.setBrush(QColor(255, 0, 0, 50));
         painter.drawRect(rect);
-        painter.fillRect(rect, QBrush(QColor(255, 0, 0, 50)));
     }
 }
 
