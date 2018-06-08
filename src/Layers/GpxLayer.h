@@ -31,7 +31,7 @@ class GpxLayer : public QWidget, public BaseLayer
 
     private:
         typedef std::map<int, size_t> SelectedPointsMap; // int - ID GPX suboru, size_t - index vybrany v tabulke bodov pre dany GPX
-        void paintPoint(QPainter & painter, const GpxManager::GpxItem & item, size_t posIdx);
+        void paintPoint(QPainter & painter, const GpxManager::GpxItem & item, size_t posIdx, const QString & title = "");
 
     private:
         GpxManager * _gpxManager = nullptr;

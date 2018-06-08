@@ -77,6 +77,11 @@ void GpxLayer::paintEvent(QPainter & painter)
 
                         painter.setBrush(QColor(255, 0, 0));
                         painter.drawEllipse(stop, 8, 8);
+
+                        if(item.biggestElevetionIdx != GpxManager::ErrorId)
+                        {
+                            paintPoint(painter, item, item.biggestElevetionIdx, tr("Max Elevation"));
+                        }
                     }
                 }
             }
@@ -111,7 +116,7 @@ void GpxLayer::paintEvent(QPainter & painter)
     }
 }
 
-void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, size_t posIdx)
+void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, size_t posIdx, const QString & title)
 {
     QPoint point = getPixelPoint(item.pointVector[posIdx].lat, item.pointVector[posIdx].lon);
     QPoint topLeft = point;
@@ -228,6 +233,7 @@ void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, s
     }
 
     int height = fontMetrics.height();
+    int titleHeight = fontMetrics.height();
     int width = fontMetrics.width(heightStr);
     width = std::max(width, fontMetrics.width(cadentionStr));
     width = std::max(width, fontMetrics.width(heartRateStr));
@@ -235,21 +241,50 @@ void GpxLayer::paintPoint(QPainter &painter, const GpxManager::GpxItem & item, s
     width = std::max(width, fontMetrics.width(dayTime));
     width = std::max(width, fontMetrics.width(tripTime));
 
+    QFont origFont = painter.font();
+    QFont titleFont = origFont;
+
+    titleFont.setBold(true);
+    titleFont.setPointSize(titleFont.pointSize() + 2);
+
+    if(title.isEmpty() == false)
+    {
+        painter.setFont(titleFont);
+
+        QFontMetrics titleFontMetric = painter.fontMetrics();
+
+        width = std::max(width, titleFontMetric.width(title));
+        titleHeight = std::max(titleHeight, titleFontMetric.height());
+
+        painter.setFont(origFont);
+    }
+
     point.rx() = point.rx() + 15;
 
     topLeft.rx() = topLeft.rx() + 10;
-    topLeft.ry() = topLeft.ry() - height;
+    topLeft.ry() = topLeft.ry() - titleHeight;
 
     QPoint bottomRight = point;
 
     bottomRight.rx() = bottomRight.rx() + width + 5;
-    bottomRight.ry() = bottomRight.ry() + 5 * height + height / 2;
+    bottomRight.ry() = bottomRight.ry() + ((title.isEmpty() == false) ? 6 : 5) * height + height / 2;
 
     QRect rect = QRect(topLeft, bottomRight);
 
     painter.fillRect(rect, QBrush(QColor(255, 0, 0, 150)));
 
     painter.setPen(QColor(0, 0, 0));
+
+    if(title.isEmpty() == false)
+    {
+        painter.setFont(titleFont);
+        painter.drawText(point, title);
+
+        painter.setFont(origFont);
+
+        point.ry() = point.ry() + height;
+    }
+
     painter.drawText(point, heightStr);
 
     point.ry() = point.ry() + height;
