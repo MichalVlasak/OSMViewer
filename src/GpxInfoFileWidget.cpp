@@ -1,6 +1,13 @@
 #include "GpxInfoFileWidget.h"
 #include "ui_GpxInfoFileWidget.h"
 
+#include <QCheckBox>
+
+bool GpxInfoFileWidget::_cadentionCheckChck = false;
+bool GpxInfoFileWidget::_elevationCheckChck = false;
+bool GpxInfoFileWidget::_heartRateCheckChck = false;
+bool GpxInfoFileWidget::_temperatureCheckChck = false;
+
 GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfoFileWidget),
@@ -22,8 +29,24 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     QObject::connect(_ui->center, SIGNAL(clicked(bool)), SLOT(centerMap()));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::connect(_gpxLayer, SIGNAL(changeSelectedPoint(int,size_t)), SLOT(changeSelectedPoint(int,size_t)));
+    QObject::connect(_ui->cadentionChck, SIGNAL(clicked(bool)), SLOT(cadentionChecked(bool)));
+    QObject::connect(_ui->elevationChck, SIGNAL(clicked(bool)), SLOT(elevationChecked(bool)));
+    QObject::connect(_ui->heartRateChck, SIGNAL(clicked(bool)), SLOT(heartRateChecked(bool)));
+    QObject::connect(_ui->temperatureChck, SIGNAL(clicked(bool)), SLOT(temperatureChecked(bool)));
 
     fillTable();
+    initializeGui();
+}
+
+GpxInfoFileWidget::~GpxInfoFileWidget()
+{
+    clearSelectedPoint();
+
+    delete _ui;
+}
+
+void GpxInfoFileWidget::initializeGui()
+{
 
     if(_gpxManager != nullptr)
     {
@@ -36,21 +59,57 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
                 if(item.biggestCadentionIdx == -1)
                 {
                     _ui->maxCadention->setDisabled(true);
+                    _ui->cadentionChck->setDisabled(true);
+                }
+                else
+                {
+                    GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                    setShowingBigestCadention(itemNoConst);
+
+                    _ui->cadentionChck->setChecked(_cadentionCheckChck);
                 }
 
                 if(item.biggestElevetionIdx == -1)
                 {
                     _ui->maxElevation->setDisabled(true);
+                    _ui->elevationChck->setDisabled(true);
+                }
+                else
+                {
+                    GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                    setShowingBigestElevation(itemNoConst);
+
+                    _ui->elevationChck->setChecked(_elevationCheckChck);
                 }
 
                 if(item.biggestHeartRateIdx == -1)
                 {
                     _ui->maxHeartRate->setDisabled(true);
+                    _ui->heartRateChck->setDisabled(true);
+                }
+                else
+                {
+                    GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                    setShowingBigestHeartRate(itemNoConst);
+
+                    _ui->heartRateChck->setChecked(_heartRateCheckChck);
                 }
 
                 if(item.biggestTemperatureIdx == -1)
                 {
                     _ui->maxTemperature->setDisabled(true);
+                    _ui->temperatureChck->setDisabled(true);
+                }
+                else
+                {
+                    GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                    setShowingBigestTemperature(itemNoConst);
+
+                    _ui->temperatureChck->setChecked(_temperatureCheckChck);
                 }
             }
         }
@@ -58,13 +117,6 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
 
     _ui->clearSelection->setDisabled(true);
     _ui->center->setDisabled(true);
-}
-
-GpxInfoFileWidget::~GpxInfoFileWidget()
-{
-    clearSelectedPoint();
-
-    delete _ui;
 }
 
 void GpxInfoFileWidget::fillTable()
@@ -173,9 +225,31 @@ void GpxInfoFileWidget::selectionChanged(QItemSelection selected, QItemSelection
         {
             prevColumn = index.column();
 
-            if(_gpxLayer != nullptr)
+            int row = index.row();
+            bool isShowed = false;
+
+            if(_gpxManager != nullptr)
             {
-                _gpxLayer->highlightSelectedPoint(_gpxId, index.row());
+                const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+                for(const GpxManager::GpxItem & item : gpxVector)
+                {
+                    if(item.fileId == _gpxId)
+                    {
+                        if((item.biggestCadentionIdx == row && item.showBiggestCadention == true) ||
+                           (item.biggestElevetionIdx == row && item.showBiggestElevetion == true) ||
+                           (item.biggestHeartRateIdx == row && item.showBiggestHeartRate == true) ||
+                           (item.biggestTemperatureIdx == row && item.showBiggestTemperature == true))
+                        {
+                            isShowed = true;
+                        }
+                    }
+                }
+            }
+
+            if(_gpxLayer != nullptr && isShowed == false)
+            {
+                _gpxLayer->highlightSelectedPoint(_gpxId, row);
             }
         }
     }
@@ -247,5 +321,125 @@ void GpxInfoFileWidget::centerMap()
                 }
             }
         }
+    }
+}
+
+void GpxInfoFileWidget::elevationChecked(bool checked)
+{
+    _elevationCheckChck = checked;
+
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                setShowingBigestElevation(itemNoConst);
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::setShowingBigestElevation(GpxManager::GpxItem & item)
+{
+    item.showBiggestElevetion = _elevationCheckChck;
+
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->refreshView();
+    }
+}
+
+void GpxInfoFileWidget::cadentionChecked(bool checked)
+{
+    _cadentionCheckChck = checked;
+
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                setShowingBigestCadention(itemNoConst);
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::setShowingBigestCadention(GpxManager::GpxItem & item)
+{
+    item.showBiggestCadention = _cadentionCheckChck;
+
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->refreshView();
+    }
+}
+
+void GpxInfoFileWidget::temperatureChecked(bool checked)
+{
+    _temperatureCheckChck = checked;
+
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                setShowingBigestTemperature(itemNoConst);
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::setShowingBigestTemperature(GpxManager::GpxItem & item)
+{
+    item.showBiggestTemperature = _temperatureCheckChck;
+
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->refreshView();
+    }
+}
+
+void GpxInfoFileWidget::heartRateChecked(bool checked)
+{
+    _heartRateCheckChck = checked;
+
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                GpxManager::GpxItem & itemNoConst = const_cast<GpxManager::GpxItem &>(item);
+
+                setShowingBigestHeartRate(itemNoConst);
+            }
+        }
+    }
+}
+
+void GpxInfoFileWidget::setShowingBigestHeartRate(GpxManager::GpxItem & item)
+{
+    item.showBiggestHeartRate = _heartRateCheckChck;
+
+    if(_gpxLayer != nullptr)
+    {
+        _gpxLayer->refreshView();
     }
 }

@@ -78,9 +78,24 @@ void GpxLayer::paintEvent(QPainter & painter)
                         painter.setBrush(QColor(255, 0, 0));
                         painter.drawEllipse(stop, 8, 8);
 
-                        if(item.biggestElevetionIdx != GpxManager::ErrorId)
+                        if(item.showBiggestElevetion == true && item.biggestElevetionIdx != GpxManager::ErrorId)
                         {
                             paintPoint(painter, item, item.biggestElevetionIdx, tr("Max Elevation"));
+                        }
+
+                        if(item.showBiggestCadention == true && item.biggestCadentionIdx != GpxManager::ErrorId)
+                        {
+                            paintPoint(painter, item, item.biggestCadentionIdx, tr("Max Cadention"));
+                        }
+
+                        if(item.showBiggestTemperature == true && item.biggestTemperatureIdx != GpxManager::ErrorId)
+                        {
+                            paintPoint(painter, item, item.biggestTemperatureIdx, tr("Max Temperature"));
+                        }
+
+                        if(item.showBiggestHeartRate == true && item.biggestHeartRateIdx != GpxManager::ErrorId)
+                        {
+                            paintPoint(painter, item, item.biggestHeartRateIdx, tr("Max Heart Rate"));
                         }
                     }
                 }

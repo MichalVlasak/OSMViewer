@@ -32,9 +32,18 @@ class GpxInfoFileWidget : public QWidget
         void selectionChanged(QItemSelection selected, QItemSelection deselected);
         void changeSelectedPoint(int gpxId, size_t idx);
         void centerMap();
+        void cadentionChecked(bool checked);
+        void elevationChecked(bool checked);
+        void heartRateChecked(bool checked);
+        void temperatureChecked(bool checked);
 
     private:
+        void initializeGui();
         void fillTable();
+        void setShowingBigestElevation(GpxManager::GpxItem & item);
+        void setShowingBigestCadention(GpxManager::GpxItem & item);
+        void setShowingBigestHeartRate(GpxManager::GpxItem & item);
+        void setShowingBigestTemperature(GpxManager::GpxItem & item);
 
     private:
         Ui::GpxInfoFileWidget * _ui = nullptr;
@@ -42,6 +51,11 @@ class GpxInfoFileWidget : public QWidget
         GpxManager * _gpxManager = nullptr;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
+
+        static bool _cadentionCheckChck;
+        static bool _elevationCheckChck;
+        static bool _heartRateCheckChck;
+        static bool _temperatureCheckChck;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H
