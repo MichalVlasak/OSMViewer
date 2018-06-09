@@ -4,13 +4,14 @@
 #include <QWidget>
 
 #include "GpxInfoFileModel.h"
+#include "GpxInfoFileWidgetConfig.h"
 #include "Layers/GpxLayer.h"
 
 namespace Ui {
 class GpxInfoFileWidget;
 }
 
-class GpxInfoFileWidget : public QWidget
+class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
 {
         Q_OBJECT
 
@@ -51,11 +52,6 @@ class GpxInfoFileWidget : public QWidget
         GpxManager * _gpxManager = nullptr;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
-
-        static bool _cadentionCheckChck;
-        static bool _elevationCheckChck;
-        static bool _heartRateCheckChck;
-        static bool _temperatureCheckChck;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H

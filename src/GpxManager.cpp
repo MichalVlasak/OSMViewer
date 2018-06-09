@@ -1,6 +1,7 @@
 #include "GpxManager.h"
 #include "AppSettings.h"
 #include "MainWindow.h"
+#include "GpxInfoFileWidgetConfig.h"
 
 #include <iostream>
 #include <QFileInfo>
@@ -33,11 +34,19 @@ void GpxManager::storeConfig(QDomDocument &document, QDomElement &rootElement)
         QDomText filePathText = document.createTextNode(item.filePath);
         filePathElement.appendChild(filePathText);
     }
+
+    GpxInfoFileWidgetConfig infoFileCfg;
+
+    infoFileCfg.storeConfig(document, rootElement);
 }
 
 bool GpxManager::restoreConfig(QDomDocument &document)
 {
     bool result = false;
+
+    GpxInfoFileWidgetConfig infoFileCfg;
+
+    infoFileCfg.restoreConfig(document);
 
     QDomElement rootElem = document.firstChildElement("OSMViewer");
 

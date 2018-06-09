@@ -59,7 +59,8 @@ SOURCES += src/main.cpp\
     src/GpxInfoFileModel.cpp \
     src/GpxInfoFileWidget.cpp \
     src/GpxFilesListWidget.cpp \
-    src/GpxInfosWidget.cpp
+    src/GpxInfosWidget.cpp \
+    src/GpxInfoFileWidgetConfig.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -98,7 +99,8 @@ HEADERS  += src/MainWindow.h \
     src/GpxInfoFileModel.h \
     src/GpxInfoFileWidget.h \
     src/GpxFilesListWidget.h \
-    src/GpxInfosWidget.h
+    src/GpxInfosWidget.h \
+    src/GpxInfoFileWidgetConfig.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

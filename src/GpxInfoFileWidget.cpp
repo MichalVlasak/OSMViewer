@@ -3,11 +3,6 @@
 
 #include <QCheckBox>
 
-bool GpxInfoFileWidget::_cadentionCheckChck = false;
-bool GpxInfoFileWidget::_elevationCheckChck = false;
-bool GpxInfoFileWidget::_heartRateCheckChck = false;
-bool GpxInfoFileWidget::_temperatureCheckChck = false;
-
 GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfoFileWidget),
@@ -67,7 +62,7 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestCadention(itemNoConst);
 
-                    _ui->cadentionChck->setChecked(_cadentionCheckChck);
+                    _ui->cadentionChck->setChecked(CadentionCheckChck);
                 }
 
                 if(item.biggestElevetionIdx == -1)
@@ -81,7 +76,7 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestElevation(itemNoConst);
 
-                    _ui->elevationChck->setChecked(_elevationCheckChck);
+                    _ui->elevationChck->setChecked(ElevationCheckChck);
                 }
 
                 if(item.biggestHeartRateIdx == -1)
@@ -95,7 +90,7 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestHeartRate(itemNoConst);
 
-                    _ui->heartRateChck->setChecked(_heartRateCheckChck);
+                    _ui->heartRateChck->setChecked(HeartRateCheckChck);
                 }
 
                 if(item.biggestTemperatureIdx == -1)
@@ -109,7 +104,7 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestTemperature(itemNoConst);
 
-                    _ui->temperatureChck->setChecked(_temperatureCheckChck);
+                    _ui->temperatureChck->setChecked(TemperatureCheckChck);
                 }
             }
         }
@@ -326,7 +321,7 @@ void GpxInfoFileWidget::centerMap()
 
 void GpxInfoFileWidget::elevationChecked(bool checked)
 {
-    _elevationCheckChck = checked;
+    ElevationCheckChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -346,7 +341,7 @@ void GpxInfoFileWidget::elevationChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestElevation(GpxManager::GpxItem & item)
 {
-    item.showBiggestElevetion = _elevationCheckChck;
+    item.showBiggestElevetion = ElevationCheckChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -356,7 +351,7 @@ void GpxInfoFileWidget::setShowingBigestElevation(GpxManager::GpxItem & item)
 
 void GpxInfoFileWidget::cadentionChecked(bool checked)
 {
-    _cadentionCheckChck = checked;
+    CadentionCheckChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -376,7 +371,7 @@ void GpxInfoFileWidget::cadentionChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestCadention(GpxManager::GpxItem & item)
 {
-    item.showBiggestCadention = _cadentionCheckChck;
+    item.showBiggestCadention = CadentionCheckChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -386,7 +381,7 @@ void GpxInfoFileWidget::setShowingBigestCadention(GpxManager::GpxItem & item)
 
 void GpxInfoFileWidget::temperatureChecked(bool checked)
 {
-    _temperatureCheckChck = checked;
+    TemperatureCheckChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -406,7 +401,7 @@ void GpxInfoFileWidget::temperatureChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestTemperature(GpxManager::GpxItem & item)
 {
-    item.showBiggestTemperature = _temperatureCheckChck;
+    item.showBiggestTemperature = TemperatureCheckChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -416,7 +411,7 @@ void GpxInfoFileWidget::setShowingBigestTemperature(GpxManager::GpxItem & item)
 
 void GpxInfoFileWidget::heartRateChecked(bool checked)
 {
-    _heartRateCheckChck = checked;
+    HeartRateCheckChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -436,7 +431,7 @@ void GpxInfoFileWidget::heartRateChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestHeartRate(GpxManager::GpxItem & item)
 {
-    item.showBiggestHeartRate = _heartRateCheckChck;
+    item.showBiggestHeartRate = HeartRateCheckChck;
 
     if(_gpxLayer != nullptr)
     {
