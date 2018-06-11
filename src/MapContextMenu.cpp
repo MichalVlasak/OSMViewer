@@ -47,15 +47,18 @@ void MapContextMenu::show(const QPointF &pos)
 
     menu->addAction(enableDownloading);
 
-    QAction * downloadArea = new QAction(tr("Download Viewed Area"), this);
-    downloadArea->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-    menu->addAction(downloadArea);
-    QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
+    if(window != nullptr)
+    {
+        QAction * downloadArea = new QAction(tr("Download Viewed Area"), this);
+        downloadArea->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        menu->addAction(downloadArea);
+        QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
 
-    QAction * selectAndDownloadArea = new QAction(tr("Select & Download Area"), this);
-    selectAndDownloadArea->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-    menu->addAction(selectAndDownloadArea);
-    QObject::connect(selectAndDownloadArea, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadArea()));
+        QAction * selectAndDownloadArea = new QAction(tr("Select & Download Area"), this);
+        selectAndDownloadArea->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        menu->addAction(selectAndDownloadArea);
+        QObject::connect(selectAndDownloadArea, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadArea()));
+    }
 
     menu->addSeparator();
 

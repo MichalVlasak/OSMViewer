@@ -16,7 +16,7 @@ class DownloadAreaHighlight : public QObject, public BaseLayer, public StoreConf
 
     public:
         void paintEvent(QPainter & painter);
-        void setDownloadParams(OSMDownloadAreaDialog::Setup setup);
+        void setDownloadParams(const OSMDownloadAreaDialog::Setup & setup);
         void setVisible(bool value);
         bool isVisible();
 

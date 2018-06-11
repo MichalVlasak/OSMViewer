@@ -73,12 +73,12 @@ QProcess * OSMTileDownloader::getFreeProcess()
 
 void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload)
 {
-    bool isPresent = false;
-
     _isDownloadCanceled = false;
 
     {
         QMutexLocker lock(&_mutex);
+
+        bool isPresent = false;
 
         for(const DownloadItem & item : _itemsToDownload)
         {

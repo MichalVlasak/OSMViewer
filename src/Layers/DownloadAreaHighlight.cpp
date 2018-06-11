@@ -26,7 +26,7 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
     }
 }
 
-void DownloadAreaHighlight::setDownloadParams(OSMDownloadAreaDialog::Setup setup)
+void DownloadAreaHighlight::setDownloadParams(const OSMDownloadAreaDialog::Setup & setup)
 {
     _setup = setup;
     _isDownloadParamsSetupEnable = true;

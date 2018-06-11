@@ -4,9 +4,9 @@
 #include <QFileDialog>
 
 CenterPointsManager::CenterPointsManager(QObject * parent)
-    : QObject(parent)
+    : QObject(parent),
+      _homePosition(CenterPointStruct(QPointF(0.0, 0.0), "Zero Point", -1))
 {
-    _homePosition = CenterPointStruct(QPointF(0.0, 0.0), "Zero Point", -1);
     _importExportLastPath = ".";
 
 //    addCenterPoint(CenterPointStruct(QPointF(17.1097222222, 48.1438888889), "Bratislava", 12));

@@ -2,9 +2,9 @@
 #include "OSMLayer.h"
 #include "src/AppSettings.h"
 
-#ifdef __linux__
+#ifdef Q_OS_LINUX
 #include <cmath>
-#else
+#elif Q_OS_MSDOS
 #define _USE_MATH_DEFINES
 #include <math.h>
 #endif

@@ -151,7 +151,6 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         else
         {
             QWidget * widget = this->parentWidget();
-            QWidget * widget2 = widget->parentWidget();
 
             _mapSettings.movingStartPoint = _mapSettings.widget->mapFrom(widget, point);
             _mapSettings.oldCenter = _mapSettings.worldCenter;

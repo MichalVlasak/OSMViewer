@@ -14,13 +14,13 @@ class OSMDownloadProjectModel : public QObject, public StoreConfigInterface
     public:
         struct Project
         {
-                Project(const QString & pName, const OSMDownloadAreaDialog::Setup pSetup)
+                Project(const QString & pName, const OSMDownloadAreaDialog::Setup & pSetup)
                     : name(pName), setup(pSetup)
                 {
                 }
 
                 Project()
-                    : name("Unknown")
+                    : name("Unknown"), setup(OSMDownloadAreaDialog::Setup())
                 {
                 }
 
