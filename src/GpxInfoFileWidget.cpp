@@ -1,6 +1,8 @@
 #include "GpxInfoFileWidget.h"
 #include "ui_GpxInfoFileWidget.h"
 
+#include "external/qcustomplot/qcustomplot.h"
+
 #include <QCheckBox>
 
 GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
@@ -29,7 +31,15 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     QObject::connect(_ui->heartRateChck, SIGNAL(clicked(bool)), SLOT(heartRateChecked(bool)));
     QObject::connect(_ui->temperatureChck, SIGNAL(clicked(bool)), SLOT(temperatureChecked(bool)));
 
+    QHBoxLayout *layout = new QHBoxLayout();
+    _plot = new QCustomPlot(this);
+
+    layout->addWidget(_plot);
+
+    _ui->graphTab->setLayout(layout);
+
     fillTable();
+    fillGraph();
     initializeGui();
 }
 
@@ -42,7 +52,6 @@ GpxInfoFileWidget::~GpxInfoFileWidget()
 
 void GpxInfoFileWidget::initializeGui()
 {
-
     if(_gpxManager != nullptr)
     {
         const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
@@ -112,6 +121,156 @@ void GpxInfoFileWidget::initializeGui()
 
     _ui->clearSelection->setDisabled(true);
     _ui->center->setDisabled(true);
+}
+
+void GpxInfoFileWidget::fillGraph()
+{
+    if(_plot != nullptr && _gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & item : gpxVector)
+        {
+            if(item.fileId == _gpxId)
+            {
+                QSharedPointer<QCPGraphDataContainer> elevationContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
+                QSharedPointer<QCPGraphDataContainer> heartRateContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
+
+                double startTime;
+                double endTime;
+                double minElevation = std::numeric_limits<double>::max();
+                double maxElevation = 0;
+                double minHeartRate = std::numeric_limits<double>::max();
+                double maxHeartRate = 0;
+
+                if(item.pointVector.size() > 0)
+                {
+                    if(item.pointVector[0].time.isNull() == false)
+                    {
+                        startTime = item.pointVector[0].time.toDateTime().toTime_t();
+                    }
+                }
+
+                for(const GpxManager::Point & point : item.pointVector)
+                {
+                    if(point.time.isNull() == false)
+                    {
+                        double time = endTime = point.time.toDateTime().toTime_t();
+
+                        if(point.elevation.isNull() == false)
+                        {
+                            QCPGraphData elevationData;
+                            QCPGraphData heartRateData;
+
+                            bool isOk = false;
+
+                            elevationData.key = time;
+                            elevationData.value = point.elevation.toDouble(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minElevation = std::min(elevationData.value, minElevation);
+                                maxElevation = std::max(elevationData.value, maxElevation);
+
+                                elevationContainer->add(elevationData);
+                            }
+
+                            heartRateData.key = time;
+                            heartRateData.value = point.heartRate.toInt(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minHeartRate = std::min(heartRateData.value, minHeartRate);
+                                maxHeartRate = std::max(heartRateData.value, maxHeartRate);
+
+                                heartRateContainer->add(heartRateData);
+                            }
+                        }
+
+                        if(point.heartRate.isNull() == false)
+                        {
+                            QCPGraphData elevationData;
+                            QCPGraphData heartRateData;
+
+                            bool isOk = false;
+
+                            elevationData.key = time;
+                            elevationData.value = point.elevation.toDouble(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minElevation = std::min(elevationData.value, minElevation);
+                                maxElevation = std::max(elevationData.value, maxElevation);
+
+                                elevationContainer->add(elevationData);
+                            }
+
+                            heartRateData.key = time;
+                            heartRateData.value = point.heartRate.toInt(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minHeartRate = std::min(heartRateData.value, minHeartRate);
+                                maxHeartRate = std::max(heartRateData.value, maxHeartRate);
+
+                                heartRateContainer->add(heartRateData);
+                            }
+                        }
+                    }
+                }
+
+                _plot->xAxis->setLabel("Time");
+
+                // configure bottom axis to show date instead of number:
+                QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
+                dateTicker->setDateTimeFormat("hh:mm:ss");
+                _plot->xAxis->setTicker(dateTicker);
+
+                _plot->legend->setVisible(true);
+                _plot->legend->setBrush(QColor(255, 255, 255, 150));
+
+                if(elevationContainer.data() != nullptr && elevationContainer.data()->size() > 0)
+                {
+                    QCPGraph * elevationGraph = _plot->addGraph();
+
+                    if(elevationGraph != nullptr)
+                    {
+                        QColor color(Qt::darkGreen);
+
+                        elevationGraph->setPen(QPen(color));
+                        elevationGraph->setName(tr("Elevation"));
+                        elevationGraph->setData(elevationContainer);
+                    }
+
+                    // set a more compact font size for bottom and left axis tick labels:
+                    _plot->xAxis->setTickLabelFont(QFont(QFont().family(), 8));
+                    _plot->yAxis->setTickLabelFont(QFont(QFont().family(), 8));
+
+                    _plot->xAxis->setRange(startTime, endTime);
+                    _plot->yAxis->setRange(minElevation * 0.9, maxElevation * 1.1);
+                }
+
+                if(heartRateContainer.data() != nullptr && heartRateContainer.data()->size() > 0)
+                {
+                    QCPGraph * heartRateGraph = _plot->addGraph(_plot->xAxis, _plot->yAxis2);
+
+                    if(heartRateGraph != nullptr)
+                    {
+                        QColor color(Qt::red);
+
+                        heartRateGraph->setPen(QPen(color));
+                        heartRateGraph->setName(tr("Heart Rate"));
+                        heartRateGraph->setData(heartRateContainer);
+                    }
+
+                    _plot->yAxis2->setVisible(true);
+                    _plot->yAxis2->setTicks(true);
+                    _plot->yAxis2->setTickLabels(true);
+                    _plot->yAxis2->setRange(minHeartRate * 0.9, maxHeartRate * 1.1);
+                }
+            }
+        }
+    }
 }
 
 void GpxInfoFileWidget::fillTable()

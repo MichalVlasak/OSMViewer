@@ -41,6 +41,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
     private:
         void initializeGui();
         void fillTable();
+        void fillGraph();
         void setShowingBigestElevation(GpxManager::GpxItem & item);
         void setShowingBigestCadention(GpxManager::GpxItem & item);
         void setShowingBigestHeartRate(GpxManager::GpxItem & item);
@@ -52,6 +53,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         GpxManager * _gpxManager = nullptr;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
+        class QCustomPlot * _plot = nullptr;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets xml
 
@@ -60,7 +60,8 @@ SOURCES += src/main.cpp\
     src/GpxInfoFileWidget.cpp \
     src/GpxFilesListWidget.cpp \
     src/GpxInfosWidget.cpp \
-    src/GpxInfoFileWidgetConfig.cpp
+    src/GpxInfoFileWidgetConfig.cpp \
+    external/qcustomplot/qcustomplot.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -100,7 +101,8 @@ HEADERS  += src/MainWindow.h \
     src/GpxInfoFileWidget.h \
     src/GpxFilesListWidget.h \
     src/GpxInfosWidget.h \
-    src/GpxInfoFileWidgetConfig.h
+    src/GpxInfoFileWidgetConfig.h \
+    external/qcustomplot/qcustomplot.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
