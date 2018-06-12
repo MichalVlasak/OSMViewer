@@ -30,6 +30,7 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     QObject::connect(_ui->elevationChck, SIGNAL(clicked(bool)), SLOT(elevationChecked(bool)));
     QObject::connect(_ui->heartRateChck, SIGNAL(clicked(bool)), SLOT(heartRateChecked(bool)));
     QObject::connect(_ui->temperatureChck, SIGNAL(clicked(bool)), SLOT(temperatureChecked(bool)));
+    QObject::connect(_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(changeVisibleTab(int)));
 
     QHBoxLayout *layout = new QHBoxLayout();
     _plot = new QCustomPlot(this);
@@ -121,6 +122,18 @@ void GpxInfoFileWidget::initializeGui()
 
     _ui->clearSelection->setDisabled(true);
     _ui->center->setDisabled(true);
+
+    switch (TabWidgetType)
+    {
+        case TabWidgetTypeEnum::Graph:
+            _ui->tabWidget->setCurrentWidget(_ui->graphTab);
+            break;
+
+        case TabWidgetTypeEnum::Table:
+        default:
+            _ui->tabWidget->setCurrentWidget(_ui->tableTab);
+            break;
+    }
 }
 
 void GpxInfoFileWidget::fillGraph()
@@ -595,5 +608,17 @@ void GpxInfoFileWidget::setShowingBigestHeartRate(GpxManager::GpxItem & item)
     if(_gpxLayer != nullptr)
     {
         _gpxLayer->refreshView();
+    }
+}
+
+void GpxInfoFileWidget::changeVisibleTab(int index)
+{
+    if(_ui->tabWidget->currentWidget() == _ui->tableTab)
+    {
+        TabWidgetType = TabWidgetTypeEnum::Table;
+    }
+    else if(_ui->tabWidget->currentWidget() == _ui->graphTab)
+    {
+        TabWidgetType = TabWidgetTypeEnum::Graph;
     }
 }

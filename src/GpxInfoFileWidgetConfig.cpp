@@ -5,6 +5,7 @@ bool GpxInfoFileWidgetConfig::CadentionCheckChck = false;
 bool GpxInfoFileWidgetConfig::ElevationCheckChck = false;
 bool GpxInfoFileWidgetConfig::HeartRateCheckChck = false;
 bool GpxInfoFileWidgetConfig::TemperatureCheckChck = false;
+GpxInfoFileWidgetConfig::TabWidgetTypeEnum GpxInfoFileWidgetConfig::TabWidgetType = GpxInfoFileWidgetConfig::TabWidgetTypeEnum::Table;
 
 GpxInfoFileWidgetConfig::GpxInfoFileWidgetConfig()
 {
@@ -35,6 +36,11 @@ void GpxInfoFileWidgetConfig::storeConfig(QDomDocument &document, QDomElement &r
     gpxInfoFileCfgElement.appendChild(temperatureElement);
     QDomText temperatureText = document.createTextNode(QString::number(TemperatureCheckChck));
     temperatureElement.appendChild(temperatureText);
+
+    QDomElement tabWidgetTypeElement = document.createElement("TabWidgetType");
+    gpxInfoFileCfgElement.appendChild(tabWidgetTypeElement);
+    QDomText tabWidgetTypeText = document.createTextNode(QString::number(int(TabWidgetType)));
+    tabWidgetTypeElement.appendChild(tabWidgetTypeText);
 }
 
 static bool getBoolFromString(const QString valueStr, bool & valueBool)
@@ -87,6 +93,22 @@ bool GpxInfoFileWidgetConfig::restoreConfig(QDomDocument &document)
                 value = AppSettings::getValueString(gpxNode, "TemperatureCheckChck");
 
                 result &= getBoolFromString(value, TemperatureCheckChck);
+
+                value = AppSettings::getValueString(gpxNode, "TabWidgetType");
+
+                if(value.isEmpty() == false)
+                {
+                    bool isOk = false;
+
+                    int num = value.toInt(&isOk);
+
+                    if(isOk == true)
+                    {
+                        TabWidgetType = TabWidgetTypeEnum(num);
+
+                        result &= true;
+                    }
+                }
             }
         }
     }

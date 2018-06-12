@@ -37,6 +37,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         void elevationChecked(bool checked);
         void heartRateChecked(bool checked);
         void temperatureChecked(bool checked);
+        void changeVisibleTab(int index);
 
     private:
         void initializeGui();
