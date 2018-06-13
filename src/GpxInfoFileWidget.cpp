@@ -26,18 +26,23 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     QObject::connect(_ui->center, SIGNAL(clicked(bool)), SLOT(centerMap()));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::connect(_gpxLayer, SIGNAL(changeSelectedPoint(int,size_t)), SLOT(changeSelectedPoint(int,size_t)));
-    QObject::connect(_ui->cadentionChck, SIGNAL(clicked(bool)), SLOT(cadentionChecked(bool)));
-    QObject::connect(_ui->elevationChck, SIGNAL(clicked(bool)), SLOT(elevationChecked(bool)));
-    QObject::connect(_ui->heartRateChck, SIGNAL(clicked(bool)), SLOT(heartRateChecked(bool)));
-    QObject::connect(_ui->temperatureChck, SIGNAL(clicked(bool)), SLOT(temperatureChecked(bool)));
+    QObject::connect(_ui->cadentionShowMaxChck, SIGNAL(clicked(bool)), SLOT(cadentionShowMaxChecked(bool)));
+    QObject::connect(_ui->elevationShowMaxChck, SIGNAL(clicked(bool)), SLOT(elevationShowMaxChecked(bool)));
+    QObject::connect(_ui->heartRateShowMaxChck, SIGNAL(clicked(bool)), SLOT(heartRateShowMaxChecked(bool)));
+    QObject::connect(_ui->temperatureShowMaxChck, SIGNAL(clicked(bool)), SLOT(temperatureShowMaxChecked(bool)));
+    QObject::connect(_ui->cadentionGraphChck, SIGNAL(clicked(bool)), SLOT(cadentionShowGraphChecked(bool)));
+    QObject::connect(_ui->elevationGraphChck, SIGNAL(clicked(bool)), SLOT(elevationShowGraphChecked(bool)));
+    QObject::connect(_ui->heartRateGraphChck, SIGNAL(clicked(bool)), SLOT(heartRateShowGraphChecked(bool)));
+    QObject::connect(_ui->temperatureGraphChck, SIGNAL(clicked(bool)), SLOT(temperatureShowGraphChecked(bool)));
     QObject::connect(_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(changeVisibleTab(int)));
 
     QHBoxLayout *layout = new QHBoxLayout();
     _plot = new QCustomPlot(this);
 
     layout->addWidget(_plot);
+    layout->setMargin(0);
 
-    _ui->graphTab->setLayout(layout);
+    _ui->graphWidget->setLayout(layout);
 
     fillTable();
     fillGraph();
@@ -53,6 +58,11 @@ GpxInfoFileWidget::~GpxInfoFileWidget()
 
 void GpxInfoFileWidget::initializeGui()
 {
+    _ui->cadentionGraphChck->setChecked(CadentionShowGrapChck);
+    _ui->elevationGraphChck->setChecked(ElevationShowGraphChck);
+    _ui->heartRateGraphChck->setChecked(HeartRateShowGraphChck);
+    _ui->temperatureGraphChck->setChecked(TemperatureShowGraphChck);
+
     if(_gpxManager != nullptr)
     {
         const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
@@ -64,7 +74,7 @@ void GpxInfoFileWidget::initializeGui()
                 if(item.biggestCadentionIdx == -1)
                 {
                     _ui->maxCadention->setDisabled(true);
-                    _ui->cadentionChck->setDisabled(true);
+                    _ui->cadentionShowMaxChck->setDisabled(true);
                 }
                 else
                 {
@@ -72,13 +82,13 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestCadention(itemNoConst);
 
-                    _ui->cadentionChck->setChecked(CadentionCheckChck);
+                    _ui->cadentionShowMaxChck->setChecked(CadentionShowMaxChck);
                 }
 
                 if(item.biggestElevetionIdx == -1)
                 {
                     _ui->maxElevation->setDisabled(true);
-                    _ui->elevationChck->setDisabled(true);
+                    _ui->elevationShowMaxChck->setDisabled(true);
                 }
                 else
                 {
@@ -86,13 +96,13 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestElevation(itemNoConst);
 
-                    _ui->elevationChck->setChecked(ElevationCheckChck);
+                    _ui->elevationShowMaxChck->setChecked(ElevationShowMaxChck);
                 }
 
                 if(item.biggestHeartRateIdx == -1)
                 {
                     _ui->maxHeartRate->setDisabled(true);
-                    _ui->heartRateChck->setDisabled(true);
+                    _ui->heartRateShowMaxChck->setDisabled(true);
                 }
                 else
                 {
@@ -100,13 +110,13 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestHeartRate(itemNoConst);
 
-                    _ui->heartRateChck->setChecked(HeartRateCheckChck);
+                    _ui->heartRateShowMaxChck->setChecked(HeartRateShowMaxChck);
                 }
 
                 if(item.biggestTemperatureIdx == -1)
                 {
                     _ui->maxTemperature->setDisabled(true);
-                    _ui->temperatureChck->setDisabled(true);
+                    _ui->temperatureShowMaxChck->setDisabled(true);
                 }
                 else
                 {
@@ -114,7 +124,7 @@ void GpxInfoFileWidget::initializeGui()
 
                     setShowingBigestTemperature(itemNoConst);
 
-                    _ui->temperatureChck->setChecked(TemperatureCheckChck);
+                    _ui->temperatureShowMaxChck->setChecked(TemperatureShowMaxChck);
                 }
             }
         }
@@ -140,6 +150,10 @@ void GpxInfoFileWidget::fillGraph()
 {
     if(_plot != nullptr && _gpxManager != nullptr)
     {
+        _plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+        _plot->xAxis->axisRect()->setRangeDragAxes(_plot->xAxis, nullptr);
+        _plot->xAxis->axisRect()->setRangeZoom(Qt::Horizontal);
+
         const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
 
         for(const GpxManager::GpxItem & item : gpxVector)
@@ -148,6 +162,8 @@ void GpxInfoFileWidget::fillGraph()
             {
                 QSharedPointer<QCPGraphDataContainer> elevationContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
                 QSharedPointer<QCPGraphDataContainer> heartRateContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
+                QSharedPointer<QCPGraphDataContainer> cadentionContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
+                QSharedPointer<QCPGraphDataContainer> temperatureContainer = QSharedPointer<QCPGraphDataContainer>(new QCPGraphDataContainer());
 
                 double startTime;
                 double endTime;
@@ -155,6 +171,10 @@ void GpxInfoFileWidget::fillGraph()
                 double maxElevation = 0;
                 double minHeartRate = std::numeric_limits<double>::max();
                 double maxHeartRate = 0;
+                double minCadention = std::numeric_limits<double>::max();
+                double maxCadention = 0;
+                double minTemperature = std::numeric_limits<double>::max();
+                double maxTemperature = 0;
 
                 if(item.pointVector.size() > 0)
                 {
@@ -173,7 +193,6 @@ void GpxInfoFileWidget::fillGraph()
                         if(point.elevation.isNull() == false)
                         {
                             QCPGraphData elevationData;
-                            QCPGraphData heartRateData;
 
                             bool isOk = false;
 
@@ -186,37 +205,14 @@ void GpxInfoFileWidget::fillGraph()
                                 maxElevation = std::max(elevationData.value, maxElevation);
 
                                 elevationContainer->add(elevationData);
-                            }
-
-                            heartRateData.key = time;
-                            heartRateData.value = point.heartRate.toInt(&isOk);
-
-                            if(isOk == true)
-                            {
-                                minHeartRate = std::min(heartRateData.value, minHeartRate);
-                                maxHeartRate = std::max(heartRateData.value, maxHeartRate);
-
-                                heartRateContainer->add(heartRateData);
                             }
                         }
 
                         if(point.heartRate.isNull() == false)
                         {
-                            QCPGraphData elevationData;
                             QCPGraphData heartRateData;
 
                             bool isOk = false;
-
-                            elevationData.key = time;
-                            elevationData.value = point.elevation.toDouble(&isOk);
-
-                            if(isOk == true)
-                            {
-                                minElevation = std::min(elevationData.value, minElevation);
-                                maxElevation = std::max(elevationData.value, maxElevation);
-
-                                elevationContainer->add(elevationData);
-                            }
 
                             heartRateData.key = time;
                             heartRateData.value = point.heartRate.toInt(&isOk);
@@ -229,10 +225,47 @@ void GpxInfoFileWidget::fillGraph()
                                 heartRateContainer->add(heartRateData);
                             }
                         }
+
+                        if(point.cadention.isNull() == false)
+                        {
+                            QCPGraphData cadentionData;
+
+                            bool isOk = false;
+
+                            cadentionData.key = time;
+                            cadentionData.value = point.cadention.toInt(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minCadention = std::min(cadentionData.value, minCadention);
+                                maxCadention = std::max(cadentionData.value, maxCadention);
+
+                                cadentionContainer->add(cadentionData);
+                            }
+                        }
+
+                        if(point.temperature.isNull() == false)
+                        {
+                            QCPGraphData temperatureData;
+
+                            bool isOk = false;
+
+                            temperatureData.key = time;
+                            temperatureData.value = point.temperature.toFloat(&isOk);
+
+                            if(isOk == true)
+                            {
+                                minTemperature = std::min(temperatureData.value, minTemperature);
+                                maxTemperature = std::max(temperatureData.value, maxTemperature);
+
+                                temperatureContainer->add(temperatureData);
+                            }
+                        }
                     }
                 }
 
-                _plot->xAxis->setLabel("Time");
+                _plot->xAxis->setLabel(tr("Time"));
+                _plot->xAxis->setTickLabelFont(QFont(QFont().family(), 8));
 
                 // configure bottom axis to show date instead of number:
                 QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
@@ -242,44 +275,132 @@ void GpxInfoFileWidget::fillGraph()
                 _plot->legend->setVisible(true);
                 _plot->legend->setBrush(QColor(255, 255, 255, 150));
 
-                if(elevationContainer.data() != nullptr && elevationContainer.data()->size() > 0)
+                if(elevationContainer.data() != nullptr && elevationContainer.data()->size() > 0 )
                 {
-                    QCPGraph * elevationGraph = _plot->addGraph();
+                    _elevationGraph = _plot->addGraph();
 
-                    if(elevationGraph != nullptr)
+                    if(_elevationGraph != nullptr)
                     {
                         QColor color(Qt::darkGreen);
 
-                        elevationGraph->setPen(QPen(color));
-                        elevationGraph->setName(tr("Elevation"));
-                        elevationGraph->setData(elevationContainer);
+                        _elevationGraph->setPen(QPen(color));
+                        _elevationGraph->setName(tr("Elevation"));
+                        _elevationGraph->setData(elevationContainer);
                     }
 
-                    // set a more compact font size for bottom and left axis tick labels:
-                    _plot->xAxis->setTickLabelFont(QFont(QFont().family(), 8));
+                    _plot->yAxis->setLabel(tr("Elevation [m]"));
                     _plot->yAxis->setTickLabelFont(QFont(QFont().family(), 8));
-
                     _plot->xAxis->setRange(startTime, endTime);
                     _plot->yAxis->setRange(minElevation * 0.9, maxElevation * 1.1);
+
+                    _elevationGraph->setVisible(ElevationShowGraphChck);
+
+                    _ui->elevationGraphChck->setDisabled(false);
+                }
+                else
+                {
+                    _ui->elevationGraphChck->setDisabled(true);
                 }
 
                 if(heartRateContainer.data() != nullptr && heartRateContainer.data()->size() > 0)
                 {
-                    QCPGraph * heartRateGraph = _plot->addGraph(_plot->xAxis, _plot->yAxis2);
+                    _heartRateGraph = _plot->addGraph(_plot->xAxis, _plot->yAxis2);
 
-                    if(heartRateGraph != nullptr)
+                    if(_heartRateGraph != nullptr)
                     {
                         QColor color(Qt::red);
 
-                        heartRateGraph->setPen(QPen(color));
-                        heartRateGraph->setName(tr("Heart Rate"));
-                        heartRateGraph->setData(heartRateContainer);
+                        _heartRateGraph->setPen(QPen(color));
+                        _heartRateGraph->setName(tr("Heart Rate"));
+                        _heartRateGraph->setData(heartRateContainer);
                     }
 
+                    _plot->yAxis2->setLabel(tr("Heart Rate [bpm]"));
+                    _plot->yAxis2->setTickLabelFont(QFont(QFont().family(), 8));
                     _plot->yAxis2->setVisible(true);
                     _plot->yAxis2->setTicks(true);
                     _plot->yAxis2->setTickLabels(true);
                     _plot->yAxis2->setRange(minHeartRate * 0.9, maxHeartRate * 1.1);
+
+                    _heartRateGraph->setVisible(HeartRateShowGraphChck);
+
+                    _ui->heartRateGraphChck->setDisabled(false);
+                }
+                else
+                {
+                    _ui->heartRateGraphChck->setDisabled(true);
+                }
+
+                if(cadentionContainer.data() != nullptr && cadentionContainer.data()->size() > 0)
+                {
+                    QList<QCPAxis*> newAxis = _plot->axisRect()->addAxes(QCPAxis::atLeft);
+
+                    if(newAxis.size() > 0)
+                    {
+                        QCPAxis * y3 = newAxis.at(0);
+
+                        y3->setLabel(tr("Cadention"));
+                        y3->setTickLabelFont(QFont(QFont().family(), 8));
+                        y3->setVisible(true);
+                        y3->setTicks(true);
+                        y3->setTickLabels(true);
+                        y3->setRange(minCadention * 0.9, maxCadention * 1.1);
+
+                        _cadentionGraph = _plot->addGraph(_plot->xAxis, y3);
+
+                        if(_cadentionGraph != nullptr)
+                        {
+                            QColor color(Qt::darkGray);
+
+                            _cadentionGraph->setPen(QPen(color));
+                            _cadentionGraph->setName(tr("Cadention"));
+                            _cadentionGraph->setData(cadentionContainer);
+                        }
+
+                        _cadentionGraph->setVisible(CadentionShowGrapChck);
+
+                        _ui->cadentionGraphChck->setDisabled(false);
+                    }
+                }
+                else
+                {
+                    _ui->cadentionGraphChck->setDisabled(true);
+                }
+
+                if(temperatureContainer.data() != nullptr && temperatureContainer.data()->size() > 0)
+                {
+                    QList<QCPAxis*> newAxis = _plot->axisRect()->addAxes(QCPAxis::atRight);
+
+                    if(newAxis.size() > 0)
+                    {
+                        QCPAxis * y4 = newAxis.at(0);
+
+                        y4->setLabel(tr("Temperature [°C]"));
+                        y4->setTickLabelFont(QFont(QFont().family(), 8));
+                        y4->setVisible(true);
+                        y4->setTicks(true);
+                        y4->setTickLabels(true);
+                        y4->setRange(minTemperature * 0.9, maxTemperature * 1.1);
+
+                        _temperatureGraph = _plot->addGraph(_plot->xAxis, y4);
+
+                        if(_temperatureGraph != nullptr)
+                        {
+                            QColor color(Qt::blue);
+
+                            _temperatureGraph->setPen(QPen(color));
+                            _temperatureGraph->setName(tr("Temperature"));
+                            _temperatureGraph->setData(temperatureContainer);
+                        }
+
+                        _temperatureGraph->setVisible(TemperatureShowGraphChck);
+
+                        _ui->temperatureGraphChck->setDisabled(false);
+                    }
+                }
+                else
+                {
+                    _ui->temperatureGraphChck->setDisabled(true);
                 }
             }
         }
@@ -491,9 +612,9 @@ void GpxInfoFileWidget::centerMap()
     }
 }
 
-void GpxInfoFileWidget::elevationChecked(bool checked)
+void GpxInfoFileWidget::elevationShowMaxChecked(bool checked)
 {
-    ElevationCheckChck = checked;
+    ElevationShowMaxChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -513,7 +634,7 @@ void GpxInfoFileWidget::elevationChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestElevation(GpxManager::GpxItem & item)
 {
-    item.showBiggestElevetion = ElevationCheckChck;
+    item.showBiggestElevetion = ElevationShowMaxChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -521,9 +642,9 @@ void GpxInfoFileWidget::setShowingBigestElevation(GpxManager::GpxItem & item)
     }
 }
 
-void GpxInfoFileWidget::cadentionChecked(bool checked)
+void GpxInfoFileWidget::cadentionShowMaxChecked(bool checked)
 {
-    CadentionCheckChck = checked;
+    CadentionShowMaxChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -543,7 +664,7 @@ void GpxInfoFileWidget::cadentionChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestCadention(GpxManager::GpxItem & item)
 {
-    item.showBiggestCadention = CadentionCheckChck;
+    item.showBiggestCadention = CadentionShowMaxChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -551,9 +672,9 @@ void GpxInfoFileWidget::setShowingBigestCadention(GpxManager::GpxItem & item)
     }
 }
 
-void GpxInfoFileWidget::temperatureChecked(bool checked)
+void GpxInfoFileWidget::temperatureShowMaxChecked(bool checked)
 {
-    TemperatureCheckChck = checked;
+    TemperatureShowMaxChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -573,7 +694,7 @@ void GpxInfoFileWidget::temperatureChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestTemperature(GpxManager::GpxItem & item)
 {
-    item.showBiggestTemperature = TemperatureCheckChck;
+    item.showBiggestTemperature = TemperatureShowMaxChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -581,9 +702,9 @@ void GpxInfoFileWidget::setShowingBigestTemperature(GpxManager::GpxItem & item)
     }
 }
 
-void GpxInfoFileWidget::heartRateChecked(bool checked)
+void GpxInfoFileWidget::heartRateShowMaxChecked(bool checked)
 {
-    HeartRateCheckChck = checked;
+    HeartRateShowMaxChck = checked;
 
     if(_gpxManager != nullptr)
     {
@@ -603,7 +724,7 @@ void GpxInfoFileWidget::heartRateChecked(bool checked)
 
 void GpxInfoFileWidget::setShowingBigestHeartRate(GpxManager::GpxItem & item)
 {
-    item.showBiggestHeartRate = HeartRateCheckChck;
+    item.showBiggestHeartRate = HeartRateShowMaxChck;
 
     if(_gpxLayer != nullptr)
     {
@@ -620,5 +741,65 @@ void GpxInfoFileWidget::changeVisibleTab(int index)
     else if(_ui->tabWidget->currentWidget() == _ui->graphTab)
     {
         TabWidgetType = TabWidgetTypeEnum::Graph;
+    }
+}
+
+void GpxInfoFileWidget::cadentionShowGraphChecked(bool checked)
+{
+    CadentionShowGrapChck = checked;
+
+    if(_cadentionGraph != nullptr)
+    {
+        _cadentionGraph ->setVisible(checked);
+
+        if(_plot != nullptr)
+        {
+            _plot->replot();
+        }
+    }
+}
+
+void GpxInfoFileWidget::elevationShowGraphChecked(bool checked)
+{
+    ElevationShowGraphChck = checked;
+
+    if(_elevationGraph != nullptr)
+    {
+        _elevationGraph->setVisible(checked);
+
+        if(_plot != nullptr)
+        {
+            _plot->replot();
+        }
+    }
+}
+
+void GpxInfoFileWidget::heartRateShowGraphChecked(bool checked)
+{
+    HeartRateShowGraphChck = checked;
+
+    if(_heartRateGraph != nullptr)
+    {
+        _heartRateGraph->setVisible(checked);
+
+        if(_plot != nullptr)
+        {
+            _plot->replot();
+        }
+    }
+}
+
+void GpxInfoFileWidget::temperatureShowGraphChecked(bool checked)
+{
+    TemperatureShowGraphChck = checked;
+
+    if(_temperatureGraph != nullptr)
+    {
+        _temperatureGraph->setVisible(checked);
+
+        if(_plot != nullptr)
+        {
+            _plot->replot();
+        }
     }
 }

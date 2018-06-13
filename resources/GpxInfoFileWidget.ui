@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>404</height>
+    <width>275</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,28 +47,28 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="elevationChck">
+           <widget class="QCheckBox" name="elevationShowMaxChck">
             <property name="text">
              <string>Elevation</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QCheckBox" name="temperatureChck">
+           <widget class="QCheckBox" name="temperatureShowMaxChck">
             <property name="text">
              <string>Temperature</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="cadentionChck">
+           <widget class="QCheckBox" name="cadentionShowMaxChck">
             <property name="text">
              <string>Cadention</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QCheckBox" name="heartRateChck">
+           <widget class="QCheckBox" name="heartRateShowMaxChck">
             <property name="text">
              <string>Heart Rate</string>
             </property>
@@ -134,6 +134,48 @@
       <attribute name="title">
        <string>Graph</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
+       <item>
+        <widget class="QWidget" name="graphWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Show Graph</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="elevationGraphChck">
+            <property name="text">
+             <string>Elevation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="temperatureGraphChck">
+            <property name="text">
+             <string>Temperature</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="cadentionGraphChck">
+            <property name="text">
+             <string>Cadention</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="heartRateGraphChck">
+            <property name="text">
+             <string>Heart Rate</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

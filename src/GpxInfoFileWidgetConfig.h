@@ -14,10 +14,16 @@ class GpxInfoFileWidgetConfig : public StoreConfigInterface
             Table, Graph
         };
 
-        static bool CadentionCheckChck;
-        static bool ElevationCheckChck;
-        static bool HeartRateCheckChck;
-        static bool TemperatureCheckChck;
+        static bool CadentionShowMaxChck;
+        static bool ElevationShowMaxChck;
+        static bool HeartRateShowMaxChck;
+        static bool TemperatureShowMaxChck;
+
+        static bool CadentionShowGrapChck;
+        static bool ElevationShowGraphChck;
+        static bool HeartRateShowGraphChck;
+        static bool TemperatureShowGraphChck;
+
         static TabWidgetTypeEnum TabWidgetType;
 
     public:

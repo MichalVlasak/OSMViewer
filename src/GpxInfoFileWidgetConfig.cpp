@@ -1,10 +1,16 @@
 #include "GpxInfoFileWidgetConfig.h"
 #include "AppSettings.h"
 
-bool GpxInfoFileWidgetConfig::CadentionCheckChck = false;
-bool GpxInfoFileWidgetConfig::ElevationCheckChck = false;
-bool GpxInfoFileWidgetConfig::HeartRateCheckChck = false;
-bool GpxInfoFileWidgetConfig::TemperatureCheckChck = false;
+bool GpxInfoFileWidgetConfig::CadentionShowMaxChck = false;
+bool GpxInfoFileWidgetConfig::ElevationShowMaxChck = false;
+bool GpxInfoFileWidgetConfig::HeartRateShowMaxChck = false;
+bool GpxInfoFileWidgetConfig::TemperatureShowMaxChck = false;
+
+bool GpxInfoFileWidgetConfig::CadentionShowGrapChck = true;
+bool GpxInfoFileWidgetConfig::ElevationShowGraphChck = true;
+bool GpxInfoFileWidgetConfig::HeartRateShowGraphChck = true;
+bool GpxInfoFileWidgetConfig::TemperatureShowGraphChck = true;
+
 GpxInfoFileWidgetConfig::TabWidgetTypeEnum GpxInfoFileWidgetConfig::TabWidgetType = GpxInfoFileWidgetConfig::TabWidgetTypeEnum::Table;
 
 GpxInfoFileWidgetConfig::GpxInfoFileWidgetConfig()
@@ -17,25 +23,45 @@ void GpxInfoFileWidgetConfig::storeConfig(QDomDocument &document, QDomElement &r
     QDomElement gpxInfoFileCfgElement = document.createElement("GpxInfoFileWidgetConfig");
     rootElement.appendChild(gpxInfoFileCfgElement);
 
-    QDomElement cadentionElement = document.createElement("CadentionCheckChck");
-    gpxInfoFileCfgElement.appendChild(cadentionElement);
-    QDomText cadentionText = document.createTextNode(QString::number(CadentionCheckChck));
-    cadentionElement.appendChild(cadentionText);
+    QDomElement cadentionShowMaxElement = document.createElement("CadentionShowMaxChck");
+    gpxInfoFileCfgElement.appendChild(cadentionShowMaxElement);
+    QDomText cadentionShowMaxText = document.createTextNode(QString::number(CadentionShowMaxChck));
+    cadentionShowMaxElement.appendChild(cadentionShowMaxText);
 
-    QDomElement elevationElement = document.createElement("ElevationCheckChck");
-    gpxInfoFileCfgElement.appendChild(elevationElement);
-    QDomText elevationText = document.createTextNode(QString::number(ElevationCheckChck));
-    elevationElement.appendChild(elevationText);
+    QDomElement cadentionShowGraphElement = document.createElement("CadentionShowGrapChck");
+    gpxInfoFileCfgElement.appendChild(cadentionShowGraphElement);
+    QDomText cadentionShowGraphText = document.createTextNode(QString::number(CadentionShowGrapChck));
+    cadentionShowGraphElement.appendChild(cadentionShowGraphText);
 
-    QDomElement heartRateElement = document.createElement("HeartRateCheckChck");
-    gpxInfoFileCfgElement.appendChild(heartRateElement);
-    QDomText heartRateText = document.createTextNode(QString::number(HeartRateCheckChck));
-    heartRateElement.appendChild(heartRateText);
+    QDomElement elevationShowMaxElement = document.createElement("ElevationShowMaxChck");
+    gpxInfoFileCfgElement.appendChild(elevationShowMaxElement);
+    QDomText elevationShowMaxText = document.createTextNode(QString::number(ElevationShowMaxChck));
+    elevationShowMaxElement.appendChild(elevationShowMaxText);
 
-    QDomElement temperatureElement = document.createElement("TemperatureCheckChck");
-    gpxInfoFileCfgElement.appendChild(temperatureElement);
-    QDomText temperatureText = document.createTextNode(QString::number(TemperatureCheckChck));
-    temperatureElement.appendChild(temperatureText);
+    QDomElement elevationShowGraphElement = document.createElement("ElevationShowGraphChck");
+    gpxInfoFileCfgElement.appendChild(elevationShowGraphElement);
+    QDomText elevationShowGraphText = document.createTextNode(QString::number(ElevationShowGraphChck));
+    elevationShowGraphElement.appendChild(elevationShowGraphText);
+
+    QDomElement heartRateShowMaxElement = document.createElement("HeartRateShowMaxChck");
+    gpxInfoFileCfgElement.appendChild(heartRateShowMaxElement);
+    QDomText heartRateShowMaxText = document.createTextNode(QString::number(HeartRateShowMaxChck));
+    heartRateShowMaxElement.appendChild(heartRateShowMaxText);
+
+    QDomElement heartRateShowGraphElement = document.createElement("HeartRateShowGraphChck");
+    gpxInfoFileCfgElement.appendChild(heartRateShowGraphElement);
+    QDomText heartRateShowGraphText = document.createTextNode(QString::number(HeartRateShowGraphChck));
+    heartRateShowGraphElement.appendChild(heartRateShowGraphText);
+
+    QDomElement temperatureShowMaxElement = document.createElement("TemperatureShowMaxChck");
+    gpxInfoFileCfgElement.appendChild(temperatureShowMaxElement);
+    QDomText temperatureShowMaxText = document.createTextNode(QString::number(TemperatureShowMaxChck));
+    temperatureShowMaxElement.appendChild(temperatureShowMaxText);
+
+    QDomElement temperatureShowGraphElement = document.createElement("TemperatureShowGraphChck");
+    gpxInfoFileCfgElement.appendChild(temperatureShowGraphElement);
+    QDomText temperatureShowGraphText = document.createTextNode(QString::number(TemperatureShowGraphChck));
+    temperatureShowGraphElement.appendChild(temperatureShowGraphText);
 
     QDomElement tabWidgetTypeElement = document.createElement("TabWidgetType");
     gpxInfoFileCfgElement.appendChild(tabWidgetTypeElement);
@@ -78,21 +104,37 @@ bool GpxInfoFileWidgetConfig::restoreConfig(QDomDocument &document)
 
             if(gpxNode.isNull() == false)
             {
-                QString value = AppSettings::getValueString(gpxNode, "CadentionCheckChck");
+                QString value = AppSettings::getValueString(gpxNode, "CadentionShowMaxChck");
 
-                result &= getBoolFromString(value, CadentionCheckChck);
+                result &= getBoolFromString(value, CadentionShowMaxChck);
 
-                value = AppSettings::getValueString(gpxNode, "ElevationCheckChck");
+                value = AppSettings::getValueString(gpxNode, "CadentionShowGrapChck");
 
-                result &= getBoolFromString(value, ElevationCheckChck);
+                result &= getBoolFromString(value, CadentionShowGrapChck);
 
-                value = AppSettings::getValueString(gpxNode, "HeartRateCheckChck");
+                value = AppSettings::getValueString(gpxNode, "ElevationShowMaxChck");
 
-                result &= getBoolFromString(value, HeartRateCheckChck);
+                result &= getBoolFromString(value, ElevationShowMaxChck);
 
-                value = AppSettings::getValueString(gpxNode, "TemperatureCheckChck");
+                value = AppSettings::getValueString(gpxNode, "ElevationShowGraphChck");
 
-                result &= getBoolFromString(value, TemperatureCheckChck);
+                result &= getBoolFromString(value, ElevationShowGraphChck);
+
+                value = AppSettings::getValueString(gpxNode, "HeartRateShowMaxChck");
+
+                result &= getBoolFromString(value, HeartRateShowMaxChck);
+
+                value = AppSettings::getValueString(gpxNode, "HeartRateShowGraphChck");
+
+                result &= getBoolFromString(value, HeartRateShowGraphChck);
+
+                value = AppSettings::getValueString(gpxNode, "TemperatureShowMaxChck");
+
+                result &= getBoolFromString(value, TemperatureShowMaxChck);
+
+                value = AppSettings::getValueString(gpxNode, "TemperatureShowGraphChck");
+
+                result &= getBoolFromString(value, TemperatureShowGraphChck);
 
                 value = AppSettings::getValueString(gpxNode, "TabWidgetType");
 

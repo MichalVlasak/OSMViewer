@@ -33,10 +33,14 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         void selectionChanged(QItemSelection selected, QItemSelection deselected);
         void changeSelectedPoint(int gpxId, size_t idx);
         void centerMap();
-        void cadentionChecked(bool checked);
-        void elevationChecked(bool checked);
-        void heartRateChecked(bool checked);
-        void temperatureChecked(bool checked);
+        void cadentionShowMaxChecked(bool checked);
+        void elevationShowMaxChecked(bool checked);
+        void heartRateShowMaxChecked(bool checked);
+        void temperatureShowMaxChecked(bool checked);
+        void cadentionShowGraphChecked(bool checked);
+        void elevationShowGraphChecked(bool checked);
+        void heartRateShowGraphChecked(bool checked);
+        void temperatureShowGraphChecked(bool checked);
         void changeVisibleTab(int index);
 
     private:
@@ -55,6 +59,10 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
         class QCustomPlot * _plot = nullptr;
+        class QCPGraph * _cadentionGraph = nullptr;
+        class QCPGraph * _elevationGraph = nullptr;
+        class QCPGraph * _heartRateGraph = nullptr;
+        class QCPGraph * _temperatureGraph = nullptr;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H
