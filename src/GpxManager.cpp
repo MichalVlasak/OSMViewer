@@ -6,10 +6,12 @@
 #include <iostream>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QtConcurrent/QtConcurrent>
 
 int GpxManager::itemIdCounter = 0;
 
-GpxManager::GpxManager()
+GpxManager::GpxManager(QObject * parent)
+    : QObject(parent)
 {
     _lastPathToGpxFiles = ".";
 }
@@ -71,6 +73,8 @@ bool GpxManager::restoreConfig(QDomDocument &document)
 
             QDomNodeList gpxFilesNodeList = gpxNode.toElement().elementsByTagName("GpxFiles");
 
+            QStringList gpxFiles;
+
             for(int iGpxFiles = 0; iGpxFiles < gpxFilesNodeList.size(); iGpxFiles++)
             {
                 QDomNode gpxFileNode = gpxFilesNodeList.at(iGpxFiles);
@@ -89,13 +93,15 @@ bool GpxManager::restoreConfig(QDomDocument &document)
 
                             if(filePath.isEmpty() == false)
                             {
-                                loadGpxFile(filePath);
+                                gpxFiles.push_back(filePath);
                                 result = true;
                             }
                         }
                     }
                 }
             }
+
+            loadGpxFiles(gpxFiles);
         }
     }
 
@@ -112,12 +118,31 @@ const QString & GpxManager::getLastPathToGpxFiles() const
     return _lastPathToGpxFiles;
 }
 
-void GpxManager::loadGpxFiles(const QStringList &filePaths)
+void GpxManager::gpxWasLoaded()
 {
-    for(const QString & filePath : filePaths)
+    emit gpxStatusAllLoaded();
+}
+
+void GpxManager::loadGpxFilesInFuture()
+{
+    int counter = 0;
+
+    for(const QString & filePath : _filePathsToLoadInFuture)
     {
         loadGpxFile(filePath);
+
+        emit gpxStatusLoad(_filePathsToLoadInFuture.size(), ++counter);
     }
+}
+
+void GpxManager::loadGpxFiles(const QStringList &filePaths)
+{
+    _filePathsToLoadInFuture = filePaths;
+
+    GpxLoaderWatcher * watcher = new GpxLoaderWatcher(this);
+
+    QObject::connect(watcher, SIGNAL(finished()), SLOT(gpxWasLoaded()));
+    watcher->setFuture(QtConcurrent::run(this, &GpxManager::loadGpxFilesInFuture));
 }
 
 void GpxManager::loadGpxFile(const QString &filePath)
@@ -136,9 +161,13 @@ void GpxManager::loadGpxFile(const QString &filePath)
             item.filePath = filePath;
             item.fileId = getNextItemId();
 
+            emit gpxCurrentLoadingSignals(item.filePath);
+
             loadXml(filePath, item);
 
             _gpxVector.push_back(item);
+
+            emit gpxWasLoadedSignals(item.fileId);
         }
     }
 }

@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QTableView>
 #include <QPushButton>
+#include <QProgressBar>
 
 GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
@@ -21,6 +22,10 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
     QObject::connect(_ui->deleteFile, SIGNAL(clicked(bool)), SLOT(deleteFile()));
     QObject::connect(_ui->deleteAllFile, SIGNAL(clicked(bool)), SLOT(deleteAllFile()));
     QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelection()));
+    QObject::connect(_gpxManager, SIGNAL(gpxWasLoadedSignals(int)), SLOT(gpxWasLoadedSlot(int)));
+    QObject::connect(_gpxManager, SIGNAL(gpxStatusLoad(int,int)), SLOT(gpxStatusLoad(int,int)));
+    QObject::connect(_gpxManager, SIGNAL(gpxStatusAllLoaded()), SLOT(gpxStatusAllLoaded()));
+    QObject::connect(_gpxManager, SIGNAL(gpxCurrentLoadingSignals(QString)), SLOT(gpxCurrentLoadingSignals(QString)));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
 
     _ui->deleteFile->setDisabled(true);
@@ -164,4 +169,45 @@ void GpxFilesListWidget::selectionChanged(QItemSelection selected, QItemSelectio
 void GpxFilesListWidget::clearSelection()
 {
     _ui->tableView->selectionModel()->clear();
+}
+
+void GpxFilesListWidget::gpxWasLoadedSlot(int fileId)
+{
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & gpxItem : gpxVector)
+        {
+            if(fileId == gpxItem.fileId)
+            {
+                _tableModel->addNewItem(gpxItem);
+            }
+        }
+
+        _ui->deleteAllFile->setDisabled(gpxVector.empty());
+        _ui->deleteFile->setDisabled(true);
+        _ui->clearSelection->setDisabled(true);
+    }
+
+    _ui->tableView->resizeColumnsToContents();
+}
+
+void GpxFilesListWidget::gpxStatusLoad(int allCount, int currentCounter)
+{
+    _ui->progresBarWidget->show();
+    _ui->progressBar->setMaximum(allCount);
+    _ui->progressBar->setValue(currentCounter);
+}
+
+void GpxFilesListWidget::gpxStatusAllLoaded()
+{
+    _ui->progresBarWidget->hide();
+}
+
+void GpxFilesListWidget::gpxCurrentLoadingSignals(QString filePath)
+{
+    QFileInfo fi(filePath);
+
+    _ui->currentLoadFileName->setText(fi.fileName());
 }

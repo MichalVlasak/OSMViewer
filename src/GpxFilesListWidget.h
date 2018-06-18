@@ -30,6 +30,10 @@ class GpxFilesListWidget : public QWidget
         void deleteAllFile();
         void selectionChanged(QItemSelection selected, QItemSelection deselected);
         void clearSelection();
+        void gpxWasLoadedSlot(int fileId);
+        void gpxStatusLoad(int allCount, int currentCounter);
+        void gpxStatusAllLoaded();
+        void gpxCurrentLoadingSignals(QString filePath);
 
     private:
         void reloadGpx();

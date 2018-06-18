@@ -51,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _gpxManager = new GpxManager();
     gpxLayer->setGpxManager(_gpxManager);
-    _appSettings.restoreConfig(_gpxManager);
     _gpxFileListWidget = new GpxFilesListWidget(_gpxManager, gpxLayer, this);
     _gpxInfosWidget = new GpxInfosWidget(_gpxManager, gpxLayer, this);
 
@@ -232,6 +231,8 @@ void MainWindow::initialize()
     {
         _downloadProjectWidget->initialize();
     }
+
+    _appSettings.restoreConfig(_gpxManager);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)

@@ -5,10 +5,12 @@
 
 #include "StoreConfigInterface.h"
 
-class GpxManager : public StoreConfigInterface
+class GpxManager : public QObject, public StoreConfigInterface
 {
+        Q_OBJECT
+
     public:
-        GpxManager();
+        GpxManager(QObject * parent = nullptr);
         virtual ~GpxManager() = default;
 
         static const int ErrorId = -1;
@@ -68,14 +70,28 @@ class GpxManager : public StoreConfigInterface
         void removeGpxFile(int fileId);
         void removeAll();
 
+    signals:
+        void gpxCurrentLoadingSignals(QString filePath);
+        void gpxWasLoadedSignals(int fileId);
+        void gpxStatusLoad(int allCount, int currentCounter);
+        void gpxStatusAllLoaded();
+
     private:
         int getNextItemId();
         void loadXml(const QString & filePath, GpxItem & gpxItem);
+        void loadGpxFilesInFuture();
+
+    private:
+        typedef QFutureWatcher<void> GpxLoaderWatcher;
+
+    private slots:
+        void gpxWasLoaded();
 
     private:
         QString _lastPathToGpxFiles;
         GpxVector _gpxVector;
         static int itemIdCounter;
+        QStringList _filePathsToLoadInFuture;
 };
 
 #endif // GPXMANAGER_H
