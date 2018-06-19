@@ -31,6 +31,7 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
     _ui->deleteFile->setDisabled(true);
     _ui->deleteAllFile->setDisabled(true);
     _ui->clearSelection->setDisabled(true);
+    _ui->progresBarWidget->hide();
 
     reloadGpx();
 }
