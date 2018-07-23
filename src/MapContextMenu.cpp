@@ -54,10 +54,15 @@ void MapContextMenu::show(const QPointF &pos)
         menu->addAction(downloadArea);
         QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
 
-        QAction * selectAndDownloadArea = new QAction(tr("Select & Download Area"), this);
-        selectAndDownloadArea->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        menu->addAction(selectAndDownloadArea);
-        QObject::connect(selectAndDownloadArea, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadArea()));
+        QAction * selectAndDownloadAreaRec = new QAction(tr("Select & Download Area (Rectangle)"), this);
+        selectAndDownloadAreaRec->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        menu->addAction(selectAndDownloadAreaRec);
+        QObject::connect(selectAndDownloadAreaRec, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaRec()));
+
+        QAction * selectAndDownloadAreaPoly = new QAction(tr("Select & Download Area (Polygon) - IS NOT FULL IMPLEMENTED"), this);
+        selectAndDownloadAreaPoly->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        menu->addAction(selectAndDownloadAreaPoly);
+        QObject::connect(selectAndDownloadAreaPoly, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaPoly()));
     }
 
     menu->addSeparator();

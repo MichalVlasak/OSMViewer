@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>263</height>
+    <width>336</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,82 +15,74 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Map Level From:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="levelFrom">
+       <property name="maximum">
+        <number>19</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="setFromMinimum">
+       <property name="text">
+        <string>Min</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Map LevelTo:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="levelTo">
+       <property name="maximum">
+        <number>19</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="setToMaximum">
+       <property name="text">
+        <string>Max</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>From</string>
+        <string>Top Left</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Map Level:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="levelFrom">
-          <property name="maximum">
-           <number>19</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="setFromMinimum">
-          <property name="text">
-           <string>Min</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="3">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Top Left</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Lat:</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QDoubleSpinBox" name="latFrom">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="decimals">
-           <number>4</number>
-          </property>
-          <property name="minimum">
-           <double>-90.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>90.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
+        <item row="1" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Lon:</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
+        <item row="1" column="1">
          <widget class="QDoubleSpinBox" name="lonFrom">
           <property name="minimumSize">
            <size>
@@ -109,52 +101,8 @@
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>To</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="2" column="0" colspan="2">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Bottom Right</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="levelTo">
-          <property name="maximum">
-           <number>19</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Map Level:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="setToMaximum">
-          <property name="text">
-           <string>Max</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="3">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QDoubleSpinBox" name="latTo">
+         <widget class="QDoubleSpinBox" name="latFrom">
           <property name="minimumSize">
            <size>
             <width>100</width>
@@ -172,7 +120,30 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Bottom Right</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Lon:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Lat:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
          <widget class="QDoubleSpinBox" name="lonTo">
           <property name="minimumSize">
            <size>
@@ -191,17 +162,22 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Lat:</string>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="latTo">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Lon:</string>
+          <property name="decimals">
+           <number>4</number>
+          </property>
+          <property name="minimum">
+           <double>-90.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>90.000000000000000</double>
           </property>
          </widget>
         </item>

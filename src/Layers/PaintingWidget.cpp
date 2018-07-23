@@ -21,6 +21,7 @@ PaintingWidget::PaintingWidget(QWidget *parent)
 
     _startPointSelectArea = QPoint(0, 0);
     _endPointSelectArea = QPoint(0, 0);
+    _selectedArea.clear();
 
     _osmLayer = new OSMLayer(_mapSettings);
     _gpxLayer = new GpxLayer(_mapSettings, this);
@@ -55,18 +56,42 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
             }
         }
 
-        if(_selectedAreaState == Selecting)
+        if(_selectedAreaState == SelectingRec)
         {
             QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
 
             painter.drawRect(rect);
         }
+        else if(_selectedAreaState == SelectingPoly)
+        {
+            QPolygon pxPolygon;
+
+            for(const QPointF & point : _selectedArea)
+            {
+                pxPolygon.push_back(QPoint(int(_mapSettings.getPixelForLon(point.x())), int(_mapSettings.getPixelForLat(point.y()))));
+            }
+
+            painter.drawPolygon(pxPolygon);
+        }
     }
 }
 
-void PaintingWidget::startSelectArea()
+void PaintingWidget::startSelectAreaRec()
 {
-    _selectedAreaState = PrepareForSelecting;
+    _selectedAreaState = PrepareForSelectingRec;
+}
+
+void PaintingWidget::startSelectAreaPoly()
+{
+    _selectedAreaState = PrepareForSelectingPoly;
+}
+
+QPointF PaintingWidget::getWgsPointFromPixelsPoint(const QPoint &point)
+{
+    double lon = _mapSettings.getLonForPixelOld(point.x());
+    double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(point.y()));
+
+    return QPointF(lon, lat);
 }
 
 void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
@@ -81,13 +106,20 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
         }
     }
 
-    if(_selectedAreaState == Selecting)
+    QPoint point = QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y()));
+
+    if(_selectedAreaState == SelectingRec)
     {
-        QPoint point = QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y()));
-
         _endPointSelectArea = point;
+    }
+    else if(_selectedAreaState == SelectingPoly)
+    {
+        if(_selectedArea.size() > 1)
+        {
+            _selectedArea.erase(_selectedArea.end() - 1);
+        }
 
-        QTimer::singleShot(1, this, SLOT(repaint()));
+        _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
     }
     else
     {
@@ -107,11 +139,12 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
             QPointF delta = currentPoint - _mapSettings.movingStartPoint;
             _mapSettings.worldCenter = _mapSettings.oldCenter + delta;
 
-            QTimer::singleShot(1, _mapSettings.widget, SLOT(repaint()));
             //std::cout << "mouseMoveEvent delta  " << delta.x() << " " << delta.y() << std::endl;
             //std::cout << "mouseMoveEvent center  " << _mapSettings.worldCenter.x() << " " << _mapSettings.worldCenter.y() << std::endl;
         }
     }
+
+    QTimer::singleShot(1, this, SLOT(repaint()));
 }
 
 void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
@@ -120,33 +153,33 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
     {
         QPoint point = QPoint(int(mouseEvent->localPos().x()), int(mouseEvent->localPos().y()));
 
-        if(_selectedAreaState == PrepareForSelecting)
+        if(_selectedAreaState == PrepareForSelectingRec)
         {
-            _selectedAreaState = Selecting;
+            _selectedAreaState = SelectingRec;
 
             _startPointSelectArea = point;
             _endPointSelectArea = point;
-
-            QTimer::singleShot(1, this, SLOT(repaint()));
         }
-        else if(_selectedAreaState == Selecting)
+        else if(_selectedAreaState == PrepareForSelectingPoly)
+        {
+            _selectedAreaState = SelectingPoly;
+
+            _selectedArea.clear();
+            _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
+        }
+        else if(_selectedAreaState == SelectingRec)
         {
             _selectedAreaState = Unselecting;
             _endPointSelectArea = point;
 
-            double lon = _mapSettings.getLonForPixelOld(_startPointSelectArea.x());
-            double lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(_startPointSelectArea.y()));
-
-            QPointF topLeft(lon, lat);
-
-            lon = _mapSettings.getLonForPixelOld(_endPointSelectArea.x());
-            lat = _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(_endPointSelectArea.y()));
-
-            QPointF bottomleft(lon, lat);
+            QPointF topLeft(getWgsPointFromPixelsPoint(_startPointSelectArea));
+            QPointF bottomleft(getWgsPointFromPixelsPoint(_endPointSelectArea));
 
             emit downloadSelectedArea(topLeft, bottomleft);
-
-            QTimer::singleShot(1, this, SLOT(repaint()));
+        }
+        else if(_selectedAreaState == SelectingPoly)
+        {
+            _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
         }
         else
         {
@@ -159,23 +192,60 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
     }
     else if(mouseEvent->buttons() & Qt::MouseButton::RightButton)
     {
-        if(_contextMenu == nullptr)
+        if(_selectedAreaState == SelectingPoly)
         {
-            _contextMenu = new MapContextMenu(this);
-            QObject::connect(_contextMenu, SIGNAL(downloadArea()), SIGNAL(downloadArea()));
-            QObject::connect(_contextMenu, SIGNAL(selectAndDownloadArea()), SLOT(startSelectArea()));
-            QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
+            if(_selectedArea.size() > 1)
+            {
+                _selectedArea.erase(_selectedArea.end() - 2);
+            }
         }
-
-        if(_contextMenu != nullptr)
+        else
         {
-            _contextMenu->show(mouseEvent->localPos());
+            if(_contextMenu == nullptr)
+            {
+                _contextMenu = new MapContextMenu(this);
+
+                QObject::connect(_contextMenu, SIGNAL(downloadArea()), SIGNAL(downloadArea()));
+                QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaRec()), SLOT(startSelectAreaRec()));
+                QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaPoly()), SLOT(startSelectAreaPoly()));
+                QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
+            }
+
+            if(_contextMenu != nullptr)
+            {
+                _contextMenu->show(mouseEvent->localPos());
+            }
         }
     }
     else
     {
         QWidget::mousePressEvent(mouseEvent);
     }
+
+    QTimer::singleShot(1, this, SLOT(repaint()));
+}
+
+void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
+{
+    if(mouseEvent->buttons() & Qt::MouseButton::LeftButton && _selectedAreaState == SelectingPoly)
+    {
+        if(_selectedArea.size() > 1)
+        {
+            _selectedArea.erase(_selectedArea.end() - 1);
+        }
+
+        // TODO: spracovat _selectedArea
+
+        _selectedAreaState = Unselecting;
+        _selectedArea.clear();
+    }
+    else
+    {
+        QWidget::mouseDoubleClickEvent(mouseEvent);
+    }
+
+
+    QTimer::singleShot(1, this, SLOT(repaint()));
 }
 
 void PaintingWidget::wheelEvent(QWheelEvent *wheelEvent)

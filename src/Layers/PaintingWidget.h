@@ -42,6 +42,7 @@ class PaintingWidget : public QWidget
         void wheelEvent(QWheelEvent * wheelEvent);
         void mouseMoveEvent(QMouseEvent * mouseEvent);
         void mousePressEvent(QMouseEvent * mouseEvent);
+        void mouseDoubleClickEvent(QMouseEvent * mouseEvent);
         void keyPressEvent(QKeyEvent * keyEvent);
 
     private:
@@ -62,15 +63,19 @@ class PaintingWidget : public QWidget
         enum SelectedAreaState
         {
             Unselecting,
-            PrepareForSelecting,
-            Selecting
+            PrepareForSelectingRec,
+            PrepareForSelectingPoly,
+            SelectingRec,
+            SelectingPoly
         };
 
     private:
         void centerToWgs(double lon, double lat);
+        QPointF getWgsPointFromPixelsPoint(const QPoint & point);
 
     private slots:
-        void startSelectArea();
+        void startSelectAreaRec();
+        void startSelectAreaPoly();
         void centerMapToPixels(QPoint pos);
 
     private:
@@ -82,6 +87,7 @@ class PaintingWidget : public QWidget
         SelectedAreaState _selectedAreaState;
         class OSMLayer * _osmLayer = nullptr;
         class GpxLayer * _gpxLayer = nullptr;
+        QPolygonF _selectedArea;
 };
 
 #endif // PAINTINGWIDGET_H
