@@ -80,25 +80,40 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
     QDomText projectLevelToText = doc.createTextNode(QString::number(project.setup.levelTo));
     projectLevelToElement.appendChild(projectLevelToText);
 
-    QDomElement projectLatitudeFromElement = doc.createElement("LatitudeFrom");
-    element.appendChild(projectLatitudeFromElement);
-    QDomText projectLatitudeFromText = doc.createTextNode(QString::number(project.setup.latFrom, 'g', 13));
-    projectLatitudeFromElement.appendChild(projectLatitudeFromText);
+    if(project.setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+       project.setup.geometry.geometry.isNull() == false &&
+       project.setup.geometry.geometry.canConvert<QRectF>() == true)
+    {
+        QRectF geometryRect = project.setup.geometry.geometry.toRectF();
 
-    QDomElement projectLongitudeFromElement = doc.createElement("LongitudeFrom");
-    element.appendChild(projectLongitudeFromElement);
-    QDomText projectLongitudeFromText = doc.createTextNode(QString::number(project.setup.lonFrom, 'g', 13));
-    projectLongitudeFromElement.appendChild(projectLongitudeFromText);
+        double lonFrom = geometryRect.topLeft().x();
+        double latFrom = geometryRect.topLeft().y();
+        double lonTo = geometryRect.bottomRight().x();
+        double latTo = geometryRect.bottomRight().y();
 
-    QDomElement projectLatitudeToElement = doc.createElement("LatitudeTo");
-    element.appendChild(projectLatitudeToElement);
-    QDomText projectLatitudeToText = doc.createTextNode(QString::number(project.setup.latTo, 'g', 13));
-    projectLatitudeToElement.appendChild(projectLatitudeToText);
+        QDomElement rectangleElement = doc.createElement("Rectangle");
+        element.appendChild(rectangleElement);
 
-    QDomElement projectLongitudeToElement = doc.createElement("LongitudeTo");
-    element.appendChild(projectLongitudeToElement);
-    QDomText projectLongitudeToText = doc.createTextNode(QString::number(project.setup.lonTo, 'g', 13));
-    projectLongitudeToElement.appendChild(projectLongitudeToText);
+        QDomElement projectLatitudeFromElement = doc.createElement("LatitudeFrom");
+        rectangleElement.appendChild(projectLatitudeFromElement);
+        QDomText projectLatitudeFromText = doc.createTextNode(QString::number(latFrom, 'g', 13));
+        projectLatitudeFromElement.appendChild(projectLatitudeFromText);
+
+        QDomElement projectLongitudeFromElement = doc.createElement("LongitudeFrom");
+        rectangleElement.appendChild(projectLongitudeFromElement);
+        QDomText projectLongitudeFromText = doc.createTextNode(QString::number(lonFrom, 'g', 13));
+        projectLongitudeFromElement.appendChild(projectLongitudeFromText);
+
+        QDomElement projectLatitudeToElement = doc.createElement("LatitudeTo");
+        rectangleElement.appendChild(projectLatitudeToElement);
+        QDomText projectLatitudeToText = doc.createTextNode(QString::number(latTo, 'g', 13));
+        projectLatitudeToElement.appendChild(projectLatitudeToText);
+
+        QDomElement projectLongitudeToElement = doc.createElement("LongitudeTo");
+        rectangleElement.appendChild(projectLongitudeToElement);
+        QDomText projectLongitudeToText = doc.createTextNode(QString::number(lonTo, 'g', 13));
+        projectLongitudeToElement.appendChild(projectLongitudeToText);
+    }
 }
 
 void OSMDownloadProjectModel::storeConfig(QDomDocument &document, QDomElement &rootElement)
@@ -141,44 +156,62 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                         QString projectName = AppSettings::getValueString(projectNode, "Name");
                         QString levelFrom = AppSettings::getValueString(projectNode, "LevelFrom");
                         QString levelTo = AppSettings::getValueString(projectNode, "LevelTo");
-                        QString latFrom = AppSettings::getValueString(projectNode, "LatitudeFrom");
-                        QString lonFrom = AppSettings::getValueString(projectNode, "LongitudeFrom");
-                        QString latTo = AppSettings::getValueString(projectNode, "LatitudeTo");
-                        QString lonTo = AppSettings::getValueString(projectNode, "LongitudeTo");
 
-                        if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false &&
-                           latFrom.isEmpty() == false && latTo.isEmpty() == false &&
-                           lonFrom.isEmpty() == false && lonTo.isEmpty() == false)
+                        if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false)
                         {
-                            OSMDownloadProjectModel::Project project;
-                            bool isOK;
+                            QDomNodeList rectangleNodeList = projectNode.toElement().elementsByTagName("Rectangle");
 
-                            project.name = projectName;
-                            project.setup.levelFrom = levelFrom.toDouble(&isOK);
+                            for(int iRectangle = 0; iRectangle < rectangleNodeList.size(); iRectangle++)
+                            {
+                                QDomNode rectangleNode = rectangleNodeList.at(iRectangle);
 
-                            if(isOK == false) break;
+                                if(rectangleNode.isNull() == false)
+                                {
+                                    QString latFromStr = AppSettings::getValueString(rectangleNode, "LatitudeFrom");
+                                    QString lonFromStr = AppSettings::getValueString(rectangleNode, "LongitudeFrom");
+                                    QString latToStr = AppSettings::getValueString(rectangleNode, "LatitudeTo");
+                                    QString lonToStr = AppSettings::getValueString(rectangleNode, "LongitudeTo");
 
-                            project.setup.levelTo = levelTo.toDouble(&isOK);
+                                    if(latFromStr.isEmpty() == false && latToStr.isEmpty() == false &&
+                                       lonFromStr.isEmpty() == false && lonToStr.isEmpty() == false)
+                                    {
+                                        OSMDownloadProjectModel::Project project;
+                                        bool isOK;
 
-                            if(isOK == false) break;
+                                        project.name = projectName;
+                                        project.setup.levelFrom = levelFrom.toDouble(&isOK);
 
-                            project.setup.latFrom = latFrom.toDouble(&isOK);
+                                        if(isOK == false) break;
 
-                            if(isOK == false) break;
+                                        project.setup.levelTo = levelTo.toDouble(&isOK);
 
-                            project.setup.latTo = latTo.toDouble(&isOK);
+                                        if(isOK == false) break;
 
-                            if(isOK == false) break;
+                                        double latFrom = latFromStr.toDouble(&isOK);
 
-                            project.setup.lonFrom = lonFrom.toDouble(&isOK);
+                                        if(isOK == false) break;
 
-                            if(isOK == false) break;
+                                        double latTo = latToStr.toDouble(&isOK);
 
-                            project.setup.lonTo = lonTo.toDouble(&isOK);
+                                        if(isOK == false) break;
 
-                            if(isOK == false) break;
+                                        double lonFrom = lonFromStr.toDouble(&isOK);
 
-                            result &= addProject(project);
+                                        if(isOK == false) break;
+
+                                        double lonTo = lonToStr.toDouble(&isOK);
+
+                                        if(isOK == false) break;
+
+                                        project.setup.geometry.geometryType = SelectGeometry::Type::Rectangle;
+                                        project.setup.geometry.geometry = QRectF(QPointF(lonFrom, latFrom), QPointF(lonTo, latTo));
+
+                                        result &= addProject(project);
+
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

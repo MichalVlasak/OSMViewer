@@ -16,6 +16,7 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QMessageBox>
 
 #include <iostream>
 
@@ -145,8 +146,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(zoom, SIGNAL(zoomChanged()), SLOT(zoomChanged()));
     QObject::connect(_ui->paintWidget, SIGNAL(mouseCursorWgsChanged(double,double)), SLOT(mouseCursorWgsChanged(double,double)));
-    QObject::connect(_ui->paintWidget, SIGNAL(downloadArea()), SLOT(downloadArea()));
-    QObject::connect(_ui->paintWidget, SIGNAL(downloadSelectedArea(QPointF,QPointF)), SLOT(downloadSelectedArea(QPointF,QPointF)));
+    QObject::connect(_ui->paintWidget, SIGNAL(downloadSelectedArea(SelectGeometry)), SLOT(downloadSelectedArea(SelectGeometry)));
     QObject::connect(_ui->action_Quit, SIGNAL(triggered(bool)), SLOT(close()));
     QObject::connect(_ui->action_AboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     QObject::connect(_ui->action_OSM_Directory, SIGNAL(triggered(bool)), SLOT(setOSMDirectoryPath()));
@@ -291,68 +291,43 @@ void MainWindow::setOSMTileDownloaderEnable(bool enable)
 
 void MainWindow::showDownloadAreaDialog(OSMDownloadAreaDialog::Setup &setup, const QString & projectName)
 {
-    OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(setup, projectName, this);
-
-    if(downloadAreaDialog->exec() == QDialog::Accepted)
+    try
     {
-        setup = downloadAreaDialog->getCurrenSetup();
+        OSMDownloadAreaDialog * downloadAreaDialog = new OSMDownloadAreaDialog(setup, projectName, this);
 
-        _downloaderPrepare->setDownloadParameters(setup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
-        _downloaderInfoDock->show();
-
-        _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
-    }
-    else
-    {
-        if(_downloadAreaHighlight != nullptr)
+        if(downloadAreaDialog->exec() == QDialog::Accepted)
         {
-            _downloadAreaHighlight->resetDownloadParams();
+            setup = downloadAreaDialog->getCurrenSetup();
+
+            _downloaderPrepare->setDownloadParameters(setup, _ui->paintWidget->getOSMLayer()->getOSMDirectorypath());
+            _downloaderInfoDock->show();
+
+            _deleteSettings = downloadAreaDialog->getCurrenSetup().deleteSettings;
+        }
+        else
+        {
+            if(_downloadAreaHighlight != nullptr)
+            {
+                _downloadAreaHighlight->resetDownloadParams();
+            }
         }
     }
+    catch(std::exception & ex)
+    {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open download setup dialog: \n") + QString::fromStdString(std::string(ex.what())));
+    }
 }
 
-void MainWindow::downloadArea()
+void MainWindow::downloadSelectedArea(SelectGeometry geometry)
 {
     OSMDownloadAreaDialog::Setup downloadSetup;
 
     downloadSetup.levelFrom = _ui->paintWidget->getMapSettings().zoom.getCurrentZoomLevel();
     downloadSetup.levelTo = downloadSetup.levelFrom + 1;
 
-    downloadSetup.latFrom = _ui->paintWidget->getTopLeft().y();
-    downloadSetup.lonFrom = _ui->paintWidget->getTopLeft().x();
-
-    downloadSetup.latTo = _ui->paintWidget->getBottomRight().y();
-    downloadSetup.lonTo = _ui->paintWidget->getBottomRight().x();
+    downloadSetup.geometry = geometry;
 
     downloadSetup.deleteSettings = _deleteSettings;
-
-    showDownloadAreaDialog(downloadSetup);
-}
-
-void MainWindow::downloadSelectedArea(QPointF topLeft, QPointF bottomRight)
-{
-    OSMDownloadAreaDialog::Setup downloadSetup;
-
-    downloadSetup.levelFrom = _ui->paintWidget->getMapSettings().zoom.getCurrentZoomLevel();
-    downloadSetup.levelTo = downloadSetup.levelFrom + 1;
-
-    downloadSetup.latFrom = topLeft.y();
-    downloadSetup.lonFrom = topLeft.x();
-
-    downloadSetup.latTo = bottomRight.y();
-    downloadSetup.lonTo = bottomRight.x();
-
-    downloadSetup.deleteSettings = _deleteSettings;
-
-    if(downloadSetup.latFrom < downloadSetup.latTo)
-    {
-        std::swap(downloadSetup.latFrom, downloadSetup.latTo);
-    }
-
-    if(downloadSetup.lonFrom > downloadSetup.lonTo)
-    {
-        std::swap(downloadSetup.lonFrom, downloadSetup.lonTo);
-    }
 
     showDownloadAreaDialog(downloadSetup);
 }

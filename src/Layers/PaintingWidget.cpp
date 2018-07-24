@@ -22,6 +22,8 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     _startPointSelectArea = QPoint(0, 0);
     _endPointSelectArea = QPoint(0, 0);
     _selectedArea.clear();
+    _selectGeometry.geometry.clear();
+    _selectGeometry.geometryType = SelectGeometry::Type::Undefined;
 
     _osmLayer = new OSMLayer(_mapSettings);
     _gpxLayer = new GpxLayer(_mapSettings, this);
@@ -172,10 +174,23 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
             _selectedAreaState = Unselecting;
             _endPointSelectArea = point;
 
-            QPointF topLeft(getWgsPointFromPixelsPoint(_startPointSelectArea));
-            QPointF bottomleft(getWgsPointFromPixelsPoint(_endPointSelectArea));
+            QPointF startPoint(getWgsPointFromPixelsPoint(_startPointSelectArea));
+            QPointF endPoint(getWgsPointFromPixelsPoint(_endPointSelectArea));
 
-            emit downloadSelectedArea(topLeft, bottomleft);
+            if(startPoint.y() < endPoint.y())
+            {
+                std::swap(startPoint.ry(), endPoint.ry());
+            }
+
+            if(startPoint.x() > endPoint.x())
+            {
+                std::swap(startPoint.rx(), endPoint.rx());
+            }
+
+            _selectGeometry.geometryType = SelectGeometry::Type::Rectangle;
+            _selectGeometry.geometry = QRectF(startPoint, endPoint);
+
+            emit downloadSelectedArea(_selectGeometry);
         }
         else if(_selectedAreaState == SelectingPoly)
         {
@@ -205,7 +220,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
             {
                 _contextMenu = new MapContextMenu(this);
 
-                QObject::connect(_contextMenu, SIGNAL(downloadArea()), SIGNAL(downloadArea()));
+                QObject::connect(_contextMenu, SIGNAL(downloadArea()), SLOT(downloadViewedAreaSlot()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaRec()), SLOT(startSelectAreaRec()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaPoly()), SLOT(startSelectAreaPoly()));
                 QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
@@ -223,6 +238,17 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
     }
 
     QTimer::singleShot(1, this, SLOT(repaint()));
+}
+
+void PaintingWidget::downloadViewedAreaSlot()
+{
+    SelectGeometry geometry;
+
+    geometry.geometryType = SelectGeometry::Type::Rectangle;
+    geometry.geometry = QRectF(getTopLeft(), getBottomRight());
+
+    emit downloadSelectedArea(geometry);
+
 }
 
 void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)

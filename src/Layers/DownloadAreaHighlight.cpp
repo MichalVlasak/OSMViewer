@@ -15,14 +15,26 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
 {
     if(_isDownloadParamsSetupEnable == true && _isVisible == true)
     {
-        QPoint startPointSelectArea(_mapSettings.getPixelForLon(_setup.lonFrom), _mapSettings.getPixelForLat(_setup.latFrom));
-        QPoint endPointSelectArea(_mapSettings.getPixelForLon(_setup.lonTo), _mapSettings.getPixelForLat(_setup.latTo));
+        if(_setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+           _setup.geometry.geometry.isNull() == false &&
+           _setup.geometry.geometry.canConvert<QRectF>() == true)
+        {
+            QRectF geometryRect = _setup.geometry.geometry.toRectF();
 
-        QRect rect = QRect(startPointSelectArea, endPointSelectArea);
+            double lonFrom = geometryRect.topLeft().x();
+            double latFrom = geometryRect.topLeft().y();
+            double lonTo = geometryRect.bottomRight().x();
+            double latTo = geometryRect.bottomRight().y();
 
-        painter.setPen(QPen(QColor(255, 0, 0, 50), 1));
-        painter.setBrush(QColor(255, 0, 0, 50));
-        painter.drawRect(rect);
+            QPoint startPointSelectArea(_mapSettings.getPixelForLon(lonFrom), _mapSettings.getPixelForLat(latFrom));
+            QPoint endPointSelectArea(_mapSettings.getPixelForLon(lonTo), _mapSettings.getPixelForLat(latTo));
+
+            QRect rect = QRect(startPointSelectArea, endPointSelectArea);
+
+            painter.setPen(QPen(QColor(255, 0, 0, 50), 1));
+            painter.setBrush(QColor(255, 0, 0, 50));
+            painter.drawRect(rect);
+        }
     }
 }
 
@@ -41,10 +53,8 @@ void DownloadAreaHighlight::resetDownloadParams()
 
 void DownloadAreaHighlight::clearDownloadParams()
 {
-    _setup.latFrom = 0.;
-    _setup.latTo = 0.;
-    _setup.lonFrom = 0.;
-    _setup.lonTo = 0.;
+    _setup.geometry.geometryType = SelectGeometry::Type::Undefined;
+    _setup.geometry.geometry.clear();
     _setup.levelFrom = 0.;
     _setup.levelTo = 0.;
     _isDownloadParamsSetupEnable = false;

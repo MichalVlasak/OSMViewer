@@ -6,6 +6,7 @@
 #include "BaseLayer.h"
 #include "MapSettings.h"
 #include "src/CenterPointStruct.h"
+#include "src/SelectGeometry.h"
 
 class PaintingWidget : public QWidget
 {
@@ -33,7 +34,7 @@ class PaintingWidget : public QWidget
     signals:
         void mouseCursorWgsChanged(double lat, double lon);
         void downloadArea();
-        void downloadSelectedArea(QPointF topLeft, QPointF bottomRight);
+        void downloadSelectedArea(SelectGeometry geometry);
 
     public slots:
 
@@ -77,6 +78,7 @@ class PaintingWidget : public QWidget
         void startSelectAreaRec();
         void startSelectAreaPoly();
         void centerMapToPixels(QPoint pos);
+        void downloadViewedAreaSlot();
 
     private:
         Layers _layers;
@@ -88,6 +90,7 @@ class PaintingWidget : public QWidget
         class OSMLayer * _osmLayer = nullptr;
         class GpxLayer * _gpxLayer = nullptr;
         QPolygonF _selectedArea;
+        SelectGeometry _selectGeometry;
 };
 
 #endif // PAINTINGWIDGET_H

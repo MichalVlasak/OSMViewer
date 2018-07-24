@@ -61,7 +61,8 @@ SOURCES += src/main.cpp\
     src/GpxFilesListWidget.cpp \
     src/GpxInfosWidget.cpp \
     src/GpxInfoFileWidgetConfig.cpp \
-    external/qcustomplot/qcustomplot.cpp
+    external/qcustomplot/qcustomplot.cpp \
+    src/SelectGeometry.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -102,7 +103,8 @@ HEADERS  += src/MainWindow.h \
     src/GpxFilesListWidget.h \
     src/GpxInfosWidget.h \
     src/GpxInfoFileWidgetConfig.h \
-    external/qcustomplot/qcustomplot.h
+    external/qcustomplot/qcustomplot.h \
+    src/SelectGeometry.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

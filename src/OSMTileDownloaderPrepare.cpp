@@ -47,68 +47,80 @@ void OSMTileDownloaderPrepare::run()
 
         QString levelStr = QString::number(level);
 
-        int tileColStart = MapSettings::long2tilex(_setup.lonFrom, level);
-        int tileColStop = MapSettings::long2tilex(_setup.lonTo, level);
-
-        int tileRowStart = MapSettings::lat2tiley(_setup.latFrom, level);
-        int tileRowStop = MapSettings::lat2tiley(_setup.latTo, level);
-
-        OSMTileDownloaderInfoWidget::LevelInfo levelInfo;
-
-        levelInfo.colFrom = tileColStart;
-        levelInfo.colTo = tileColStop;
-        levelInfo.rowFrom = tileRowStart;
-        levelInfo.rowTo = tileRowStop;
-
-        _infoWidget->setLevelInfo(level, levelInfo);
-
-        for(int col = tileColStart; col <= tileColStop; col++)
+        if(_setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+           _setup.geometry.geometry.isNull() == false &&
+           _setup.geometry.geometry.canConvert<QRectF>() == true)
         {
-            if(_runPrepare == false)
-            {
-                break;
-            }
+            QRectF geometryRect = _setup.geometry.geometry.toRectF();
 
-            QString columnStr = QString::number(col);
+            double lonFrom = geometryRect.topLeft().x();
+            double latFrom = geometryRect.topLeft().y();
+            double lonTo = geometryRect.bottomRight().x();
+            double latTo = geometryRect.bottomRight().y();
 
-            for(int row = tileRowStart; row <= tileRowStop; row++)
+            int tileColStart = MapSettings::long2tilex(lonFrom, level);
+            int tileColStop = MapSettings::long2tilex(lonTo, level);
+
+            int tileRowStart = MapSettings::lat2tiley(latFrom, level);
+            int tileRowStop = MapSettings::lat2tiley(latTo, level);
+
+            OSMTileDownloaderInfoWidget::LevelInfo levelInfo;
+
+            levelInfo.colFrom = tileColStart;
+            levelInfo.colTo = tileColStop;
+            levelInfo.rowFrom = tileRowStart;
+            levelInfo.rowTo = tileRowStop;
+
+            _infoWidget->setLevelInfo(level, levelInfo);
+
+            for(int col = tileColStart; col <= tileColStop; col++)
             {
                 if(_runPrepare == false)
                 {
                     break;
                 }
 
-                QString filePath = _tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
-                QFile file(filePath);
+                QString columnStr = QString::number(col);
 
-                DeleteOldMapsUtils::tryDeleteFile(filePath, _setup.deleteSettings, true);
-
-                if(file.exists() == false)
+                for(int row = tileRowStart; row <= tileRowStop; row++)
                 {
-                    if(_downloader != nullptr)
+                    if(_runPrepare == false)
                     {
-                        //std::cout << "prepare - " << filePath.toStdString() << " - Dont exist!" << std::endl;
-
-                        OSMTileDownloader::DownloadItem item;
-
-                        item.column = col;
-                        item.level = level;
-                        item.row = row;
-                        item.fullPath = filePath;
-                        item.basePath = _tilesPath;
-
-                        while(_downloader->isFreeQueue() == false)
-                        {
-                            QThread::msleep(500);
-                        }
-
-                        _downloader->addUrlToDownload(item, false);
+                        break;
                     }
-                }
 
-                if(_runPrepare == true)
-                {
-                    emit columnIsPrepared();
+                    QString filePath = _tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
+                    QFile file(filePath);
+
+                    DeleteOldMapsUtils::tryDeleteFile(filePath, _setup.deleteSettings, true);
+
+                    if(file.exists() == false)
+                    {
+                        if(_downloader != nullptr)
+                        {
+                            //std::cout << "prepare - " << filePath.toStdString() << " - Dont exist!" << std::endl;
+
+                            OSMTileDownloader::DownloadItem item;
+
+                            item.column = col;
+                            item.level = level;
+                            item.row = row;
+                            item.fullPath = filePath;
+                            item.basePath = _tilesPath;
+
+                            while(_downloader->isFreeQueue() == false)
+                            {
+                                QThread::msleep(500);
+                            }
+
+                            _downloader->addUrlToDownload(item, false);
+                        }
+                    }
+
+                    if(_runPrepare == true)
+                    {
+                        emit columnIsPrepared();
+                    }
                 }
             }
         }
