@@ -15,7 +15,7 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
 {
     if(_isDownloadParamsSetupEnable == true && _isVisible == true)
     {
-        if(_setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+        if(_setup.geometry.geometryType == AreaGeometry::Type::Rectangle &&
            _setup.geometry.geometry.isNull() == false &&
            _setup.geometry.geometry.canConvert<QRectF>() == true)
         {
@@ -53,7 +53,7 @@ void DownloadAreaHighlight::resetDownloadParams()
 
 void DownloadAreaHighlight::clearDownloadParams()
 {
-    _setup.geometry.geometryType = SelectGeometry::Type::Undefined;
+    _setup.geometry.geometryType = AreaGeometry::Type::Undefined;
     _setup.geometry.geometry.clear();
     _setup.levelFrom = 0.;
     _setup.levelTo = 0.;

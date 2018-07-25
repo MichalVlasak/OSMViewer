@@ -16,7 +16,7 @@
 #include "OSMDownloadProjectWidget.h"
 #include "OSMDownloadProjectModel.h"
 #include "StoreConfigInterface.h"
-#include "SelectGeometry.h"
+#include "hmi/AreaGeometry.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,7 +61,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         void mouseCursorWgsChanged(double lat, double lon);
         void setOSMDirectoryPath();
         void setOSMTileDownloaderEnable(bool enable);
-        void downloadSelectedArea(SelectGeometry geometry);
+        void downloadSelectedArea(AreaGeometry geometry);
         void showAbout();
 
     private:

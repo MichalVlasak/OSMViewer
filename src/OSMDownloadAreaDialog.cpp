@@ -4,17 +4,18 @@
 #include "OSMDownloadProjectModel.h"
 #include "ProjectNameDialog.h"
 #include "Layers/ZoomInfo.h"
+#include "hmi/RectangleAreaWidget.h"
 
 #include <QSpinBox>
 #include <QPushButton>
 #include <QMessageBox>
 #include <exception>
 
-OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, const QString & projectName, QWidget *parent) :
-    QDialog(parent),
-    _ui(new Ui::OSMDownloadAreaDialog),
-    _setup(setup),
-    _projectName(projectName)
+OSMDownloadAreaDialog::OSMDownloadAreaDialog(const Setup & setup, const QString & projectName, QWidget *parent)
+    : QDialog(parent),
+      _ui(new Ui::OSMDownloadAreaDialog),
+      _setup(setup),
+      _projectName(projectName)
 {
     _ui->setupUi(this);
 
@@ -30,59 +31,17 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(Setup & setup, const QString & proj
     _ui->levelTo->setValue(_setup.levelTo);
     _ui->levelTo->setMinimum(_setup.levelFrom);
 
-    if(_setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
-       _setup.geometry.geometry.isNull() == false &&
-       _setup.geometry.geometry.canConvert<QRectF>() == true)
-    {
-        QRectF rect = _setup.geometry.geometry.toRectF();
+    _geometryWidget = AreaGeometryWigdetInterface::createGeometryWidget(setup.geometry, this);
+    QHBoxLayout * hLayout = new QHBoxLayout(this);
 
-        _lonFrom = rect.topLeft().x();
-        _latFrom = rect.topLeft().y();
-        _lonTo = rect.bottomRight().x();
-        _latTo = rect.bottomRight().y();
+    hLayout->addWidget(_geometryWidget);
 
-        if(_latFrom < -90.) _latFrom = -90.;
-        if(_latFrom > 90.) _latFrom = 90.;
-
-        if(_lonFrom < -180.) _lonFrom = -180.;
-        if(_lonFrom > 180.) _lonFrom = 180.;
-
-        if(_latTo < -90.) _latTo = -90.;
-        if(_latTo > 90.) _latTo = 90.;
-
-        if(_lonTo < -180.) _lonTo = -180.;
-        if(_lonTo > 180.) _lonTo = 180.;
-
-        if(_latFrom < _latTo) _latFrom = _latTo;
-        if(_lonFrom > _lonTo) _lonFrom = _lonTo;
-
-        _ui->latFrom->setValue(_latFrom);
-        _ui->latFrom->setMinimum(_latTo);
-
-        _ui->latTo->setValue(_latTo);
-        _ui->latTo->setMaximum(_latFrom);
-
-        _ui->lonFrom->setValue(_lonFrom);
-        _ui->lonFrom->setMaximum(_lonTo);
-
-        _ui->lonTo->setValue(_lonTo);
-        _ui->lonTo->setMinimum(_lonFrom);
-    }
-    else
-    {
-        throw std::logic_error("Cannot detect right geometry type!");
-    }
+    _ui->geometryWidget->setLayout(hLayout);
 
     _ui->deleteOldMapsWidget->setDeleteSettings(_setup.deleteSettings);
 
     QObject::connect(_ui->levelFrom, SIGNAL(valueChanged(int)), SLOT(changeLevelFrom(int)));
     QObject::connect(_ui->levelTo, SIGNAL(valueChanged(int)), SLOT(changeLevelTo(int)));
-
-    QObject::connect(_ui->latFrom, SIGNAL(valueChanged(double)), SLOT(changeLatFrom(double)));
-    QObject::connect(_ui->latTo, SIGNAL(valueChanged(double)), SLOT(changeLatTo(double)));
-
-    QObject::connect(_ui->lonFrom, SIGNAL(valueChanged(double)), SLOT(changeLonFrom(double)));
-    QObject::connect(_ui->lonTo, SIGNAL(valueChanged(double)), SLOT(changeLonTo(double)));
 
     QObject::connect(_ui->setFromMinimum, SIGNAL(clicked(bool)), SLOT(setFromMinimum()));
     QObject::connect(_ui->setToMaximum, SIGNAL(clicked(bool)), SLOT(setToMaximum()));
@@ -107,30 +66,6 @@ void OSMDownloadAreaDialog::changeLevelTo(int level)
     _ui->levelFrom->setMaximum(_setup.levelTo);
 }
 
-void OSMDownloadAreaDialog::changeLatFrom(double lat)
-{
-    _latFrom = lat;
-    _ui->latTo->setMaximum(_latFrom);
-}
-
-void OSMDownloadAreaDialog::changeLatTo(double lat)
-{
-    _latTo = lat;
-    _ui->latFrom->setMinimum(_latTo);
-}
-
-void OSMDownloadAreaDialog::changeLonFrom(double lon)
-{
-    _lonFrom = lon;
-    _ui->lonTo->setMinimum(_lonFrom);
-}
-
-void OSMDownloadAreaDialog::changeLonTo(double lon)
-{
-    _lonTo = lon;
-    _ui->lonFrom->setMaximum(_lonTo);
-}
-
 OSMDownloadAreaDialog::Setup OSMDownloadAreaDialog::getCurrenSetup()
 {
     Setup setup;
@@ -140,9 +75,9 @@ OSMDownloadAreaDialog::Setup OSMDownloadAreaDialog::getCurrenSetup()
 
     setup.geometry.geometryType = _setup.geometry.geometryType;
 
-    if(setup.geometry.geometryType == SelectGeometry::Type::Rectangle)
+    if(_geometryWidget != nullptr)
     {
-        setup.geometry.geometry = QRectF(QPointF(_lonFrom, _latFrom), QPointF(_lonTo, _latTo));
+        setup.geometry.geometry = _geometryWidget->getGeometry();
     }
 
     setup.deleteSettings = _ui->deleteOldMapsWidget->getDeleteSettings();

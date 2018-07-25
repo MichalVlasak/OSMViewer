@@ -80,7 +80,7 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
     QDomText projectLevelToText = doc.createTextNode(QString::number(project.setup.levelTo));
     projectLevelToElement.appendChild(projectLevelToText);
 
-    if(project.setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+    if(project.setup.geometry.geometryType == AreaGeometry::Type::Rectangle &&
        project.setup.geometry.geometry.isNull() == false &&
        project.setup.geometry.geometry.canConvert<QRectF>() == true)
     {
@@ -203,7 +203,7 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
 
                                         if(isOK == false) break;
 
-                                        project.setup.geometry.geometryType = SelectGeometry::Type::Rectangle;
+                                        project.setup.geometry.geometryType = AreaGeometry::Type::Rectangle;
                                         project.setup.geometry.geometry = QRectF(QPointF(lonFrom, latFrom), QPointF(lonTo, latTo));
 
                                         result &= addProject(project);

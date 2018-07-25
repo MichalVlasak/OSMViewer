@@ -23,7 +23,7 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     _endPointSelectArea = QPoint(0, 0);
     _selectedArea.clear();
     _selectGeometry.geometry.clear();
-    _selectGeometry.geometryType = SelectGeometry::Type::Undefined;
+    _selectGeometry.geometryType = AreaGeometry::Type::Undefined;
 
     _osmLayer = new OSMLayer(_mapSettings);
     _gpxLayer = new GpxLayer(_mapSettings, this);
@@ -187,7 +187,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
                 std::swap(startPoint.rx(), endPoint.rx());
             }
 
-            _selectGeometry.geometryType = SelectGeometry::Type::Rectangle;
+            _selectGeometry.geometryType = AreaGeometry::Type::Rectangle;
             _selectGeometry.geometry = QRectF(startPoint, endPoint);
 
             emit downloadSelectedArea(_selectGeometry);
@@ -242,9 +242,9 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
 
 void PaintingWidget::downloadViewedAreaSlot()
 {
-    SelectGeometry geometry;
+    AreaGeometry geometry;
 
-    geometry.geometryType = SelectGeometry::Type::Rectangle;
+    geometry.geometryType = AreaGeometry::Type::Rectangle;
     geometry.geometry = QRectF(getTopLeft(), getBottomRight());
 
     emit downloadSelectedArea(geometry);
@@ -260,7 +260,12 @@ void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
             _selectedArea.erase(_selectedArea.end() - 1);
         }
 
-        // TODO: spracovat _selectedArea
+        AreaGeometry geometry;
+
+        geometry.geometryType = AreaGeometry::Type::Polygon;
+        geometry.geometry = _selectedArea;
+
+        emit downloadSelectedArea(geometry);
 
         _selectedAreaState = Unselecting;
         _selectedArea.clear();

@@ -4,7 +4,8 @@
 #include <QDialog>
 
 #include "DeleteOldMapsWidget.h"
-#include "SelectGeometry.h"
+#include "hmi/AreaGeometry.h"
+#include "hmi/AreaGeometryWigdetInterface.h"
 
 namespace Ui {
 class OSMDownloadAreaDialog;
@@ -20,13 +21,13 @@ class OSMDownloadAreaDialog : public QDialog
                 int levelFrom = 0;
                 int levelTo = 0;
 
-                SelectGeometry geometry;
+                AreaGeometry geometry;
 
                 DeleteOldMapsWidget::DeleteSettings deleteSettings;
         };
 
     public:
-        OSMDownloadAreaDialog(Setup & setup, const QString & projectName, QWidget *parent = 0);
+        OSMDownloadAreaDialog(const Setup & setup, const QString & projectName, QWidget *parent = 0);
         ~OSMDownloadAreaDialog();
 
         Setup getCurrenSetup();
@@ -34,12 +35,6 @@ class OSMDownloadAreaDialog : public QDialog
     private slots:
         void changeLevelFrom(int level);
         void changeLevelTo(int level);
-
-        void changeLatFrom(double lat);
-        void changeLatTo(double lat);
-
-        void changeLonFrom(double lon);
-        void changeLonTo(double lon);
 
         void setFromMinimum();
         void setToMaximum();
@@ -50,10 +45,7 @@ class OSMDownloadAreaDialog : public QDialog
         Ui::OSMDownloadAreaDialog *_ui;
         Setup _setup;
         QString _projectName;
-        double _lonFrom = 0.;
-        double _latFrom = 0.;
-        double _lonTo = 0.;
-        double _latTo = 0.;
+        AreaGeometryWigdetInterface * _geometryWidget = nullptr;
 };
 
 #endif // OSMDOWNLOADAREADIALOG_H

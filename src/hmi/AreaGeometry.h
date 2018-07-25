@@ -1,9 +1,9 @@
-#ifndef SELECTGEOMETRY_H
-#define SELECTGEOMETRY_H
+#ifndef AREAGEOMETRY_H
+#define AREAGEOMETRY_H
 
 #include <QVariant>
 
-struct SelectGeometry
+struct AreaGeometry
 {
         enum class Type
         {
@@ -19,4 +19,4 @@ struct SelectGeometry
         Type geometryType = Type::Undefined;
 };
 
-#endif // SELECTGEOMETRY_H
+#endif // AREAGEOMETRY_H

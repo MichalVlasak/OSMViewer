@@ -62,7 +62,9 @@ SOURCES += src/main.cpp\
     src/GpxInfosWidget.cpp \
     src/GpxInfoFileWidgetConfig.cpp \
     external/qcustomplot/qcustomplot.cpp \
-    src/SelectGeometry.cpp
+    src/hmi/RectangleAreaWidget.cpp \
+    src/hmi/AreaGeometry.cpp \
+    src/hmi/AreaGeometryWigdetInterface.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -104,7 +106,9 @@ HEADERS  += src/MainWindow.h \
     src/GpxInfosWidget.h \
     src/GpxInfoFileWidgetConfig.h \
     external/qcustomplot/qcustomplot.h \
-    src/SelectGeometry.h
+    src/hmi/RectangleAreaWidget.h \
+    src/hmi/AreaGeometry.h \
+    src/hmi/AreaGeometryWigdetInterface.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -121,7 +125,8 @@ FORMS    += resources/MainWindow.ui \
     resources/ProjectNameDialog.ui \
     resources/GpxFileListWidget.ui \
     resources/GpxInfoFileWidget.ui \
-    resources/GpxInfosWidget.ui
+    resources/GpxInfosWidget.ui \
+    resources/RectangleAreaWidget.ui
 
 RESOURCES += \
     resources/resources.qrc

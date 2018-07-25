@@ -146,7 +146,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(zoom, SIGNAL(zoomChanged()), SLOT(zoomChanged()));
     QObject::connect(_ui->paintWidget, SIGNAL(mouseCursorWgsChanged(double,double)), SLOT(mouseCursorWgsChanged(double,double)));
-    QObject::connect(_ui->paintWidget, SIGNAL(downloadSelectedArea(SelectGeometry)), SLOT(downloadSelectedArea(SelectGeometry)));
+    QObject::connect(_ui->paintWidget, SIGNAL(downloadSelectedArea(AreaGeometry)), SLOT(downloadSelectedArea(AreaGeometry)));
     QObject::connect(_ui->action_Quit, SIGNAL(triggered(bool)), SLOT(close()));
     QObject::connect(_ui->action_AboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     QObject::connect(_ui->action_OSM_Directory, SIGNAL(triggered(bool)), SLOT(setOSMDirectoryPath()));
@@ -318,7 +318,7 @@ void MainWindow::showDownloadAreaDialog(OSMDownloadAreaDialog::Setup &setup, con
     }
 }
 
-void MainWindow::downloadSelectedArea(SelectGeometry geometry)
+void MainWindow::downloadSelectedArea(AreaGeometry geometry)
 {
     OSMDownloadAreaDialog::Setup downloadSetup;
 

@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include <QApplication>
-#include "SelectGeometry.h"
+#include "hmi/AreaGeometry.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow *w = MainWindow::getInstance();
 
-    qRegisterMetaType<SelectGeometry>("SelectGeometry");
+    qRegisterMetaType<AreaGeometry>("SelectGeometry");
 
     w->initialize();
     w->show();

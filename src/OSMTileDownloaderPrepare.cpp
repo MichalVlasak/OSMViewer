@@ -47,7 +47,7 @@ void OSMTileDownloaderPrepare::run()
 
         QString levelStr = QString::number(level);
 
-        if(_setup.geometry.geometryType == SelectGeometry::Type::Rectangle &&
+        if(_setup.geometry.geometryType == AreaGeometry::Type::Rectangle &&
            _setup.geometry.geometry.isNull() == false &&
            _setup.geometry.geometry.canConvert<QRectF>() == true)
         {
