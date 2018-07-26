@@ -258,6 +258,7 @@ void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
         if(_selectedArea.size() > 1)
         {
             _selectedArea.erase(_selectedArea.end() - 1);
+            _selectedArea.push_back(_selectedArea.at(0));
         }
 
         AreaGeometry geometry;

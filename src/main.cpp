@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     MainWindow *w = MainWindow::getInstance();
 
     qRegisterMetaType<AreaGeometry>("SelectGeometry");
+    qRegisterMetaType<QPolygonF>("QPolygonF");
 
     w->initialize();
     w->show();

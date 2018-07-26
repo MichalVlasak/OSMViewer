@@ -35,6 +35,7 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(const Setup & setup, const QString 
     QHBoxLayout * hLayout = new QHBoxLayout(this);
 
     hLayout->addWidget(_geometryWidget);
+    hLayout->setMargin(0);
 
     _ui->geometryWidget->setLayout(hLayout);
 
@@ -73,11 +74,9 @@ OSMDownloadAreaDialog::Setup OSMDownloadAreaDialog::getCurrenSetup()
     setup.levelFrom = _ui->levelFrom->value();
     setup.levelTo = _ui->levelTo->value();
 
-    setup.geometry.geometryType = _setup.geometry.geometryType;
-
     if(_geometryWidget != nullptr)
     {
-        setup.geometry.geometry = _geometryWidget->getGeometry();
+        setup.geometry = _geometryWidget->getGeometry();
     }
 
     setup.deleteSettings = _ui->deleteOldMapsWidget->getDeleteSettings();

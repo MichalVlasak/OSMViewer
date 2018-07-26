@@ -1,8 +1,6 @@
 #ifndef RECTANGLEAREAWIDGET_H
 #define RECTANGLEAREAWIDGET_H
 
-#include <QWidget>
-
 #include "AreaGeometryWigdetInterface.h"
 
 namespace Ui {
@@ -18,7 +16,7 @@ class RectangleAreaWidget : public AreaGeometryWigdetInterface
         ~RectangleAreaWidget();
 
     public:
-        virtual QVariant getGeometry() override;
+        virtual AreaGeometry getGeometry() override;
 
     private slots:
         void changeLatFrom(double lat);

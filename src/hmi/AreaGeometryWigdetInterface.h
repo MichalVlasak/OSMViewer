@@ -14,7 +14,7 @@ class AreaGeometryWigdetInterface : public QWidget
         static AreaGeometryWigdetInterface * createGeometryWidget(const AreaGeometry & geometry, QWidget *parent = 0);
 
     public:
-        virtual QVariant getGeometry() = 0;
+        virtual AreaGeometry getGeometry() = 0;
 };
 
 #endif // AREAGEOMETRYWIGDETINTERFACE_H

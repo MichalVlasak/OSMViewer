@@ -1,5 +1,6 @@
 #include "AreaGeometryWigdetInterface.h"
 #include "RectangleAreaWidget.h"
+#include "PolygonAreaWidget.h"
 
 AreaGeometryWigdetInterface::AreaGeometryWigdetInterface(QWidget * parent)
     : QWidget(parent)
@@ -22,8 +23,7 @@ AreaGeometryWigdetInterface * AreaGeometryWigdetInterface::createGeometryWidget(
        geometry.geometry.isNull() == false &&
        geometry.geometry.canConvert<QPolygonF>() == true)
     {
-        throw std::logic_error("Polygon is not yet implemented!");
-        return nullptr;
+        return new PolygonAreaWidget(geometry, parent);
     }
     else
     {

@@ -1,15 +1,15 @@
-#ifndef GPXINFOFILEMODEL_H
-#define GPXINFOFILEMODEL_H
+#ifndef POLYGONAREATABLEMODEL_H
+#define POLYGONAREATABLEMODEL_H
 
 #include <QStandardItemModel>
 
-#include "GpxManager.h"
-
-class GpxInfoFileModel : public QStandardItemModel
+class PolygonAreaTableModel : public QStandardItemModel
 {
+        Q_OBJECT
+
     public:
-        explicit GpxInfoFileModel(QObject *parent = nullptr);
-        virtual ~GpxInfoFileModel() = default;
+        explicit PolygonAreaTableModel(QObject *parent = nullptr);
+        virtual ~PolygonAreaTableModel() = default;
 
     public:
         /**
@@ -17,7 +17,7 @@ class GpxInfoFileModel : public QStandardItemModel
          */
         enum class HeaderTableEnum
         {
-            Time, Latitude, Longitude, Elevation, HeartRate, Cadention, Temperature, Last
+            Latitude, Longitude
         };
 
         static const int ERROR_INDEX = -1;
@@ -27,7 +27,7 @@ class GpxInfoFileModel : public QStandardItemModel
         void clear();
 
         int getColumnIndex(HeaderTableEnum headerItem) const;
-        void setItemPoints(const GpxManager::PointVector & points);
+        void setPolygon(const QPolygonF & polygon);
 
     private:
         /**
@@ -53,4 +53,4 @@ class GpxInfoFileModel : public QStandardItemModel
         HeaderMap _headerMap;
 };
 
-#endif // GPXINFOFILEMODEL_H
+#endif // POLYGONAREATABLEMODEL_H

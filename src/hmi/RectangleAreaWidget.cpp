@@ -11,7 +11,6 @@ RectangleAreaWidget::RectangleAreaWidget(const AreaGeometry & geometry, QWidget 
        geometry.geometry.isNull() == false &&
        geometry.geometry.canConvert<QRectF>() == true)
     {
-
         QRectF rect = geometry.geometry.toRectF();
 
         _lonFrom = rect.topLeft().x();
@@ -83,11 +82,12 @@ void RectangleAreaWidget::changeLonTo(double lon)
     _ui->lonFrom->setMaximum(_lonTo);
 }
 
-QVariant RectangleAreaWidget::getGeometry()
+AreaGeometry RectangleAreaWidget::getGeometry()
 {
-    QVariant geom;
+    AreaGeometry geom;
 
-    geom = QRectF(QPointF(_lonFrom, _latFrom), QPointF(_lonTo, _latTo));;
+    geom.geometry = QRectF(QPointF(_lonFrom, _latFrom), QPointF(_lonTo, _latTo));
+    geom.geometryType = AreaGeometry::Type::Rectangle;
 
     return geom;
 }

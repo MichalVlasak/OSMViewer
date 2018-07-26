@@ -64,7 +64,11 @@ SOURCES += src/main.cpp\
     external/qcustomplot/qcustomplot.cpp \
     src/hmi/RectangleAreaWidget.cpp \
     src/hmi/AreaGeometry.cpp \
-    src/hmi/AreaGeometryWigdetInterface.cpp
+    src/hmi/AreaGeometryWigdetInterface.cpp \
+    src/hmi/PolygonAreaWidget.cpp \
+    src/hmi/PolygonAreaTableModel.cpp \
+    src/hmi/PointEditorDialog.cpp \
+    src/hmi/PositionEditorWidget.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -108,7 +112,11 @@ HEADERS  += src/MainWindow.h \
     external/qcustomplot/qcustomplot.h \
     src/hmi/RectangleAreaWidget.h \
     src/hmi/AreaGeometry.h \
-    src/hmi/AreaGeometryWigdetInterface.h
+    src/hmi/AreaGeometryWigdetInterface.h \
+    src/hmi/PolygonAreaWidget.h \
+    src/hmi/PolygonAreaTableModel.h \
+    src/hmi/PointEditorDialog.h \
+    src/hmi/PositionEditorWidget.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -126,7 +134,10 @@ FORMS    += resources/MainWindow.ui \
     resources/GpxFileListWidget.ui \
     resources/GpxInfoFileWidget.ui \
     resources/GpxInfosWidget.ui \
-    resources/RectangleAreaWidget.ui
+    resources/RectangleAreaWidget.ui \
+    resources/PolygonAreaWidget.ui \
+    resources/PointEditorDialog.ui \
+    resources/PositionEditorWidget.ui
 
 RESOURCES += \
     resources/resources.qrc
