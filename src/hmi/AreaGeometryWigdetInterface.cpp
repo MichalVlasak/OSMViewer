@@ -20,8 +20,8 @@ AreaGeometryWigdetInterface * AreaGeometryWigdetInterface::createGeometryWidget(
         return new RectangleAreaWidget(geometry, parent);
     }
     else if(geometry.geometryType == AreaGeometry::Type::Polygon &&
-       geometry.geometry.isNull() == false &&
-       geometry.geometry.canConvert<QPolygonF>() == true)
+            geometry.geometry.isNull() == false &&
+            geometry.geometry.canConvert<QPolygonF>() == true)
     {
         return new PolygonAreaWidget(geometry, parent);
     }

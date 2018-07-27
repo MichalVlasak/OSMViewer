@@ -114,6 +114,31 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
         QDomText projectLongitudeToText = doc.createTextNode(QString::number(lonTo, 'g', 13));
         projectLongitudeToElement.appendChild(projectLongitudeToText);
     }
+    else if(project.setup.geometry.geometryType == AreaGeometry::Type::Polygon &&
+            project.setup.geometry.geometry.isNull() == false &&
+            project.setup.geometry.geometry.canConvert<QPolygonF>() == true)
+    {
+        QPolygonF polygon = project.setup.geometry.geometry.value<QPolygonF>();
+
+        QDomElement polygonElement = doc.createElement("Polygon");
+        element.appendChild(polygonElement);
+
+        for(const QPointF & point : polygon)
+        {
+            QDomElement pointElement = doc.createElement("Point");
+            polygonElement.appendChild(pointElement);
+
+            QDomElement projectLatitudeFromElement = doc.createElement("Latitude");
+            pointElement.appendChild(projectLatitudeFromElement);
+            QDomText projectLatitudeFromText = doc.createTextNode(QString::number(point.y(), 'g', 13));
+            projectLatitudeFromElement.appendChild(projectLatitudeFromText);
+
+            QDomElement projectLongitudeFromElement = doc.createElement("Longitude");
+            pointElement.appendChild(projectLongitudeFromElement);
+            QDomText projectLongitudeFromText = doc.createTextNode(QString::number(point.x(), 'g', 13));
+            projectLongitudeFromElement.appendChild(projectLongitudeFromText);
+        }
+    }
 }
 
 void OSMDownloadProjectModel::storeConfig(QDomDocument &document, QDomElement &rootElement)
@@ -160,6 +185,17 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                         if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false)
                         {
                             QDomNodeList rectangleNodeList = projectNode.toElement().elementsByTagName("Rectangle");
+                            OSMDownloadProjectModel::Project project;
+                            bool isOK;
+
+                            project.name = projectName;
+                            project.setup.levelFrom = levelFrom.toDouble(&isOK);
+
+                            if(isOK == false) break;
+
+                            project.setup.levelTo = levelTo.toDouble(&isOK);
+
+                            if(isOK == false) break;
 
                             for(int iRectangle = 0; iRectangle < rectangleNodeList.size(); iRectangle++)
                             {
@@ -175,18 +211,6 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                                     if(latFromStr.isEmpty() == false && latToStr.isEmpty() == false &&
                                        lonFromStr.isEmpty() == false && lonToStr.isEmpty() == false)
                                     {
-                                        OSMDownloadProjectModel::Project project;
-                                        bool isOK;
-
-                                        project.name = projectName;
-                                        project.setup.levelFrom = levelFrom.toDouble(&isOK);
-
-                                        if(isOK == false) break;
-
-                                        project.setup.levelTo = levelTo.toDouble(&isOK);
-
-                                        if(isOK == false) break;
-
                                         double latFrom = latFromStr.toDouble(&isOK);
 
                                         if(isOK == false) break;
@@ -210,6 +234,50 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
 
                                         break;
                                     }
+                                }
+                            }
+
+                            QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
+
+                            for(int iPolygon = 0; iPolygon < polygonNodeList.size(); iPolygon++)
+                            {
+                                QDomNode polygonNode = polygonNodeList.at(iPolygon);
+
+                                if(polygonNode.isNull() == false)
+                                {
+                                    QDomNodeList pointNodeList = projectsNode.toElement().elementsByTagName("Point");
+                                    QPolygonF polygon;
+
+                                    for(int iPoint = 0; iPoint < pointNodeList.size(); iPoint++)
+                                    {
+                                        QDomNode pointNode = pointNodeList.at(iPoint);
+
+                                        if(pointNode.isNull() == false)
+                                        {
+                                            QString latStr = AppSettings::getValueString(pointNode, "Latitude");
+                                            QString lonStr = AppSettings::getValueString(pointNode, "Longitude");
+
+                                            if(latStr.isEmpty() == false && lonStr.isEmpty() == false)
+                                            {
+                                                double lat = latStr.toDouble(&isOK);
+
+                                                if(isOK == false) break;
+
+                                                double lon = lonStr.toDouble(&isOK);
+
+                                                if(isOK == false) break;
+
+                                                polygon.push_back(QPointF(lon, lat));
+                                            }
+                                        }
+                                    }
+
+                                    project.setup.geometry.geometryType = AreaGeometry::Type::Polygon;
+                                    project.setup.geometry.geometry = polygon;
+
+                                    result &= addProject(project);
+
+                                    break;
                                 }
                             }
                         }

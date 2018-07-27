@@ -32,7 +32,7 @@ class OSMTileDownloaderPrepare : public QThread
         OSMTileDownloader * _downloader;
         OSMTileDownloaderInfoWidget * _infoWidget;
         QString _tilesPath;
-        volatile bool _runPrepare = true;
+        bool _runPrepare = true;
         class DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
 };
 

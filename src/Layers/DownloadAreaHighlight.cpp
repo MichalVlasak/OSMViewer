@@ -35,6 +35,22 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
             painter.setBrush(QColor(255, 0, 0, 50));
             painter.drawRect(rect);
         }
+        else if(_setup.geometry.geometryType == AreaGeometry::Type::Polygon &&
+                _setup.geometry.geometry.isNull() == false &&
+                _setup.geometry.geometry.canConvert<QPolygonF>() == true)
+        {
+            QPolygonF polygon = _setup.geometry.geometry.value<QPolygonF>();
+            QPolygonF polygonPix;
+
+            for(const QPointF & point : polygon)
+            {
+                polygonPix.push_back(QPointF(_mapSettings.getPixelForLon(point.x()), _mapSettings.getPixelForLat(point.y())));
+            }
+
+            painter.setPen(QPen(QColor(255, 0, 0, 50), 1));
+            painter.setBrush(QColor(255, 0, 0, 50));
+            painter.drawPolygon(polygonPix);
+        }
     }
 }
 

@@ -68,7 +68,10 @@ SOURCES += src/main.cpp\
     src/hmi/PolygonAreaWidget.cpp \
     src/hmi/PolygonAreaTableModel.cpp \
     src/hmi/PointEditorDialog.cpp \
-    src/hmi/PositionEditorWidget.cpp
+    src/hmi/PositionEditorWidget.cpp \
+    src/GeometryDownloaderPrepare.cpp \
+    src/RectangleDownloaderPrepare.cpp \
+    src/PolygonDownloaderPrepare.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -116,7 +119,10 @@ HEADERS  += src/MainWindow.h \
     src/hmi/PolygonAreaWidget.h \
     src/hmi/PolygonAreaTableModel.h \
     src/hmi/PointEditorDialog.h \
-    src/hmi/PositionEditorWidget.h
+    src/hmi/PositionEditorWidget.h \
+    src/GeometryDownloaderPrepare.h \
+    src/RectangleDownloaderPrepare.h \
+    src/PolygonDownloaderPrepare.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

@@ -59,7 +59,7 @@ void MapContextMenu::show(const QPointF &pos)
         menu->addAction(selectAndDownloadAreaRec);
         QObject::connect(selectAndDownloadAreaRec, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaRec()));
 
-        QAction * selectAndDownloadAreaPoly = new QAction(tr("Select & Download Area (Polygon) - IS NOT FULL IMPLEMENTED"), this);
+        QAction * selectAndDownloadAreaPoly = new QAction(tr("Select & Download Area (Polygon)"), this);
         selectAndDownloadAreaPoly->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
         menu->addAction(selectAndDownloadAreaPoly);
         QObject::connect(selectAndDownloadAreaPoly, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaPoly()));
