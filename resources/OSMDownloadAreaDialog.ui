@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>OSM Download Area</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0">
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">

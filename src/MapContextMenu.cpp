@@ -54,15 +54,23 @@ void MapContextMenu::show(const QPointF &pos)
         menu->addAction(downloadArea);
         QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
 
-        QAction * selectAndDownloadAreaRec = new QAction(tr("Select & Download Area (Rectangle)"), this);
+        QMenu * subMenu = new QMenu(tr("Select & Download Area"), menu);
+        menu->addMenu(subMenu);
+
+        QAction * selectAndDownloadAreaRec = new QAction(tr("Define as Rectangle"), this);
         selectAndDownloadAreaRec->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        menu->addAction(selectAndDownloadAreaRec);
+        subMenu->addAction(selectAndDownloadAreaRec);
         QObject::connect(selectAndDownloadAreaRec, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaRec()));
 
-        QAction * selectAndDownloadAreaPoly = new QAction(tr("Select & Download Area (Polygon)"), this);
+        QAction * selectAndDownloadAreaPoly = new QAction(tr("Define as Polygon"), this);
         selectAndDownloadAreaPoly->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        menu->addAction(selectAndDownloadAreaPoly);
+        subMenu->addAction(selectAndDownloadAreaPoly);
         QObject::connect(selectAndDownloadAreaPoly, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaPoly()));
+
+        QAction * selectAndDownloadAreaLine = new QAction(tr("Define as Line"), this);
+        selectAndDownloadAreaLine->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        subMenu->addAction(selectAndDownloadAreaLine);
+        QObject::connect(selectAndDownloadAreaLine, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaLine()));
     }
 
     menu->addSeparator();

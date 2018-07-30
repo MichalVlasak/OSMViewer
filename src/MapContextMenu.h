@@ -17,6 +17,7 @@ class MapContextMenu : public QWidget
         void downloadArea();
         void selectAndDownloadAreaRec();
         void selectAndDownloadAreaPoly();
+        void selectAndDownloadAreaLine();
         void centerMap(QPoint pos);
 
     public slots:

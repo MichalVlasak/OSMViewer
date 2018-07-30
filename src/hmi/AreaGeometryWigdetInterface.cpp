@@ -1,6 +1,7 @@
 #include "AreaGeometryWigdetInterface.h"
 #include "RectangleAreaWidget.h"
 #include "PolygonAreaWidget.h"
+#include "LineWidget.h"
 
 AreaGeometryWigdetInterface::AreaGeometryWigdetInterface(QWidget * parent)
     : QWidget(parent)
@@ -24,6 +25,12 @@ AreaGeometryWigdetInterface * AreaGeometryWigdetInterface::createGeometryWidget(
             geometry.geometry.canConvert<QPolygonF>() == true)
     {
         return new PolygonAreaWidget(geometry, parent);
+    }
+    else if(geometry.geometryType == AreaGeometry::Type::Line &&
+            geometry.geometry.isNull() == false &&
+            geometry.geometry.canConvert<QPolygonF>() == true)
+    {
+        return new LineWidget(geometry, parent);
     }
     else
     {

@@ -71,7 +71,8 @@ SOURCES += src/main.cpp\
     src/hmi/PositionEditorWidget.cpp \
     src/GeometryDownloaderPrepare.cpp \
     src/RectangleDownloaderPrepare.cpp \
-    src/PolygonDownloaderPrepare.cpp
+    src/PolygonDownloaderPrepare.cpp \
+    src/hmi/LineWidget.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -122,7 +123,8 @@ HEADERS  += src/MainWindow.h \
     src/hmi/PositionEditorWidget.h \
     src/GeometryDownloaderPrepare.h \
     src/RectangleDownloaderPrepare.h \
-    src/PolygonDownloaderPrepare.h
+    src/PolygonDownloaderPrepare.h \
+    src/hmi/LineWidget.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \
@@ -143,7 +145,8 @@ FORMS    += resources/MainWindow.ui \
     resources/RectangleAreaWidget.ui \
     resources/PolygonAreaWidget.ui \
     resources/PointEditorDialog.ui \
-    resources/PositionEditorWidget.ui
+    resources/PositionEditorWidget.ui \
+    resources/LineWidget.ui
 
 RESOURCES += \
     resources/resources.qrc

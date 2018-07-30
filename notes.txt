@@ -1,7 +1,5 @@
 Co je na plane pre vyvoj:
 - okrem zobrazenia oblasti ktora sa prave stahuje, zobrazit jednotlive dlazdice ktore sa stahuju
 - export oblasti s dlazdicami
-- praca s *.gpx subormi (analyza ... tabulky, grafi, zvyraznenie vyznacnych bodov)
 - stahovanie map cez Qt nastroje a nie cez wget
 - stahovanie map pre vybrany *.gpx subor, tj. stahovat dlazdice len v okoli danej trasy
-- stahovanie map pre oblast definovanu ako polygon a nie len ako obdlznik

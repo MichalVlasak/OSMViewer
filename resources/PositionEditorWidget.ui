@@ -23,6 +23,9 @@
    </item>
    <item row="0" column="1">
     <widget class="QDoubleSpinBox" name="latitude">
+     <property name="suffix">
+      <string> [º]</string>
+     </property>
      <property name="decimals">
       <number>10</number>
      </property>
@@ -43,6 +46,9 @@
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="longitude">
+     <property name="suffix">
+      <string> [º]</string>
+     </property>
      <property name="decimals">
       <number>10</number>
      </property>

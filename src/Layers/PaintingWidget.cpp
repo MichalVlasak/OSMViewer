@@ -19,9 +19,10 @@ PaintingWidget::PaintingWidget(QWidget *parent)
 
     _selectedAreaState = Unselecting;
 
-    _startPointSelectArea = QPoint(0, 0);
-    _endPointSelectArea = QPoint(0, 0);
-    _selectedArea.clear();
+    _startPointSelectRectangle = QPoint(0, 0);
+    _endPointSelectRectangle = QPoint(0, 0);
+    _selectedPolygon.clear();
+    _selectedLine.clear();
     _selectGeometry.geometry.clear();
     _selectGeometry.geometryType = AreaGeometry::Type::Undefined;
 
@@ -60,7 +61,7 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
 
         if(_selectedAreaState == SelectingRec)
         {
-            QRect rect = QRect(_startPointSelectArea, _endPointSelectArea);
+            QRect rect = QRect(_startPointSelectRectangle, _endPointSelectRectangle);
 
             painter.drawRect(rect);
         }
@@ -68,12 +69,23 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
         {
             QPolygon pxPolygon;
 
-            for(const QPointF & point : _selectedArea)
+            for(const QPointF & point : _selectedPolygon)
             {
                 pxPolygon.push_back(QPoint(int(_mapSettings.getPixelForLon(point.x())), int(_mapSettings.getPixelForLat(point.y()))));
             }
 
             painter.drawPolygon(pxPolygon);
+        }
+        else if(_selectedAreaState == SelectingLine)
+        {
+            QPolygon pxPolygon;
+
+            for(const QPointF & point : _selectedLine)
+            {
+                pxPolygon.push_back(QPoint(int(_mapSettings.getPixelForLon(point.x())), int(_mapSettings.getPixelForLat(point.y()))));
+            }
+
+            painter.drawPolyline(pxPolygon);
         }
     }
 }
@@ -86,6 +98,11 @@ void PaintingWidget::startSelectAreaRec()
 void PaintingWidget::startSelectAreaPoly()
 {
     _selectedAreaState = PrepareForSelectingPoly;
+}
+
+void PaintingWidget::startSelectAreaLine()
+{
+    _selectedAreaState = PrepareForSelectingLine;
 }
 
 QPointF PaintingWidget::getWgsPointFromPixelsPoint(const QPoint &point)
@@ -112,16 +129,25 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     if(_selectedAreaState == SelectingRec)
     {
-        _endPointSelectArea = point;
+        _endPointSelectRectangle = point;
     }
     else if(_selectedAreaState == SelectingPoly)
     {
-        if(_selectedArea.size() > 1)
+        if(_selectedPolygon.size() > 1)
         {
-            _selectedArea.erase(_selectedArea.end() - 1);
+            _selectedPolygon.erase(_selectedPolygon.end() - 1);
         }
 
-        _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
+        _selectedPolygon.push_back(getWgsPointFromPixelsPoint(point));
+    }
+    else if(_selectedAreaState == SelectingLine)
+    {
+        if(_selectedLine.size() > 1)
+        {
+            _selectedLine.erase(_selectedLine.end() - 1);
+        }
+
+        _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
     }
     else
     {
@@ -159,23 +185,30 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         {
             _selectedAreaState = SelectingRec;
 
-            _startPointSelectArea = point;
-            _endPointSelectArea = point;
+            _startPointSelectRectangle = point;
+            _endPointSelectRectangle = point;
         }
         else if(_selectedAreaState == PrepareForSelectingPoly)
         {
             _selectedAreaState = SelectingPoly;
 
-            _selectedArea.clear();
-            _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
+            _selectedPolygon.clear();
+            _selectedPolygon.push_back(getWgsPointFromPixelsPoint(point));
+        }
+        else if(_selectedAreaState == PrepareForSelectingLine)
+        {
+            _selectedAreaState = SelectingLine;
+
+            _selectedLine.clear();
+            _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
         }
         else if(_selectedAreaState == SelectingRec)
         {
             _selectedAreaState = Unselecting;
-            _endPointSelectArea = point;
+            _endPointSelectRectangle = point;
 
-            QPointF startPoint(getWgsPointFromPixelsPoint(_startPointSelectArea));
-            QPointF endPoint(getWgsPointFromPixelsPoint(_endPointSelectArea));
+            QPointF startPoint(getWgsPointFromPixelsPoint(_startPointSelectRectangle));
+            QPointF endPoint(getWgsPointFromPixelsPoint(_endPointSelectRectangle));
 
             if(startPoint.y() < endPoint.y())
             {
@@ -194,7 +227,11 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         }
         else if(_selectedAreaState == SelectingPoly)
         {
-            _selectedArea.push_back(getWgsPointFromPixelsPoint(point));
+            _selectedPolygon.push_back(getWgsPointFromPixelsPoint(point));
+        }
+        else if(_selectedAreaState == SelectingLine)
+        {
+            _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
         }
         else
         {
@@ -209,9 +246,16 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
     {
         if(_selectedAreaState == SelectingPoly)
         {
-            if(_selectedArea.size() > 1)
+            if(_selectedPolygon.size() > 1)
             {
-                _selectedArea.erase(_selectedArea.end() - 2);
+                _selectedPolygon.erase(_selectedPolygon.end() - 2);
+            }
+        }
+        if(_selectedAreaState == SelectingLine)
+        {
+            if(_selectedLine.size() > 1)
+            {
+                _selectedLine.erase(_selectedLine.end() - 2);
             }
         }
         else
@@ -223,6 +267,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
                 QObject::connect(_contextMenu, SIGNAL(downloadArea()), SLOT(downloadViewedAreaSlot()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaRec()), SLOT(startSelectAreaRec()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaPoly()), SLOT(startSelectAreaPoly()));
+                QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaLine()), SLOT(startSelectAreaLine()));
                 QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
             }
 
@@ -253,23 +298,43 @@ void PaintingWidget::downloadViewedAreaSlot()
 
 void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 {
-    if(mouseEvent->buttons() & Qt::MouseButton::LeftButton && _selectedAreaState == SelectingPoly)
+    if(mouseEvent->buttons() & Qt::MouseButton::LeftButton)
     {
-        if(_selectedArea.size() > 1)
+        if(_selectedAreaState == SelectingPoly)
         {
-            _selectedArea.erase(_selectedArea.end() - 1);
-            _selectedArea.push_back(_selectedArea.at(0));
+            if(_selectedPolygon.size() > 1)
+            {
+                _selectedPolygon.erase(_selectedPolygon.end() - 1);
+                _selectedPolygon.push_back(_selectedPolygon.at(0));
+            }
+
+            AreaGeometry geometry;
+
+            geometry.geometryType = AreaGeometry::Type::Polygon;
+            geometry.geometry = _selectedPolygon;
+
+            emit downloadSelectedArea(geometry);
+
+            _selectedAreaState = Unselecting;
+            _selectedPolygon.clear();
         }
+        else if(_selectedAreaState == SelectingLine)
+        {
+            if(_selectedLine.size() > 1)
+            {
+                _selectedLine.erase(_selectedLine.end() - 1);
+            }
 
-        AreaGeometry geometry;
+            AreaGeometry geometry;
 
-        geometry.geometryType = AreaGeometry::Type::Polygon;
-        geometry.geometry = _selectedArea;
+            geometry.geometryType = AreaGeometry::Type::Line;
+            geometry.geometry = _selectedLine;
 
-        emit downloadSelectedArea(geometry);
+            emit downloadSelectedArea(geometry);
 
-        _selectedAreaState = Unselecting;
-        _selectedArea.clear();
+            _selectedAreaState = Unselecting;
+            _selectedLine.clear();
+        }
     }
     else
     {

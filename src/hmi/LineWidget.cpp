@@ -1,14 +1,14 @@
-#include "PolygonAreaWidget.h"
-#include "ui_PolygonAreaWidget.h"
+#include "LineWidget.h"
+#include "ui_LineWidget.h"
 #include "PointEditorDialog.h"
 
-PolygonAreaWidget::PolygonAreaWidget(const AreaGeometry & geometry, QWidget *parent)
+LineWidget::LineWidget(const AreaGeometry & geometry, QWidget *parent)
     : AreaGeometryWigdetInterface(parent),
-      _ui(new Ui::PolygonAreaWidget)
+      _ui(new Ui::LineWidget)
 {
     _ui->setupUi(this);
 
-    if(geometry.geometryType == AreaGeometry::Type::Polygon &&
+    if(geometry.geometryType == AreaGeometry::Type::Line &&
        geometry.geometry.isNull() == false &&
        geometry.geometry.canConvert<QPolygonF>() == true)
     {
@@ -32,12 +32,12 @@ PolygonAreaWidget::PolygonAreaWidget(const AreaGeometry & geometry, QWidget *par
     _ui->editBtn->setDisabled(true);
 }
 
-PolygonAreaWidget::~PolygonAreaWidget()
+LineWidget::~LineWidget()
 {
     delete _ui;
 }
 
-AreaGeometry PolygonAreaWidget::getGeometry()
+AreaGeometry LineWidget::getGeometry()
 {
     AreaGeometry geom;
 
@@ -47,7 +47,7 @@ AreaGeometry PolygonAreaWidget::getGeometry()
     return geom;
 }
 
-void PolygonAreaWidget::tableClicked(QModelIndex index)
+void LineWidget::tableClicked(QModelIndex index)
 {
     _ui->deleteBtn->setDisabled(_polygon.size() < 5);
     _ui->addAfterBtn->setDisabled(false);
@@ -56,17 +56,15 @@ void PolygonAreaWidget::tableClicked(QModelIndex index)
     {
         int row = index.row();
 
-        if(row > -1 && _polygon.size() == (row + 1))
+        if(row > -1 && row < _polygon.size())
         {
-            _ui->deleteBtn->setDisabled(true);
-            _ui->addAfterBtn->setDisabled(true);
+            _ui->deleteBtn->setDisabled(false);
+            _ui->editBtn->setDisabled(false);
         }
-
-        _ui->editBtn->setDisabled(false);
     }
 }
 
-void PolygonAreaWidget::addPoint()
+void LineWidget::addPoint()
 {
     QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
 
@@ -78,7 +76,7 @@ void PolygonAreaWidget::addPoint()
         {
             int row = index.row();
 
-            if(row > -1 && row < (_polygon.size() - 1))
+            if(row > -1 && row < _polygon.size())
             {
                 PointEditorDialog * editor = new PointEditorDialog(_polygon[row], this);
 
@@ -100,7 +98,7 @@ void PolygonAreaWidget::addPoint()
     }
 }
 
-void PolygonAreaWidget::deletePoint()
+void LineWidget::deletePoint()
 {
     QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
 
@@ -133,7 +131,7 @@ void PolygonAreaWidget::deletePoint()
     }
 }
 
-void PolygonAreaWidget::editPoint()
+void LineWidget::editPoint()
 {
     QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
 

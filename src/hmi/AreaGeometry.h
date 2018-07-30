@@ -7,7 +7,7 @@ struct AreaGeometry
 {
         enum class Type
         {
-            Undefined, Rectangle, Polygon
+            Undefined, Rectangle, Polygon, Line
         };
 
         /**

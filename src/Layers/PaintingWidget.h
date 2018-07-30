@@ -66,8 +66,10 @@ class PaintingWidget : public QWidget
             Unselecting,
             PrepareForSelectingRec,
             PrepareForSelectingPoly,
+            PrepareForSelectingLine,
             SelectingRec,
-            SelectingPoly
+            SelectingPoly,
+            SelectingLine
         };
 
     private:
@@ -77,6 +79,7 @@ class PaintingWidget : public QWidget
     private slots:
         void startSelectAreaRec();
         void startSelectAreaPoly();
+        void startSelectAreaLine();
         void centerMapToPixels(QPoint pos);
         void downloadViewedAreaSlot();
 
@@ -84,12 +87,13 @@ class PaintingWidget : public QWidget
         Layers _layers;
         MapSettings _mapSettings;
         class MapContextMenu * _contextMenu = nullptr;
-        QPoint _startPointSelectArea;
-        QPoint _endPointSelectArea;
+        QPoint _startPointSelectRectangle;
+        QPoint _endPointSelectRectangle;
         SelectedAreaState _selectedAreaState;
         class OSMLayer * _osmLayer = nullptr;
         class GpxLayer * _gpxLayer = nullptr;
-        QPolygonF _selectedArea;
+        QPolygonF _selectedPolygon;
+        QPolygonF _selectedLine;
         AreaGeometry _selectGeometry;
 };
 
