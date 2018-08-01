@@ -51,6 +51,23 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
             painter.setBrush(QColor(255, 0, 0, 50));
             painter.drawPolygon(polygonPix);
         }
+        else if(_setup.geometry.geometryType == AreaGeometry::Type::Line &&
+                _setup.geometry.geometry.isNull() == false &&
+                _setup.geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
+        {
+            AreaGeometry::LineBufferGeometry lineGeometry = _setup.geometry.geometry.value<AreaGeometry::LineBufferGeometry>();
+            QPolygonF polygon = lineGeometry.line;
+            QPolygonF polygonPix;
+
+            for(const QPointF & point : polygon)
+            {
+                polygonPix.push_back(QPointF(_mapSettings.getPixelForLon(point.x()), _mapSettings.getPixelForLat(point.y())));
+            }
+
+            painter.setPen(QPen(QColor(255, 0, 0), 1));
+            painter.setBrush(QColor(255, 0, 0));
+            painter.drawPolyline(polygonPix);
+        }
     }
 }
 

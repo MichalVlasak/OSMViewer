@@ -72,7 +72,8 @@ SOURCES += src/main.cpp\
     src/GeometryDownloaderPrepare.cpp \
     src/RectangleDownloaderPrepare.cpp \
     src/PolygonDownloaderPrepare.cpp \
-    src/hmi/LineWidget.cpp
+    src/hmi/LineWidget.cpp \
+    src/LineDownloaderPrepare.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -124,7 +125,8 @@ HEADERS  += src/MainWindow.h \
     src/GeometryDownloaderPrepare.h \
     src/RectangleDownloaderPrepare.h \
     src/PolygonDownloaderPrepare.h \
-    src/hmi/LineWidget.h
+    src/hmi/LineWidget.h \
+    src/LineDownloaderPrepare.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

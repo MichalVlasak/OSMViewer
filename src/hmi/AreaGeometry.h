@@ -2,12 +2,20 @@
 #define AREAGEOMETRY_H
 
 #include <QVariant>
+#include <QPolygonF>
+#include <QMetaType>
 
 struct AreaGeometry
 {
         enum class Type
         {
             Undefined, Rectangle, Polygon, Line
+        };
+
+        struct LineBufferGeometry
+        {
+                QPolygonF line;
+                int bufferWidth;
         };
 
         /**
@@ -18,5 +26,7 @@ struct AreaGeometry
         QVariant geometry;
         Type geometryType = Type::Undefined;
 };
+
+Q_DECLARE_METATYPE(AreaGeometry::LineBufferGeometry)
 
 #endif // AREAGEOMETRY_H

@@ -4,6 +4,7 @@
 #include "Layers/DownloadAreaHighlight.h"
 
 #include <iostream>
+#include <QMessageBox>
 
 OSMTileDownloaderPrepare::OSMTileDownloaderPrepare(OSMTileDownloader * downloader, OSMTileDownloaderInfoWidget * infoWidget, QObject *parent)
     : QThread(parent),
@@ -39,20 +40,27 @@ void OSMTileDownloaderPrepare::run()
 {
     GeometryDownloaderPrepare::DownloaderPrepareSetup prepareSetup(_setup, _runPrepare, _downloader, _infoWidget, _tilesPath);
 
-    GeometryDownloaderPrepare * prepare = GeometryDownloaderPrepare::createGeometryDownloaderPrepare(prepareSetup, this);
-
-    QObject::connect(prepare, SIGNAL(columnIsPrepared()), SIGNAL(columnIsPrepared()));
-
-    prepare->prepare();
-
-    if(_downloadAreaHighlight != nullptr)
+    try
     {
-        while(_downloader->isRunning() == true)
-        {
-            QThread::msleep(100);
-        }
+        GeometryDownloaderPrepare * prepare = GeometryDownloaderPrepare::createGeometryDownloaderPrepare(prepareSetup, this);
 
-        emit allIsDownloaded();
+        QObject::connect(prepare, SIGNAL(columnIsPrepared()), SIGNAL(columnIsPrepared()));
+
+        prepare->prepare();
+
+        if(_downloadAreaHighlight != nullptr)
+        {
+            while(_downloader->isRunning() == true)
+            {
+                QThread::msleep(100);
+            }
+
+            emit allIsDownloaded();
+        }
+    }
+    catch(std::exception & ex)
+    {
+        QMessageBox::warning(_infoWidget, tr("Error"), tr("Error by preparing download:\n") + QString::fromStdString(std::string(ex.what())));
     }
 }
 

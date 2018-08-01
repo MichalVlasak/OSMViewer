@@ -2,6 +2,8 @@
 #include "ui_LineWidget.h"
 #include "PointEditorDialog.h"
 
+#include <QSpinBox>
+
 LineWidget::LineWidget(const AreaGeometry & geometry, QWidget *parent)
     : AreaGeometryWigdetInterface(parent),
       _ui(new Ui::LineWidget)
@@ -40,9 +42,13 @@ LineWidget::~LineWidget()
 AreaGeometry LineWidget::getGeometry()
 {
     AreaGeometry geom;
+    AreaGeometry::LineBufferGeometry line;
 
-    geom.geometryType = AreaGeometry::Type::Polygon;
-    geom.geometry = _polygon;
+    line.line = _polygon;
+    line.bufferWidth = _ui->bufferWidth->value();
+
+    geom.geometryType = AreaGeometry::Type::Line;
+    geom.geometry = QVariant::fromValue(line);
 
     return geom;
 }
