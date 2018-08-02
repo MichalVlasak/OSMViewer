@@ -197,87 +197,92 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
 
                             if(isOK == false) break;
 
-                            for(int iRectangle = 0; iRectangle < rectangleNodeList.size(); iRectangle++)
+                            if(rectangleNodeList.size() > 0)
                             {
-                                QDomNode rectangleNode = rectangleNodeList.at(iRectangle);
-
-                                if(rectangleNode.isNull() == false)
+                                for(int iRectangle = 0; iRectangle < rectangleNodeList.size(); iRectangle++)
                                 {
-                                    QString latFromStr = AppSettings::getValueString(rectangleNode, "LatitudeFrom");
-                                    QString lonFromStr = AppSettings::getValueString(rectangleNode, "LongitudeFrom");
-                                    QString latToStr = AppSettings::getValueString(rectangleNode, "LatitudeTo");
-                                    QString lonToStr = AppSettings::getValueString(rectangleNode, "LongitudeTo");
+                                    QDomNode rectangleNode = rectangleNodeList.at(iRectangle);
 
-                                    if(latFromStr.isEmpty() == false && latToStr.isEmpty() == false &&
-                                       lonFromStr.isEmpty() == false && lonToStr.isEmpty() == false)
+                                    if(rectangleNode.isNull() == false)
                                     {
-                                        double latFrom = latFromStr.toDouble(&isOK);
+                                        QString latFromStr = AppSettings::getValueString(rectangleNode, "LatitudeFrom");
+                                        QString lonFromStr = AppSettings::getValueString(rectangleNode, "LongitudeFrom");
+                                        QString latToStr = AppSettings::getValueString(rectangleNode, "LatitudeTo");
+                                        QString lonToStr = AppSettings::getValueString(rectangleNode, "LongitudeTo");
 
-                                        if(isOK == false) break;
+                                        if(latFromStr.isEmpty() == false && latToStr.isEmpty() == false &&
+                                           lonFromStr.isEmpty() == false && lonToStr.isEmpty() == false)
+                                        {
+                                            double latFrom = latFromStr.toDouble(&isOK);
 
-                                        double latTo = latToStr.toDouble(&isOK);
+                                            if(isOK == false) break;
 
-                                        if(isOK == false) break;
+                                            double latTo = latToStr.toDouble(&isOK);
 
-                                        double lonFrom = lonFromStr.toDouble(&isOK);
+                                            if(isOK == false) break;
 
-                                        if(isOK == false) break;
+                                            double lonFrom = lonFromStr.toDouble(&isOK);
 
-                                        double lonTo = lonToStr.toDouble(&isOK);
+                                            if(isOK == false) break;
 
-                                        if(isOK == false) break;
+                                            double lonTo = lonToStr.toDouble(&isOK);
 
-                                        project.setup.geometry.geometryType = AreaGeometry::Type::Rectangle;
-                                        project.setup.geometry.geometry = QRectF(QPointF(lonFrom, latFrom), QPointF(lonTo, latTo));
+                                            if(isOK == false) break;
+
+                                            project.setup.geometry.geometryType = AreaGeometry::Type::Rectangle;
+                                            project.setup.geometry.geometry = QRectF(QPointF(lonFrom, latFrom), QPointF(lonTo, latTo));
+
+                                            result &= addProject(project);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
+
+                                for(int iPolygon = 0; iPolygon < polygonNodeList.size(); iPolygon++)
+                                {
+                                    QDomNode polygonNode = polygonNodeList.at(iPolygon);
+
+                                    if(polygonNode.isNull() == false)
+                                    {
+                                        QDomNodeList pointNodeList = polygonNode.toElement().elementsByTagName("Point");
+                                        QPolygonF polygon;
+
+                                        for(int iPoint = 0; iPoint < pointNodeList.size(); iPoint++)
+                                        {
+                                            QDomNode pointNode = pointNodeList.at(iPoint);
+
+                                            if(pointNode.isNull() == false)
+                                            {
+                                                QString latStr = AppSettings::getValueString(pointNode, "Latitude");
+                                                QString lonStr = AppSettings::getValueString(pointNode, "Longitude");
+
+                                                if(latStr.isEmpty() == false && lonStr.isEmpty() == false)
+                                                {
+                                                    double lat = latStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    double lon = lonStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    polygon.push_back(QPointF(lon, lat));
+                                                }
+                                            }
+                                        }
+
+                                        project.setup.geometry.geometryType = AreaGeometry::Type::Polygon;
+                                        project.setup.geometry.geometry = polygon;
 
                                         result &= addProject(project);
 
                                         break;
                                     }
-                                }
-                            }
-
-                            QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
-
-                            for(int iPolygon = 0; iPolygon < polygonNodeList.size(); iPolygon++)
-                            {
-                                QDomNode polygonNode = polygonNodeList.at(iPolygon);
-
-                                if(polygonNode.isNull() == false)
-                                {
-                                    QDomNodeList pointNodeList = projectsNode.toElement().elementsByTagName("Point");
-                                    QPolygonF polygon;
-
-                                    for(int iPoint = 0; iPoint < pointNodeList.size(); iPoint++)
-                                    {
-                                        QDomNode pointNode = pointNodeList.at(iPoint);
-
-                                        if(pointNode.isNull() == false)
-                                        {
-                                            QString latStr = AppSettings::getValueString(pointNode, "Latitude");
-                                            QString lonStr = AppSettings::getValueString(pointNode, "Longitude");
-
-                                            if(latStr.isEmpty() == false && lonStr.isEmpty() == false)
-                                            {
-                                                double lat = latStr.toDouble(&isOK);
-
-                                                if(isOK == false) break;
-
-                                                double lon = lonStr.toDouble(&isOK);
-
-                                                if(isOK == false) break;
-
-                                                polygon.push_back(QPointF(lon, lat));
-                                            }
-                                        }
-                                    }
-
-                                    project.setup.geometry.geometryType = AreaGeometry::Type::Polygon;
-                                    project.setup.geometry.geometry = polygon;
-
-                                    result &= addProject(project);
-
-                                    break;
                                 }
                             }
                         }
