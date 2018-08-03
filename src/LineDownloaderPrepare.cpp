@@ -27,95 +27,59 @@ void LineDownloaderPrepare::prepare()
            _prepareSetup._downloadSetup.geometry.geometry.isNull() == false &&
            _prepareSetup._downloadSetup.geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
         {
-            // FIXME: upravit algoritmus hladania dlazdic pre stiahnutie
-            // tak aby sa stahovali dlazdice, ktore pretinaju definovanu ciaru,
-            // resp. su v definovanom okoli ciary. tym sa usetri velke mnozstvo
-            // testovania pre dlazdice ktore niesu v blyzkosti danej ciary, ale
-            // spadaju do ohranicenia pre definovanu ciaru
             AreaGeometry::LineBufferGeometry lineGeometry = _prepareSetup._downloadSetup.geometry.geometry.value<AreaGeometry::LineBufferGeometry>();
             QPolygonF polygon = lineGeometry.line;
 
-            QRectF geometryRect = polygon.boundingRect();
-
-            double lonFrom = geometryRect.topLeft().x();
-            double latFrom = geometryRect.topLeft().y();
-            double lonTo = geometryRect.bottomRight().x();
-            double latTo = geometryRect.bottomRight().y();
-
-            if(latFrom < latTo)
+            for(int i = 0; i < polygon.size() - 1; i++)
             {
-                std::swap(latFrom, latTo);
-            }
+                QPointF startPoint = polygon[i];
+                QPointF stopPoint = polygon[i + 1];
+                QLineF line(startPoint, stopPoint);
 
-            int tileColStart = MapSettings::long2tilex(lonFrom, level);
-            int tileColStop = MapSettings::long2tilex(lonTo, level);
+                int tileStartCol = MapSettings::long2tilex(startPoint.y(), level);
+                int tileStartRow = MapSettings::lat2tiley(startPoint.x(), level);
+                int tileStopCol = MapSettings::long2tilex(stopPoint.y(), level);
+                int tileStopRow = MapSettings::lat2tiley(stopPoint.x(), level);
 
-            int tileRowStart = MapSettings::lat2tiley(latFrom, level);
-            int tileRowStop = MapSettings::lat2tiley(latTo, level);
+                double maxTileDiff = std::max(std::fabs(tileStartCol - tileStopCol), std::fabs(tileStartRow - tileStopRow));
 
-            OSMTileDownloaderInfoWidget::LevelInfo levelInfo;
-
-            levelInfo.colFrom = tileColStart;
-            levelInfo.colTo = tileColStop;
-            levelInfo.rowFrom = tileRowStart;
-            levelInfo.rowTo = tileRowStop;
-
-            _prepareSetup._infoWidget->setLevelInfo(level, levelInfo);
-
-            for(int col = tileColStart; col <= tileColStop; col++)
-            {
-                if(_prepareSetup._runPrepare == false)
+                if(maxTileDiff == 0.)
                 {
-                    break;
+                    maxTileDiff = 1.;
                 }
 
-                QString columnStr = QString::number(col);
+                maxTileDiff *= 10.;
 
-                for(int row = tileRowStart; row <= tileRowStop; row++)
+                double koef = 1. / maxTileDiff;
+                int tileColPrev = 0;
+                int tileRowPrev = 0;
+
+                for(double i = 0.;  i <= (1. + koef); i += koef)
                 {
-                    if(_prepareSetup._runPrepare == false)
+                    QPointF currentPoint = line.pointAt(i);
+
+                    int tileCol = MapSettings::long2tilex(currentPoint.x(), level);
+                    int tileRow = MapSettings::lat2tiley(currentPoint.y(), level);
+
+                    if(i == 0.)
                     {
-                        break;
+                        tileColPrev = tileCol;
+                        tileRowPrev = tileRow;
                     }
-
-                    if((col + 1) < maxCol && (row + 1) < maxRow)
+                    else
                     {
-                        QPointF topLeft(MapSettings::tilex2long(col, level), MapSettings::tiley2lat(row, level));
-                        QPointF topRight(MapSettings::tilex2long(col + 1, level), MapSettings::tiley2lat(row, level));
-                        QPointF bottomLeft(MapSettings::tilex2long(col, level), MapSettings::tiley2lat(row + 1, level));
-                        QPointF bottomRight(MapSettings::tilex2long(col + 1, level), MapSettings::tiley2lat(row + 1, level));
-
-                        QPolygonF tilePolygon;
-
-                        tilePolygon.push_back(topLeft);
-                        tilePolygon.push_back(topRight);
-                        tilePolygon.push_back(bottomLeft);
-                        tilePolygon.push_back(bottomRight);
-                        tilePolygon.push_back(topLeft);
-
-                        bool intersected = false;
-
-                        // Nemozem testovat pretnutie polygonu samotneho, ale musim ist
-                        // po jednotlivych useckach polygonu a tie testovat. Ak by som
-                        // siel po polygone ako takom tak by sa mi stahovalo vsetko
-                        // co je v danom polygone, tj. ciary
-                        for(int i = 0; i < polygon.size() - 1; i++)
-                        {
-                            QPolygonF tmp;
-
-                            tmp.push_back(polygon[i]);
-                            tmp.push_back(polygon[i + 1]);
-
-                            intersected |= tmp.intersects(tilePolygon);
-                        }
-
-                        if(intersected == false)
+                        if(tileColPrev == tileCol && tileRowPrev == tileRow)
                         {
                             continue;
                         }
+
+                        tileColPrev = tileCol;
+                        tileRowPrev = tileRow;
                     }
 
-                    QString filePath = _prepareSetup._tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row) + ".png";
+                    QString columnStr = QString::number(tileCol);
+
+                    QString filePath = _prepareSetup._tilesPath + levelStr + "/" + columnStr + "/" + QString::number(tileRow) + ".png";
                     QFile file(filePath);
 
                     DeleteOldMapsUtils::tryDeleteFile(filePath, _prepareSetup._downloadSetup.deleteSettings, true);
@@ -128,9 +92,9 @@ void LineDownloaderPrepare::prepare()
 
                             OSMTileDownloader::DownloadItem item;
 
-                            item.column = col;
+                            item.column = tileCol;
                             item.level = level;
-                            item.row = row;
+                            item.row = tileRow;
                             item.fullPath = filePath;
                             item.basePath = _prepareSetup._tilesPath;
 
@@ -150,16 +114,26 @@ void LineDownloaderPrepare::prepare()
 
                     for(int colBuf = 0 - lineGeometry.bufferWidth; colBuf <=lineGeometry.bufferWidth; colBuf++)
                     {
-                        QString columnStr = QString::number(col + colBuf);
+                        if((tileCol + colBuf) > maxCol)
+                        {
+                            break;
+                        }
+
+                        QString columnStr = QString::number(tileCol + colBuf);
 
                         for(int rowBuf = 0 - lineGeometry.bufferWidth; rowBuf <=lineGeometry.bufferWidth; rowBuf++)
                         {
+                            if((tileRow + rowBuf) > maxRow)
+                            {
+                                break;
+                            }
+
                             if(colBuf == 0 && rowBuf == 0)
                             {
                                 continue;
                             }
 
-                            QString filePath = _prepareSetup._tilesPath + levelStr + "/" + columnStr + "/" + QString::number(row + rowBuf) + ".png";
+                            QString filePath = _prepareSetup._tilesPath + levelStr + "/" + columnStr + "/" + QString::number(tileRow + rowBuf) + ".png";
                             QFile file(filePath);
 
                             DeleteOldMapsUtils::tryDeleteFile(filePath, _prepareSetup._downloadSetup.deleteSettings, true);
@@ -172,9 +146,9 @@ void LineDownloaderPrepare::prepare()
 
                                     OSMTileDownloader::DownloadItem item;
 
-                                    item.column = col + colBuf;
+                                    item.column = tileCol + colBuf;
                                     item.level = level;
-                                    item.row = row + rowBuf;
+                                    item.row = tileRow + rowBuf;
                                     item.fullPath = filePath;
                                     item.basePath = _prepareSetup._tilesPath;
 
