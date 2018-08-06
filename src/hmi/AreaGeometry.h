@@ -15,7 +15,7 @@ struct AreaGeometry
         struct LineBufferGeometry
         {
                 QPolygonF line;
-                int bufferWidth;
+                int bufferWidth = 0;
         };
 
         /**

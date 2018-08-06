@@ -139,6 +139,37 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
             projectLongitudeFromElement.appendChild(projectLongitudeFromText);
         }
     }
+    else if(project.setup.geometry.geometryType == AreaGeometry::Type::Line &&
+            project.setup.geometry.geometry.isNull() == false &&
+            project.setup.geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
+    {
+        AreaGeometry::LineBufferGeometry lineGeometry = project.setup.geometry.geometry.value<AreaGeometry::LineBufferGeometry>();
+        QPolygonF polygon = lineGeometry.line;
+
+        QDomElement lineElement = doc.createElement("Line");
+
+        QDomElement bufferWidthElement = doc.createElement("BufferWidth");
+        lineElement.appendChild(bufferWidthElement);
+        QDomText bufferWidthText = doc.createTextNode(QString::number(lineGeometry.bufferWidth));
+        bufferWidthElement.appendChild(bufferWidthText);
+        element.appendChild(lineElement);
+
+        for(const QPointF & point : polygon)
+        {
+            QDomElement pointElement = doc.createElement("Point");
+            lineElement.appendChild(pointElement);
+
+            QDomElement projectLatitudeFromElement = doc.createElement("Latitude");
+            pointElement.appendChild(projectLatitudeFromElement);
+            QDomText projectLatitudeFromText = doc.createTextNode(QString::number(point.y(), 'g', 13));
+            projectLatitudeFromElement.appendChild(projectLatitudeFromText);
+
+            QDomElement projectLongitudeFromElement = doc.createElement("Longitude");
+            pointElement.appendChild(projectLongitudeFromElement);
+            QDomText projectLongitudeFromText = doc.createTextNode(QString::number(point.x(), 'g', 13));
+            projectLongitudeFromElement.appendChild(projectLongitudeFromText);
+        }
+    }
 }
 
 void OSMDownloadProjectModel::storeConfig(QDomDocument &document, QDomElement &rootElement)
@@ -185,6 +216,9 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                         if(projectName.isEmpty() == false && levelFrom.isEmpty() == false && levelTo.isEmpty() == false)
                         {
                             QDomNodeList rectangleNodeList = projectNode.toElement().elementsByTagName("Rectangle");
+                            QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
+                            QDomNodeList lineNodeList = projectNode.toElement().elementsByTagName("Line");
+
                             OSMDownloadProjectModel::Project project;
                             bool isOK;
 
@@ -239,10 +273,8 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                                     }
                                 }
                             }
-                            else
+                            else if(polygonNodeList.size() > 0)
                             {
-                                QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
-
                                 for(int iPolygon = 0; iPolygon < polygonNodeList.size(); iPolygon++)
                                 {
                                     QDomNode polygonNode = polygonNodeList.at(iPolygon);
@@ -278,6 +310,65 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
 
                                         project.setup.geometry.geometryType = AreaGeometry::Type::Polygon;
                                         project.setup.geometry.geometry = polygon;
+
+                                        result &= addProject(project);
+
+                                        break;
+                                    }
+                                }
+                            }
+                            else if(lineNodeList.size() > 0)
+                            {
+                                for(int iLine = 0; iLine < lineNodeList.size(); iLine++)
+                                {
+                                    QDomNode lineNode = lineNodeList.at(iLine);
+
+                                    if(lineNode.isNull() == false)
+                                    {
+                                        QDomNodeList pointNodeList = lineNode.toElement().elementsByTagName("Point");
+                                        AreaGeometry::LineBufferGeometry lineGeometry;
+                                        QString bufferWidthStr = AppSettings::getValueString(projectNode, "BufferWidth");
+
+                                        for(int iPoint = 0; iPoint < pointNodeList.size(); iPoint++)
+                                        {
+                                            QDomNode pointNode = pointNodeList.at(iPoint);
+
+                                            if(pointNode.isNull() == false)
+                                            {
+                                                QString latStr = AppSettings::getValueString(pointNode, "Latitude");
+                                                QString lonStr = AppSettings::getValueString(pointNode, "Longitude");
+
+                                                if(latStr.isEmpty() == false && lonStr.isEmpty() == false)
+                                                {
+                                                    double lat = latStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    double lon = lonStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    lineGeometry.line.push_back(QPointF(lon, lat));
+                                                }
+                                            }
+                                        }
+
+                                        if(bufferWidthStr.isEmpty() == true)
+                                        {
+                                            lineGeometry.bufferWidth = 0;
+                                        }
+                                        else
+                                        {
+                                            int buffer = bufferWidthStr.toInt(&isOK);
+
+                                            if(isOK == true)
+                                            {
+                                                lineGeometry.bufferWidth = buffer;
+                                            }
+                                        }
+
+                                        project.setup.geometry.geometryType = AreaGeometry::Type::Line;
+                                        project.setup.geometry.geometry = QVariant::fromValue(lineGeometry);
 
                                         result &= addProject(project);
 

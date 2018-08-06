@@ -28,7 +28,7 @@ AreaGeometryWigdetInterface * AreaGeometryWigdetInterface::createGeometryWidget(
     }
     else if(geometry.geometryType == AreaGeometry::Type::Line &&
             geometry.geometry.isNull() == false &&
-            geometry.geometry.canConvert<QPolygonF>() == true)
+            geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
     {
         return new LineWidget(geometry, parent);
     }

@@ -326,9 +326,13 @@ void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
             }
 
             AreaGeometry geometry;
+            AreaGeometry::LineBufferGeometry lineGeom;
+
+            lineGeom.bufferWidth = 0;
+            lineGeom.line = _selectedLine;
 
             geometry.geometryType = AreaGeometry::Type::Line;
-            geometry.geometry = _selectedLine;
+            geometry.geometry = QVariant::fromValue(lineGeom);
 
             emit downloadSelectedArea(geometry);
 

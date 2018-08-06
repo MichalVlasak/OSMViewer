@@ -12,13 +12,15 @@ LineWidget::LineWidget(const AreaGeometry & geometry, QWidget *parent)
 
     if(geometry.geometryType == AreaGeometry::Type::Line &&
        geometry.geometry.isNull() == false &&
-       geometry.geometry.canConvert<QPolygonF>() == true)
+       geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
     {
-        _polygon = geometry.geometry.value<QPolygonF>();
+        AreaGeometry::LineBufferGeometry lineGeometry = geometry.geometry.value<AreaGeometry::LineBufferGeometry>();
+        _polygon = lineGeometry.line;
 
         _tableModel = new PolygonAreaTableModel(this);
 
         _ui->tableView->setModel(_tableModel);
+        _ui->bufferWidth->setValue(lineGeometry.bufferWidth);
 
         _tableModel->setPolygon(_polygon);
     }
