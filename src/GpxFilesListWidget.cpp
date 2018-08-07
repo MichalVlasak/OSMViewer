@@ -1,5 +1,6 @@
 #include "GpxFilesListWidget.h"
 #include "ui_GpxFileListWidget.h"
+#include "MainWindow.h"
 
 #include <QFileDialog>
 #include <QTableView>
@@ -18,19 +19,27 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
 
     _ui->tableView->setModel(_tableModel);
 
+    _timer = new QTimer(this);
+    _timer->setInterval(1000);
+
     QObject::connect(_ui->addFile, SIGNAL(clicked(bool)), SLOT(addFile()));
     QObject::connect(_ui->deleteFile, SIGNAL(clicked(bool)), SLOT(deleteFile()));
     QObject::connect(_ui->deleteAllFile, SIGNAL(clicked(bool)), SLOT(deleteAllFile()));
     QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelection()));
+    QObject::connect(_ui->downloadTilesForGpx, SIGNAL(clicked(bool)), SLOT(downloadTilesForGpx()));
     QObject::connect(_gpxManager, SIGNAL(gpxWasLoadedSignals(int)), SLOT(gpxWasLoadedSlot(int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusLoad(int,int)), SLOT(gpxStatusLoad(int,int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusAllLoaded()), SLOT(gpxStatusAllLoaded()));
     QObject::connect(_gpxManager, SIGNAL(gpxCurrentLoadingSignals(QString)), SLOT(gpxCurrentLoadingSignals(QString)));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    QObject::connect(_timer, SIGNAL(timeout()), SLOT(checkDownloadRunning()));
+
+    _timer->start();
 
     _ui->deleteFile->setDisabled(true);
     _ui->deleteAllFile->setDisabled(true);
     _ui->clearSelection->setDisabled(true);
+    _ui->downloadTilesForGpx->setDisabled(true);
     _ui->progresBarWidget->hide();
 
     reloadGpx();
@@ -50,6 +59,32 @@ void GpxFilesListWidget::addFile()
         _gpxManager->loadGpxFiles(filePaths);
 
         reloadGpx();
+    }
+}
+
+void GpxFilesListWidget::downloadTilesForGpx()
+{
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+        QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
+
+        for(const QModelIndex & index : indexes)
+        {
+            int id = getId(index);
+
+            if(id != GpxManager::ErrorId)
+            {
+                for(const GpxManager::GpxItem & gpxItem : gpxVector)
+                {
+                    if(gpxItem.fileId == id)
+                    {
+                        GpxManager::downloadTilesForGpx(gpxItem);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -136,6 +171,7 @@ void GpxFilesListWidget::reloadGpx()
         _ui->deleteAllFile->setDisabled(gpxVector.empty());
         _ui->deleteFile->setDisabled(true);
         _ui->clearSelection->setDisabled(true);
+        _ui->downloadTilesForGpx->setDisabled(true);
     }
 
     _ui->tableView->resizeColumnsToContents();
@@ -145,6 +181,18 @@ void GpxFilesListWidget::selectionChanged(QItemSelection selected, QItemSelectio
 {
     _ui->deleteFile->setDisabled(selected.isEmpty());
     _ui->clearSelection->setDisabled(selected.isEmpty());
+
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        OSMTileDownloader * downloader = window->getOSMTileDownloader();
+
+        if(downloader != nullptr)
+        {
+            _ui->downloadTilesForGpx->setDisabled(selected.isEmpty() || window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        }
+    }
 
     QModelIndexList indexes = _ui->tableView->selectionModel()->selectedIndexes();
     GpxManager::GpxIdVector selectedGpx;
@@ -189,6 +237,7 @@ void GpxFilesListWidget::gpxWasLoadedSlot(int fileId)
         _ui->deleteAllFile->setDisabled(gpxVector.empty());
         _ui->deleteFile->setDisabled(true);
         _ui->clearSelection->setDisabled(true);
+        _ui->downloadTilesForGpx->setDisabled(true);
     }
 
     _ui->tableView->resizeColumnsToContents();
@@ -211,4 +260,20 @@ void GpxFilesListWidget::gpxCurrentLoadingSignals(QString filePath)
     QFileInfo fi(filePath);
 
     _ui->currentLoadFileName->setText(fi.fileName());
+}
+
+void GpxFilesListWidget::checkDownloadRunning()
+{
+    MainWindow * window = MainWindow::getInstance();
+
+    if(window != nullptr)
+    {
+        OSMTileDownloader * downloader = window->getOSMTileDownloader();
+        OSMTileDownloaderPrepare * prepareDownload = window->getOSMTileDownloaderprepare();
+
+        if(downloader != nullptr && prepareDownload)
+        {
+            _ui->downloadTilesForGpx->setDisabled(_ui->tableView->selectionModel()->selectedIndexes().isEmpty() || downloader->isRunning() || prepareDownload->isRunning());
+        }
+    }
 }

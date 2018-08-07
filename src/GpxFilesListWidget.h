@@ -28,12 +28,14 @@ class GpxFilesListWidget : public QWidget
         void addFile();
         void deleteFile();
         void deleteAllFile();
+        void downloadTilesForGpx();
         void selectionChanged(QItemSelection selected, QItemSelection deselected);
         void clearSelection();
         void gpxWasLoadedSlot(int fileId);
         void gpxStatusLoad(int allCount, int currentCounter);
         void gpxStatusAllLoaded();
         void gpxCurrentLoadingSignals(QString filePath);
+        void checkDownloadRunning();
 
     private:
         void reloadGpx();
@@ -44,6 +46,7 @@ class GpxFilesListWidget : public QWidget
         GpxManager * _gpxManager = nullptr;
         GpxFilesListModel * _tableModel = nullptr;
         GpxLayer * _gpxLayer = nullptr;
+        QTimer * _timer = nullptr;
 };
 
 #endif // GPXFILESLISTWIDGET_H

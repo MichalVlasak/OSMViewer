@@ -449,3 +449,32 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
         }
     }
 }
+
+void GpxManager::downloadTilesForGpx(const GpxItem &gpxItem)
+{
+    AreaGeometry::LineBufferGeometry lineGeometry;
+
+    for(const GpxManager::Point & point : gpxItem.pointVector)
+    {
+        lineGeometry.line.push_back(QPointF(point.lon, point.lat));
+    }
+
+    lineGeometry.bufferWidth = 1.;
+
+    MainWindow * mainWindow = MainWindow::getInstance();
+
+    if(mainWindow != nullptr)
+    {
+        OSMDownloadAreaDialog::Setup setup;
+
+        setup.geometry.geometryType = AreaGeometry::Type::Line;
+        setup.geometry.geometry = QVariant::fromValue(lineGeometry);
+
+        setup.levelFrom = 0;
+        setup.levelTo = ZoomInfo::MaxZoomLevel;
+
+        QFileInfo fi(gpxItem.filePath);
+
+        mainWindow->showDownloadAreaDialog(setup, fi.fileName());
+    }
+}

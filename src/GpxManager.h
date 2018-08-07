@@ -70,6 +70,8 @@ class GpxManager : public QObject, public StoreConfigInterface
         void removeGpxFile(int fileId);
         void removeAll();
 
+        static void downloadTilesForGpx(const GpxItem & gpxItem);
+
     signals:
         void gpxCurrentLoadingSignals(QString filePath);
         void gpxWasLoadedSignals(int fileId);

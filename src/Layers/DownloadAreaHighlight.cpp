@@ -64,7 +64,7 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
                 polygonPix.push_back(QPointF(_mapSettings.getPixelForLon(point.x()), _mapSettings.getPixelForLat(point.y())));
             }
 
-            painter.setPen(QPen(QColor(255, 0, 0), 1));
+            painter.setPen(QPen(QColor(255, 0, 0), 3));
             painter.setBrush(QColor(255, 0, 0));
             painter.drawPolyline(polygonPix);
         }
