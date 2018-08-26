@@ -35,7 +35,7 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         bool isFreeQueue();
         bool isRunning();
         int getThreads() { return _threads; }
-        void setThreads(size_t threads);
+        void setThreads(int threads);
         unsigned getSessionDownloadCount();
         unsigned getAllDownloadCount();
         QString getBaseUrl() { return _baseWebRootUrl; }
@@ -67,17 +67,19 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         void doDownload(QUrl url);
 
     private:
-        QNetworkAccessManager _manager;
+        QVector<QNetworkAccessManager*> _managers;
         QVector<QNetworkReply *> _currentDownloads;
         QVector<DownloadItem> _downloadingItems;
         QString _baseWebRootUrl;
         QStringList _baseWebRootUrllist;
         QMutex _mutex;
+        QMutex _threadMutex;
         bool _isDownloadingEnable = true;
-        size_t _threads;
+        int _threads;
         unsigned _sessionDownloadCount = 0;
         unsigned _allDownloadCount = 0;
         QString _appName;
+        int _lastManager = 0;
 };
 
 #endif // OSMTILEDOWNLOADER_H

@@ -25,11 +25,13 @@ class OSMTileDownloaderSetupWidget : public QWidget
         void clickedButton(QAbstractButton* button);
         void changeBaseUrlFromCombo(QString url);
         void settingsChanged();
+        void checkDownloadRunning();
 
     private:
         Ui::OSMTileDownloaderSetupWidget *_ui;
         OSMTileDownloader * _downloader;
         bool _isSettingsChanged;
+        QTimer * _timer;
 };
 
 #endif // DOWNLOADERSETUPWIDGET_H

@@ -22,13 +22,17 @@ OSMTileDownloaderSetupWidget::OSMTileDownloaderSetupWidget(OSMTileDownloader * d
     _ui->baseUrlCombo->insertItems(0, _downloader->getBaseUrlList());
     _ui->settingsChanged->setText(tr(""));
 
-    _ui->threads->setDisabled(true);
+    _timer = new QTimer(this);
+
+    _timer->setInterval(1000);
+    _timer->start();
 
     QObject::connect(_ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(clickedButton(QAbstractButton*)));
     QObject::connect(_ui->baseUrlCombo, SIGNAL(currentIndexChanged(QString)), SLOT(changeBaseUrlFromCombo(QString)));
     QObject::connect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), SLOT(settingsChanged()));
     QObject::connect(_ui->threads, SIGNAL(valueChanged(int)), SLOT(settingsChanged()));
     QObject::connect(_downloader, SIGNAL(changeThreadsCount(int)), _ui->threads, SLOT(setValue(int)));
+    QObject::connect(_timer, SIGNAL(timeout()), SLOT(checkDownloadRunning()));
 }
 
 OSMTileDownloaderSetupWidget::~OSMTileDownloaderSetupWidget()
@@ -77,5 +81,18 @@ void OSMTileDownloaderSetupWidget::updateSettingsChanged()
     else
     {
         _ui->settingsChanged->setText(tr(""));
+    }
+}
+
+void OSMTileDownloaderSetupWidget::checkDownloadRunning()
+{
+    if(_downloader != nullptr)
+    {
+        bool disable = _downloader->isRunning();
+
+        _ui->threads->setDisabled(disable);
+        _ui->baseUrlEdit->setDisabled(disable);
+        _ui->baseUrlCombo->setDisabled(disable);
+        _ui->buttonBox->setDisabled(disable);
     }
 }

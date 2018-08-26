@@ -23,7 +23,12 @@ OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
 
     _baseWebRootUrl = _baseWebRootUrllist.at(0);
 
-    QObject::connect(&_manager, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+    for(int i = 0; i < _threads; i++)
+    {
+        _managers.push_back(new QNetworkAccessManager(this));
+        QObject::connect(_managers[i], SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+    }
+
     QObject::connect(this, SIGNAL(doDownladSignal(QUrl)), SLOT(doDownload(QUrl)));
 }
 
@@ -48,7 +53,20 @@ void OSMTileDownloader::doDownload(QUrl url)
 {
     QNetworkRequest request(url);
     request.setRawHeader(QByteArray::fromStdString("User-Agent"), _appName.toUtf8());
-    QNetworkReply *reply = _manager.get(request);
+
+    QMutexLocker lockThread(&_threadMutex);
+
+    if(_lastManager > _managers.size())
+    {
+        _lastManager = 0;
+    }
+
+    QNetworkReply *reply = _managers[_lastManager++]->get(request);
+
+    if(_lastManager >= _threads)
+    {
+        _lastManager = 0;
+    }
 
 #if QT_CONFIG(ssl)
     QObject::connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
@@ -98,13 +116,15 @@ bool OSMTileDownloader::saveToDisk(const QUrl &url, QIODevice *data, QString & f
 
     if (basename.isEmpty())
     {
-        basename = "unknown";
+        basename = "???unknown???";
     }
     else
     {
         QString origUrl = url.url();
 
         QMutexLocker lock(&_mutex);
+
+        bool isFinded = false;
 
         for(int i = 0; i < _downloadingItems.size(); i++)
         {
@@ -126,24 +146,36 @@ bool OSMTileDownloader::saveToDisk(const QUrl &url, QIODevice *data, QString & f
                 basename = itemStruct.fullPath;
                 _downloadingItems.remove(i);
 
+                isFinded = true;
+
                 break;
             }
         }
+
+        if(isFinded == false)
+        {
+            if(_downloadingItems.size() > 0)
+            {
+                basename = _downloadingItems[0].basePath + path;
+            }
+        }
+
+        QFile file(basename);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            std::cerr << "Could not open " << qPrintable(basename) << " for writing: " << qPrintable(file.errorString()) << std::endl;
+            return false;
+        }
+
+        file.write(data->readAll());
+        file.close();
+
+        fileName = basename;
+
+        return true;
     }
 
-    QFile file(basename);
-    if (!file.open(QIODevice::WriteOnly))
-    {
-        std::cerr << "Could not open " << qPrintable(basename) << " for writing: " << qPrintable(file.errorString()) << std::endl;
-        return false;
-    }
-
-    file.write(data->readAll());
-    file.close();
-
-    fileName = basename;
-
-    return true;
+    return false;
 }
 
 bool OSMTileDownloader::isHttpRedirect(QNetworkReply *reply)
@@ -261,8 +293,43 @@ void OSMTileDownloader::cancelDownload()
     _sessionDownloadCount = 0;
 }
 
-void OSMTileDownloader::setThreads(size_t threads)
+void OSMTileDownloader::setThreads(int threads)
 {
+    if(threads == _threads)
+    {
+        return;
+    }
+    else if(threads > _threads)
+    {
+        QMutexLocker lockThread(&_threadMutex);
+
+        for(int i = _threads; i < threads; i++)
+        {
+            _managers.push_back(new QNetworkAccessManager(this));
+            QObject::connect(_managers[i], SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+        }
+    }
+    else if(threads < _threads)
+    {
+        if(isRunning() == false)
+        {
+            QMutexLocker lockThread(&_threadMutex);
+
+            for(int i = threads; i < _threads; i++)
+            {
+                QNetworkAccessManager * manager = _managers[i];
+
+                if(manager != nullptr)
+                {
+                    delete manager;
+                    manager = nullptr;
+                }
+            }
+
+            _managers.resize(threads);
+        }
+    }
+
     _threads = threads;
 
     emit changeThreadsCount(_threads);
@@ -288,10 +355,10 @@ void OSMTileDownloader::storeConfig(QDomDocument &document, QDomElement &rootEle
     QDomText downloadEnableText = document.createTextNode(QString::number(isDownloadingEnable()));
     downloadEnableElement.appendChild(downloadEnableText);
 
-    /*QDomElement threadsCountElement = document.createElement("ThreadsCount");
+    QDomElement threadsCountElement = document.createElement("ThreadsCount");
     downloaderElement.appendChild(threadsCountElement);
     QDomText threadsCountText = document.createTextNode(QString::number(getThreads()));
-    threadsCountElement.appendChild(threadsCountText);*/
+    threadsCountElement.appendChild(threadsCountText);
 }
 
 bool OSMTileDownloader::restoreConfig(QDomDocument &document)
