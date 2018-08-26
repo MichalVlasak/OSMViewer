@@ -11,7 +11,6 @@ OSMTileDownloaderPrepare::OSMTileDownloaderPrepare(OSMTileDownloader * downloade
       _downloader(downloader),
       _infoWidget(infoWidget)
 {
-    QObject::connect(this, SIGNAL(columnIsPrepared()), _downloader, SLOT(startDownload()));
     QObject::connect(_infoWidget, SIGNAL(cancelDownloading()), SLOT(cancelDownloading()));
 }
 
@@ -43,8 +42,6 @@ void OSMTileDownloaderPrepare::run()
     try
     {
         GeometryDownloaderPrepare * prepare = GeometryDownloaderPrepare::createGeometryDownloaderPrepare(prepareSetup, this);
-
-        QObject::connect(prepare, SIGNAL(columnIsPrepared()), SIGNAL(columnIsPrepared()));
 
         prepare->prepare();
 

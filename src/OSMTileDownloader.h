@@ -1,8 +1,8 @@
 #ifndef OSMTILEDOWNLOADER_H
 #define OSMTILEDOWNLOADER_H
 
-#include <QProcess>
 #include <QMutex>
+#include <QtNetwork>
 
 #include "StoreConfigInterface.h"
 
@@ -11,7 +11,7 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         Q_OBJECT
 
     public:
-        static const size_t MAX_QUEUE;
+        static const int MAX_QUEUE;
 
     public:
         struct DownloadItem
@@ -25,21 +25,22 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         };
 
     public:
-        explicit OSMTileDownloader(QObject *parent = 0);
+        OSMTileDownloader(const QString & appName, QObject *parent = nullptr);
+        virtual ~OSMTileDownloader() = default;
 
     public:
         bool isDownloadingEnable();
         void cancelDownload();
-        void addUrlToDownload(DownloadItem newItem, bool autoDownload = true);
+        bool addDownloadItem(const DownloadItem & itemStruct);
+        bool isFreeQueue();
         bool isRunning();
         int getThreads() { return _threads; }
         void setThreads(size_t threads);
+        unsigned getSessionDownloadCount();
+        unsigned getAllDownloadCount();
         QString getBaseUrl() { return _baseWebRootUrl; }
         void setBaseUrl(QString url);
         QStringList getBaseUrlList() { return _baseWebRootUrllist; }
-        bool isFreeQueue();
-        unsigned getSessionDownloadCount();
-        unsigned getAllDownloadCount();
 
         // interface zo StoreConfigInterface
         void storeConfig(QDomDocument & document, QDomElement & rootElement);
@@ -47,39 +48,36 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
 
     public slots:
         void setDownloadingEnable(bool enabled);
-        void startDownload();
 
     signals:
-        void allItemIsDownloaded();
-        void downloadItemIsDone();
         void downloadingEnable(bool value);
-        void downloadedItem(int level, int col, int row);
         void changeThreadsCount(int count);
+        void downloadedItem(int level, int col, int row);
+        void downloadItemIsDone();
+        void allItemIsDownloaded();
+        void doDownladSignal(QUrl url);
 
     private:
-        bool isFileExist(DownloadItem item);
-        QProcess * getFreeProcess();
-        QProcess * newProcess();
+        bool saveToDisk(const QUrl & url, QIODevice *data, QString & fileName);
+        bool isHttpRedirect(QNetworkReply *reply);
 
     private slots:
-        void processDone();
+        void downloadFinished(QNetworkReply *reply);
+        void sslErrors(const QList<QSslError> &errors);
+        void doDownload(QUrl url);
 
     private:
-        typedef std::vector<DownloadItem> DownloadItemsVector;
-        typedef std::vector<QProcess*> ProcessVector;
-
-    private:
-        bool _isDownloadingEnable = true;
-        DownloadItemsVector _itemsToDownload;
-        ProcessVector _processVector;
-        QMutex _mutex;
-        QMutex _processMutex;
+        QNetworkAccessManager _manager;
+        QVector<QNetworkReply *> _currentDownloads;
+        QVector<DownloadItem> _downloadingItems;
         QString _baseWebRootUrl;
         QStringList _baseWebRootUrllist;
+        QMutex _mutex;
+        bool _isDownloadingEnable = true;
         size_t _threads;
         unsigned _sessionDownloadCount = 0;
         unsigned _allDownloadCount = 0;
-        bool _isDownloadCanceled = false;
+        QString _appName;
 };
 
 #endif // OSMTILEDOWNLOADER_H

@@ -22,6 +22,8 @@ OSMTileDownloaderSetupWidget::OSMTileDownloaderSetupWidget(OSMTileDownloader * d
     _ui->baseUrlCombo->insertItems(0, _downloader->getBaseUrlList());
     _ui->settingsChanged->setText(tr(""));
 
+    _ui->threads->setDisabled(true);
+
     QObject::connect(_ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(clickedButton(QAbstractButton*)));
     QObject::connect(_ui->baseUrlCombo, SIGNAL(currentIndexChanged(QString)), SLOT(changeBaseUrlFromCombo(QString)));
     QObject::connect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), SLOT(settingsChanged()));

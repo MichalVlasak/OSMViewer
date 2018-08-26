@@ -18,7 +18,6 @@ class OSMTileDownloaderPrepare : public QThread
         void setDownloadAreaHighlight(class DownloadAreaHighlight * downloadAreaHighlight);
 
     signals:
-        void columnIsPrepared();
         void allIsDownloaded();
 
     private:

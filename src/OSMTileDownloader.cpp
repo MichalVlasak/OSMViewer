@@ -1,5 +1,6 @@
 #include "OSMTileDownloader.h"
 #include "AppSettings.h"
+#include "MainWindow.h"
 
 #include <QDir>
 #include <QThread>
@@ -7,32 +8,23 @@
 
 #include <iostream>
 
-const size_t OSMTileDownloader::MAX_QUEUE = 1000;
+const int OSMTileDownloader::MAX_QUEUE = 100;
 
-OSMTileDownloader::OSMTileDownloader(QObject *parent)
-    : QObject(parent)
+OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
+    : QObject(parent),
+      _appName(appName)
 {
     _threads = QThread::idealThreadCount();
+    _sessionDownloadCount = 0;
+    _allDownloadCount = 0;
 
-    _baseWebRootUrllist.append("140.211.167.105");
+    _baseWebRootUrllist.append("http://140.211.167.105");
     _baseWebRootUrllist.append("http://tile.openstreetmap.org");
 
     _baseWebRootUrl = _baseWebRootUrllist.at(0);
 
-    for(size_t i = 0; i < _threads; i++)
-    {
-        _processVector.push_back(newProcess());
-    }
-}
-
-QProcess * OSMTileDownloader::newProcess()
-{
-    QProcess * proc = new QProcess(this);
-    proc->close();
-
-    QObject::connect(proc, SIGNAL(finished(int)), SLOT(processDone()));
-
-    return proc;
+    QObject::connect(&_manager, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+    QObject::connect(this, SIGNAL(doDownladSignal(QUrl)), SLOT(doDownload(QUrl)));
 }
 
 void OSMTileDownloader::setBaseUrl(QString url)
@@ -40,11 +32,195 @@ void OSMTileDownloader::setBaseUrl(QString url)
     _baseWebRootUrl = url;
 }
 
+bool OSMTileDownloader::isFreeQueue()
+{
+    QMutexLocker lock(&_mutex);
+
+    if(_downloadingItems.size() < MAX_QUEUE)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void OSMTileDownloader::doDownload(QUrl url)
+{
+    QNetworkRequest request(url);
+    request.setRawHeader(QByteArray::fromStdString("User-Agent"), _appName.toUtf8());
+    QNetworkReply *reply = _manager.get(request);
+
+#if QT_CONFIG(ssl)
+    QObject::connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
+#endif
+
+    QMutexLocker lock(&_mutex);
+    _currentDownloads.append(reply);
+}
+
+bool OSMTileDownloader::addDownloadItem(const OSMTileDownloader::DownloadItem & itemStruct)
+{
+    bool isPresent = false;
+
+    for(const DownloadItem & item : _downloadingItems)
+    {
+        if(item.level == itemStruct.level &&
+           item.column == itemStruct.column &&
+           item.row == itemStruct.row)
+        {
+            isPresent = true;
+
+            break;
+        }
+    }
+
+    if(isPresent == false)
+    {
+        QString tileUrl = QString("%1/%2/%3/%4.png").arg(_baseWebRootUrl).arg(itemStruct.level).arg(itemStruct.column).arg(itemStruct.row);
+
+        QUrl url = QUrl(tileUrl);
+
+        {
+            QMutexLocker lock(&_mutex);
+            _downloadingItems.append(itemStruct);
+        }
+
+        emit doDownladSignal(url);
+    }
+
+    return true;
+}
+
+bool OSMTileDownloader::saveToDisk(const QUrl &url, QIODevice *data, QString & fileName)
+{
+    QString path = url.path();
+    QString basename = QFileInfo(path).fileName();
+
+    if (basename.isEmpty())
+    {
+        basename = "unknown";
+    }
+    else
+    {
+        QString origUrl = url.url();
+
+        QMutexLocker lock(&_mutex);
+
+        for(int i = 0; i < _downloadingItems.size(); i++)
+        {
+            const DownloadItem & itemStruct = _downloadingItems[i];
+
+            QString tileUrl = QString("%1/%2/%3/%4.png").arg(_baseWebRootUrl).arg(itemStruct.level).arg(itemStruct.column).arg(itemStruct.row);
+
+            if(origUrl.compare(tileUrl) == 0)
+            {
+                QString directory = QString("%1/%2/%3").arg(itemStruct.basePath).arg(itemStruct.level).arg(itemStruct.column);
+
+                if(QDir(directory).exists() == false)
+                {
+                    QDir().mkpath(directory);
+                }
+
+                emit downloadedItem(itemStruct.level, itemStruct.column, itemStruct.row);
+
+                basename = itemStruct.fullPath;
+                _downloadingItems.remove(i);
+
+                break;
+            }
+        }
+    }
+
+    QFile file(basename);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        std::cerr << "Could not open " << qPrintable(basename) << " for writing: " << qPrintable(file.errorString()) << std::endl;
+        return false;
+    }
+
+    file.write(data->readAll());
+    file.close();
+
+    fileName = basename;
+
+    return true;
+}
+
+bool OSMTileDownloader::isHttpRedirect(QNetworkReply *reply)
+{
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    return statusCode == 301 || statusCode == 302 || statusCode == 303
+            || statusCode == 305 || statusCode == 307 || statusCode == 308;
+}
+
+void OSMTileDownloader::sslErrors(const QList<QSslError> &sslErrors)
+{
+#if QT_CONFIG(ssl)
+    for (const QSslError &error : sslErrors)
+    {
+        std::cerr << "SSL error: " << qPrintable(error.errorString()) << std::endl;
+    }
+#else
+    Q_UNUSED(sslErrors);
+#endif
+}
+
+void OSMTileDownloader::downloadFinished(QNetworkReply *reply)
+{
+    QUrl url = reply->url();
+
+    if (reply->error())
+    {
+        std::cerr << "Download of " << url.toEncoded().constData() << " failed: " << qPrintable(reply->errorString()) << std::endl;
+    }
+    else
+    {
+        if (isHttpRedirect(reply))
+        {
+            std::cerr << "Request was redirected." << std::endl;
+        }
+        else
+        {
+            QString fileName;
+
+            if (saveToDisk(url, reply, fileName))
+            {
+                std::cout << "Download of " << url.toEncoded().constData() << " succeeded (saved to " << qPrintable(fileName) << ")" << std::endl;
+            }
+        }
+    }
+
+    {
+        QMutexLocker lock(&_mutex);
+
+        _currentDownloads.removeAll(reply);
+    }
+
+    reply->deleteLater();
+
+    _sessionDownloadCount++;
+    _allDownloadCount++;
+
+    if (_currentDownloads.isEmpty())
+    {
+        // all downloads finished
+        _sessionDownloadCount = 0;
+        emit allItemIsDownloaded();
+    }
+
+    emit downloadItemIsDone();
+}
+
 void OSMTileDownloader::setDownloadingEnable(bool enabled)
 {
     _isDownloadingEnable = enabled;
 
     emit downloadingEnable(_isDownloadingEnable);
+
+    if(enabled == false)
+    {
+        cancelDownload();
+    }
 }
 
 bool OSMTileDownloader::isDownloadingEnable()
@@ -52,204 +228,13 @@ bool OSMTileDownloader::isDownloadingEnable()
     return _isDownloadingEnable;
 }
 
-QProcess * OSMTileDownloader::getFreeProcess()
-{
-    QMutexLocker lock(&_processMutex);
-
-    for(size_t i = 0; i < _processVector.size(); i++)
-    {
-        QProcess * proc = _processVector[i];
-
-        bool isOpen = proc->isOpen();
-
-        if(isOpen == false)
-        {
-            return proc;
-        }
-    }
-
-    return nullptr;
-}
-
-void OSMTileDownloader::addUrlToDownload(DownloadItem newItem, bool autoDownload)
-{
-    _isDownloadCanceled = false;
-
-    {
-        QMutexLocker lock(&_mutex);
-
-        bool isPresent = false;
-
-        for(const DownloadItem & item : _itemsToDownload)
-        {
-            if(item.level == newItem.level && item.column == newItem.column && item.row == newItem.row)
-            {
-                isPresent = true;
-            }
-        }
-
-        if(isPresent == false)
-        {
-            _itemsToDownload.push_back(newItem);
-            lock.unlock();
-        }
-    }
-
-    if(_itemsToDownload.size() > 0 && autoDownload == true)
-    {
-        QTimer::singleShot(1, this, SLOT(startDownload()));
-        //startDownload();
-    }
-}
-
-bool OSMTileDownloader::isFileExist(DownloadItem item)
-{
-    QFile file(item.fullPath);
-
-    return file.exists();
-}
-
-void OSMTileDownloader::startDownload()
-{
-    QProcess * proc = getFreeProcess();
-
-    if(proc != nullptr && _itemsToDownload.size() > 0)
-    {
-        DownloadItemsVector::iterator it = _itemsToDownload.begin();
-
-        if(it != _itemsToDownload.end())
-        {
-            DownloadItem item = *it;
-
-            while(isFileExist(item) == true)
-            {
-                emit downloadedItem(item.level, item.column, item.row);
-
-                {
-                    QMutexLocker lock(&_mutex);
-
-                    _itemsToDownload.erase(_itemsToDownload.begin());
-                }
-
-                it = _itemsToDownload.begin();
-
-                if(it != _itemsToDownload.end())
-                {
-                    item = *it;
-                }
-                else
-                {
-                    emit allItemIsDownloaded();
-
-                    return;
-                }
-            }
-
-            QDir levelDir(item.basePath + "/" + QString::number(item.level));
-            if(levelDir.exists() == false)
-            {
-                levelDir.mkpath(levelDir.absolutePath());
-            }
-
-            QDir columnDir(levelDir.path() + "/" + QString::number(item.column));
-            if(columnDir.exists() == false)
-            {
-                columnDir.mkpath(columnDir.absolutePath());
-            }
-
-            QString tileUrl = QString("%1/%2/%3/%4.png").arg(_baseWebRootUrl).arg(item.level).arg(item.column).arg(item.row);
-
-            //std::cout << "start download" << std::endl;
-
-#ifdef __linux__
-            QString programs = "wget ";
-#else
-            QString programs = "\"C:\\Program Files (x86)\\GnuWin32\\bin\\wget.exe\" ";
-#endif
-
-            QString command = programs + tileUrl + " -O " + item.fullPath;
-            proc->start(command);
-            proc->startDetached(command);
-            //proc->waitForFinished();
-
-            //std::cout << "stop download" << std::endl;
-        }
-        else
-        {
-            emit allItemIsDownloaded();
-        }
-    }
-}
-
-void OSMTileDownloader::processDone()
-{
-    //std::cout << "process done" << std::endl;
-
-    QProcess * proc = qobject_cast<QProcess*>(sender());
-
-    if(proc != nullptr)
-    {
-        proc->close();
-
-        // ak prislo znizenie poctu trackov tak procesy budem odoberat az tu, je to jednoduchsie
-        if(_threads < _processVector.size())
-        {
-            QMutexLocker lock(&_processMutex);
-
-            int idx = -1;
-
-            for(size_t i = 0; i < _processVector.size(); i++)
-            {
-                if(_processVector[i] == proc)
-                {
-                    idx = i;
-                    break;
-                }
-            }
-
-            if(idx != -1)
-            {
-                _processVector.erase(_processVector.begin() + idx);
-            }
-        }
-
-        emit downloadItemIsDone();
-
-        if(_isDownloadCanceled == false)
-        {
-            _sessionDownloadCount++;
-        }
-
-        if(_itemsToDownload.size() == 0)
-        {
-            _sessionDownloadCount = 0;
-        }
-
-        _allDownloadCount++;
-
-        startDownload();
-    }
-}
-
-void OSMTileDownloader::cancelDownload()
+bool OSMTileDownloader::isRunning()
 {
     QMutexLocker lock(&_mutex);
 
-    _itemsToDownload.clear();
-
-    _sessionDownloadCount = 0;
-    _isDownloadCanceled = true;
-}
-
-bool OSMTileDownloader::isRunning()
-{
-    QMutexLocker lock(&_processMutex);
-
-    for(size_t i = 0; i < _processVector.size(); i++)
+    for(QNetworkReply * reply : _currentDownloads)
     {
-        QProcess * proc = _processVector[i];
-
-        if(proc->isOpen() == true)
+        if(reply != nullptr && reply->isRunning() == true)
         {
             return true;
         }
@@ -258,36 +243,29 @@ bool OSMTileDownloader::isRunning()
     return false;
 }
 
-void OSMTileDownloader::setThreads(size_t threads)
-{
-    QMutexLocker lock(&_processMutex);
-
-    _threads = threads;
-
-    // pridanie dalsich "vlakien" mozem urobit hned, odobratie budem riesit ked sa niektory z procesov ukonci
-    if(threads > _processVector.size())
-    {
-        for(size_t i = _processVector.size(); i < _threads; i++)
-        {
-            _processVector.push_back(newProcess());
-        }
-    }
-
-    lock.unlock();
-
-    for(size_t i = 0; i < threads; i++)
-    {
-        startDownload();
-    }
-
-    emit changeThreadsCount(_threads);
-}
-
-bool OSMTileDownloader::isFreeQueue()
+void OSMTileDownloader::cancelDownload()
 {
     QMutexLocker lock(&_mutex);
 
-    return _itemsToDownload.size() < MAX_QUEUE;
+    for(QNetworkReply * reply : _currentDownloads)
+    {
+        if(reply != nullptr)
+        {
+            reply->deleteLater();
+        }
+    }
+
+    _currentDownloads.clear();
+    _downloadingItems.clear();
+
+    _sessionDownloadCount = 0;
+}
+
+void OSMTileDownloader::setThreads(size_t threads)
+{
+    _threads = threads;
+
+    emit changeThreadsCount(_threads);
 }
 
 unsigned OSMTileDownloader::getSessionDownloadCount()
@@ -310,10 +288,10 @@ void OSMTileDownloader::storeConfig(QDomDocument &document, QDomElement &rootEle
     QDomText downloadEnableText = document.createTextNode(QString::number(isDownloadingEnable()));
     downloadEnableElement.appendChild(downloadEnableText);
 
-    QDomElement threadsCountElement = document.createElement("ThreadsCount");
+    /*QDomElement threadsCountElement = document.createElement("ThreadsCount");
     downloaderElement.appendChild(threadsCountElement);
     QDomText threadsCountText = document.createTextNode(QString::number(getThreads()));
-    threadsCountElement.appendChild(threadsCountText);
+    threadsCountElement.appendChild(threadsCountText);*/
 }
 
 bool OSMTileDownloader::restoreConfig(QDomDocument &document)

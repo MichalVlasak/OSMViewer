@@ -38,9 +38,6 @@ class GeometryDownloaderPrepare : public QObject
 
         virtual void prepare() = 0;
 
-    signals:
-        void columnIsPrepared();
-
     protected:
         const DownloaderPrepareSetup & _prepareSetup;
 };

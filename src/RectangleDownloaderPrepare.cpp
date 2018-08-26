@@ -88,13 +88,8 @@ void RectangleDownloaderPrepare::prepare()
                                 QThread::msleep(500);
                             }
 
-                            _prepareSetup._downloader->addUrlToDownload(item, false);
+                            _prepareSetup._downloader->addDownloadItem(item);
                         }
-                    }
-
-                    if(_prepareSetup._runPrepare == true)
-                    {
-                        emit columnIsPrepared();
                     }
                 }
             }

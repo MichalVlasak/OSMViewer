@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _ui->statusBar->addWidget(_mouseWgs);
 
     //_downloader = new OSMTileDownloader(this);
-    _downloader = new OSMTileDownloader(this);
+    _downloader = new OSMTileDownloader(_applicationName, this);
     _downloaderInfoWidget = new OSMTileDownloaderInfoWidget(_downloader, this);
     _downloaderPrepare = new OSMTileDownloaderPrepare(_downloader, _downloaderInfoWidget, this);
     _downloaderSetupWidget = new OSMTileDownloaderSetupWidget(_downloader, this);

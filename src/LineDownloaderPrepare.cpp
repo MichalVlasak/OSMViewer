@@ -103,13 +103,8 @@ void LineDownloaderPrepare::prepare()
                                 QThread::msleep(500);
                             }
 
-                            _prepareSetup._downloader->addUrlToDownload(item, false);
+                            _prepareSetup._downloader->addDownloadItem(item);
                         }
-                    }
-
-                    if(_prepareSetup._runPrepare == true)
-                    {
-                        emit columnIsPrepared();
                     }
 
                     for(int colBuf = 0 - lineGeometry.bufferWidth; colBuf <=lineGeometry.bufferWidth; colBuf++)
@@ -157,13 +152,8 @@ void LineDownloaderPrepare::prepare()
                                         QThread::msleep(500);
                                     }
 
-                                    _prepareSetup._downloader->addUrlToDownload(item, false);
+                                    _prepareSetup._downloader->addDownloadItem(item);
                                 }
-                            }
-
-                            if(_prepareSetup._runPrepare == true)
-                            {
-                                emit columnIsPrepared();
                             }
                         }
                     }

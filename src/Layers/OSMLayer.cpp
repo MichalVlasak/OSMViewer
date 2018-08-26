@@ -104,7 +104,7 @@ void OSMLayer::paintEvent(QPainter & painter)
                     item.fullPath = filePath;
                     item.basePath = _tilesPath;
 
-                    _downloader->addUrlToDownload(item);
+                    _downloader->addDownloadItem(item);
                 }
             }
         }
