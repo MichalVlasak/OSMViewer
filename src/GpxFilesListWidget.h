@@ -19,10 +19,13 @@ class GpxFilesListWidget : public QWidget
         GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
         ~GpxFilesListWidget();
 
+        void setEnabledClearHighlightedButton(bool enabled);
+
     signals:
         void changeSelectedGpsSignal(const GpxManager::GpxIdVector & ids);
         void deleteGpxSignal(int id);
         void deleteAllSignal();
+        void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);
 
     private slots:
         void addFile();
@@ -36,6 +39,7 @@ class GpxFilesListWidget : public QWidget
         void gpxStatusAllLoaded();
         void gpxCurrentLoadingSignals(QString filePath);
         void checkDownloadRunning();
+        void clearHighlighted();
 
     private:
         void reloadGpx();

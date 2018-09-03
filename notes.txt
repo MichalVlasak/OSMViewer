@@ -1,4 +1,4 @@
 Co je na plane pre vyvoj:
 - okrem zobrazenia oblasti ktora sa prave stahuje, zobrazit jednotlive dlazdice ktore sa stahuju
 - export oblasti s dlazdicami
-- vyhladavanie GPX tras vo vybranom polygone na mape
+- zusenie nacitania GPX suborov po starte aplikacie

@@ -3,6 +3,7 @@
 #include "DeleteOldMapsDialog.h"
 #include "CenterPointEditDialog.h"
 #include "WgsConversion.h"
+#include "GpxManager.h"
 
 #include <QMenu>
 #include <QClipboard>
@@ -54,23 +55,51 @@ void MapContextMenu::show(const QPointF &pos)
         menu->addAction(downloadArea);
         QObject::connect(downloadArea, SIGNAL(triggered(bool)), SIGNAL(downloadArea()));
 
-        QMenu * subMenu = new QMenu(tr("Select & Download Area"), menu);
-        menu->addMenu(subMenu);
+        QMenu * downloadSubMenu = new QMenu(tr("Select & Download Area"), menu);
+        menu->addMenu(downloadSubMenu);
 
         QAction * selectAndDownloadAreaRec = new QAction(tr("Define as Rectangle"), this);
         selectAndDownloadAreaRec->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        subMenu->addAction(selectAndDownloadAreaRec);
+        downloadSubMenu->addAction(selectAndDownloadAreaRec);
         QObject::connect(selectAndDownloadAreaRec, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaRec()));
 
         QAction * selectAndDownloadAreaPoly = new QAction(tr("Define as Polygon"), this);
         selectAndDownloadAreaPoly->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        subMenu->addAction(selectAndDownloadAreaPoly);
+        downloadSubMenu->addAction(selectAndDownloadAreaPoly);
         QObject::connect(selectAndDownloadAreaPoly, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaPoly()));
 
         QAction * selectAndDownloadAreaLine = new QAction(tr("Define as Line"), this);
         selectAndDownloadAreaLine->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
-        subMenu->addAction(selectAndDownloadAreaLine);
+        downloadSubMenu->addAction(selectAndDownloadAreaLine);
         QObject::connect(selectAndDownloadAreaLine, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaLine()));
+
+        QMenu * findSubMenu = new QMenu(tr("Find GPX's"), menu);
+        menu->addMenu(findSubMenu);
+
+        QAction * selectAndFindAreaRec = new QAction(tr("Define as Rectangle"), this);
+        selectAndFindAreaRec->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        findSubMenu->addAction(selectAndFindAreaRec);
+        QObject::connect(selectAndFindAreaRec, SIGNAL(triggered(bool)), SIGNAL(selectAndFindAreaRec()));
+
+        QAction * selectAndFindAreaPoly = new QAction(tr("Define as Polygon"), this);
+        selectAndFindAreaPoly->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        findSubMenu->addAction(selectAndFindAreaPoly);
+        QObject::connect(selectAndFindAreaPoly, SIGNAL(triggered(bool)), SIGNAL(selectAndFindAreaPoly()));
+
+        MainWindow * mainWin = MainWindow::getInstance();
+
+        if(mainWin != nullptr)
+        {
+            GpxManager * gpxManager = mainWin->getGpxManager();
+
+            if(gpxManager != nullptr)
+            {
+                bool isGpxsLoaded = gpxManager->isAllLoaaded();
+
+                selectAndFindAreaRec->setEnabled(isGpxsLoaded);
+                selectAndFindAreaPoly->setEnabled(isGpxsLoaded);
+            }
+        }
     }
 
     menu->addSeparator();

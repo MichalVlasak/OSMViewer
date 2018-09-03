@@ -121,6 +121,8 @@ const QString & GpxManager::getLastPathToGpxFiles() const
 void GpxManager::gpxWasLoaded()
 {
     emit gpxStatusAllLoaded();
+
+    _isAllLoaded = true;
 }
 
 void GpxManager::loadGpxFilesInFuture()
@@ -477,4 +479,9 @@ void GpxManager::downloadTilesForGpx(const GpxItem &gpxItem)
 
         mainWindow->showDownloadAreaDialog(setup, fi.fileName());
     }
+}
+
+bool GpxManager::isAllLoaaded() const
+{
+    return _isAllLoaded;
 }

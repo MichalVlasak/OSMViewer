@@ -50,6 +50,8 @@ class GpxManager : public QObject, public StoreConfigInterface
 
                 int biggestHeartRateIdx = ErrorId;
                 bool showBiggestHeartRate = false;
+
+                bool highlight = false;
         };
 
         typedef std::vector<GpxItem> GpxVector;
@@ -69,6 +71,8 @@ class GpxManager : public QObject, public StoreConfigInterface
 
         void removeGpxFile(int fileId);
         void removeAll();
+
+        bool isAllLoaaded() const;
 
         static void downloadTilesForGpx(const GpxItem & gpxItem);
 
@@ -94,6 +98,7 @@ class GpxManager : public QObject, public StoreConfigInterface
         GpxVector _gpxVector;
         static int itemIdCounter;
         QStringList _filePathsToLoadInFuture;
+        bool _isAllLoaded = false;
 };
 
 #endif // GPXMANAGER_H

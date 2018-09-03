@@ -35,6 +35,7 @@ class PaintingWidget : public QWidget
         void mouseCursorWgsChanged(double lat, double lon);
         void downloadArea();
         void downloadSelectedArea(AreaGeometry geometry);
+        void findInSelectedArea(AreaGeometry geometry);
 
     public slots:
 
@@ -64,12 +65,16 @@ class PaintingWidget : public QWidget
         enum SelectedAreaState
         {
             Unselecting,
-            PrepareForSelectingRec,
-            PrepareForSelectingPoly,
-            PrepareForSelectingLine,
-            SelectingRec,
-            SelectingPoly,
-            SelectingLine
+            PrepareForSelectAndDownloadRec,
+            PrepareForSelectAndDownloadPoly,
+            PrepareForSelectAndDownloadLine,
+            PrepareForSelectAndFindRec,
+            PrepareForSelectAndFindPoly,
+            SelectAndDownloadRec,
+            SelectAndDownloadPoly,
+            SelectAndDownloadLine,
+            SelectAndFindRec,
+            SelectAndFindPoly
         };
 
     private:
@@ -77,9 +82,11 @@ class PaintingWidget : public QWidget
         QPointF getWgsPointFromPixelsPoint(const QPoint & point);
 
     private slots:
-        void startSelectAreaRec();
-        void startSelectAreaPoly();
-        void startSelectAreaLine();
+        void startSelectAndDownloadAreaRec();
+        void startSelectAndDownloadAreaPoly();
+        void startSelectAndDownloadAreaLine();
+        void startSelectAndFindAreaRec();
+        void startSelectAndFindAreaPoly();
         void centerMapToPixels(QPoint pos);
         void downloadViewedAreaSlot();
 

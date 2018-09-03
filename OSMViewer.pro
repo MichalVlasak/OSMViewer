@@ -73,7 +73,8 @@ SOURCES += src/main.cpp\
     src/RectangleDownloaderPrepare.cpp \
     src/PolygonDownloaderPrepare.cpp \
     src/hmi/LineWidget.cpp \
-    src/LineDownloaderPrepare.cpp
+    src/LineDownloaderPrepare.cpp \
+    src/GpxFileFinder.cpp
 
 HEADERS  += src/MainWindow.h \
     src/Layers/BaseLayer.h \
@@ -126,7 +127,8 @@ HEADERS  += src/MainWindow.h \
     src/RectangleDownloaderPrepare.h \
     src/PolygonDownloaderPrepare.h \
     src/hmi/LineWidget.h \
-    src/LineDownloaderPrepare.h
+    src/LineDownloaderPrepare.h \
+    src/GpxFileFinder.h
 
 FORMS    += resources/MainWindow.ui \
     resources/OSMDirectoryPathDialog.ui \

@@ -28,6 +28,8 @@ class GpxFilesListModel : public QStandardItemModel
         int getColumnIndex(HeaderTableEnum headerItem) const;
         void addNewItem(const GpxManager::GpxItem & item);
 
+        QVariant data(const QModelIndex &index, int role) const;
+
     private:
         /**
          * @brief The HeaderIdent struct Struktura identifikujuca nazov stlpca a jeho poradie.

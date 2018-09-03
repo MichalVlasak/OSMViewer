@@ -26,12 +26,14 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
     QObject::connect(_ui->deleteFile, SIGNAL(clicked(bool)), SLOT(deleteFile()));
     QObject::connect(_ui->deleteAllFile, SIGNAL(clicked(bool)), SLOT(deleteAllFile()));
     QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelection()));
+    QObject::connect(_ui->clearHighlighted, SIGNAL(clicked(bool)), SLOT(clearHighlighted()));
     QObject::connect(_ui->downloadTilesForGpx, SIGNAL(clicked(bool)), SLOT(downloadTilesForGpx()));
     QObject::connect(_gpxManager, SIGNAL(gpxWasLoadedSignals(int)), SLOT(gpxWasLoadedSlot(int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusLoad(int,int)), SLOT(gpxStatusLoad(int,int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusAllLoaded()), SLOT(gpxStatusAllLoaded()));
     QObject::connect(_gpxManager, SIGNAL(gpxCurrentLoadingSignals(QString)), SLOT(gpxCurrentLoadingSignals(QString)));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    QObject::connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), _ui->tableView, SLOT(dataChanged(QModelIndex,QModelIndex)));
     QObject::connect(_timer, SIGNAL(timeout()), SLOT(checkDownloadRunning()));
 
     _timer->start();
@@ -39,6 +41,7 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
     _ui->deleteFile->setDisabled(true);
     _ui->deleteAllFile->setDisabled(true);
     _ui->clearSelection->setDisabled(true);
+    _ui->clearHighlighted->setDisabled(true);
     _ui->downloadTilesForGpx->setDisabled(true);
     _ui->progresBarWidget->hide();
 
@@ -276,4 +279,31 @@ void GpxFilesListWidget::checkDownloadRunning()
             _ui->downloadTilesForGpx->setDisabled(_ui->tableView->selectionModel()->selectedIndexes().isEmpty() || downloader->isRunning() || prepareDownload->isRunning());
         }
     }
+}
+
+void GpxFilesListWidget::clearHighlighted()
+{
+    if(_gpxManager != nullptr)
+    {
+        const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
+
+        for(const GpxManager::GpxItem & gpxItem : gpxVector)
+        {
+            GpxManager::GpxItem * itemNoConst = const_cast<GpxManager::GpxItem*>(&gpxItem);
+
+            if(itemNoConst != nullptr)
+            {
+                itemNoConst->highlight = false;
+            }
+        }
+
+        _ui->clearHighlighted->setDisabled(true);
+        emit dataChanged(_tableModel->index(0,0), _tableModel->index(_tableModel->rowCount(), 0));
+    }
+}
+
+void GpxFilesListWidget::setEnabledClearHighlightedButton(bool enabled)
+{
+    _ui->clearHighlighted->setEnabled(enabled);
+    emit dataChanged(_tableModel->index(0,0), _tableModel->index(_tableModel->rowCount(), 0));
 }

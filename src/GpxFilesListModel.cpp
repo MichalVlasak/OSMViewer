@@ -1,4 +1,5 @@
 #include "GpxFilesListModel.h"
+#include "MainWindow.h"
 
 GpxFilesListModel::GpxFilesListModel(QObject *parent)
     : QStandardItemModel(parent)
@@ -117,4 +118,51 @@ int GpxFilesListModel::getColumnIndex(HeaderTableEnum headerItem) const
     }
 
     return ERROR_INDEX;
+}
+
+QVariant GpxFilesListModel::data(const QModelIndex &index, int role) const
+{
+    if(role == Qt::BackgroundRole)
+    {
+        if(index.isValid() == true)
+        {
+            int fileNameColumnIndex = getColumnIndex(GpxFilesListModel::HeaderTableEnum::FileName);
+
+            if(fileNameColumnIndex != GpxFilesListModel::ERROR_INDEX)
+            {
+                QString stringId = data(index, Qt::UserRole + 1).toString();
+
+                if(stringId.isEmpty() == false)
+                {
+                    bool isOk = false;
+                    int id = stringId.toInt(&isOk);
+
+                    if(isOk == true)
+                    {
+                        MainWindow * mainWin = MainWindow::getInstance();
+
+                        if(mainWin != nullptr)
+                        {
+                            GpxManager * gpxManager = mainWin->getGpxManager();
+
+                            if(gpxManager != nullptr)
+                            {
+                                const GpxManager::GpxVector & allGpxs = gpxManager->getGpxVector();
+
+                                for(const GpxManager::GpxItem & item : allGpxs)
+                                {
+                                    if(item.fileId == id && item.highlight == true)
+                                    {
+                                        return QColor(Qt::red);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return QStandardItemModel::data(index, role);
 }

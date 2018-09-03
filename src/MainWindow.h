@@ -52,6 +52,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         void storeConfig(QDomDocument & document, QDomElement & rootElement);
         bool restoreConfig(QDomDocument & document);
         class GpxManager * getGpxManager();
+        class GpxFilesListWidget * getGpxFilesListWidget();
 
     private:
         void keyPressEvent(QKeyEvent * event);
@@ -62,6 +63,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         void setOSMDirectoryPath();
         void setOSMTileDownloaderEnable(bool enable);
         void downloadSelectedArea(AreaGeometry geometry);
+        void findInSelectedArea(AreaGeometry geometry);
         void showAbout();
 
     private:
