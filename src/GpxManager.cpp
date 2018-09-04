@@ -101,7 +101,14 @@ bool GpxManager::restoreConfig(QDomDocument &document)
                 }
             }
 
-            loadGpxFiles(gpxFiles);
+            if(_cancelLoad == false)
+            {
+                loadGpxFiles(gpxFiles);
+            }
+            else
+            {
+                break;
+            }
         }
     }
 
@@ -131,15 +138,23 @@ void GpxManager::loadGpxFilesInFuture()
 
     for(const QString & filePath : _filePathsToLoadInFuture)
     {
-        loadGpxFile(filePath);
+        if(_cancelLoad == false)
+        {
+            loadGpxFile(filePath);
 
-        emit gpxStatusLoad(_filePathsToLoadInFuture.size(), ++counter);
+            emit gpxStatusLoad(_filePathsToLoadInFuture.size(), ++counter);
+        }
+        else
+        {
+            break;
+        }
     }
 }
 
 void GpxManager::loadGpxFiles(const QStringList &filePaths)
 {
     _filePathsToLoadInFuture = filePaths;
+    _cancelLoad = false;
 
     GpxLoaderWatcher * watcher = new GpxLoaderWatcher(this);
 
@@ -484,4 +499,9 @@ void GpxManager::downloadTilesForGpx(const GpxItem &gpxItem)
 bool GpxManager::isAllLoaaded() const
 {
     return _isAllLoaded;
+}
+
+void GpxManager::cancelLoadGpx()
+{
+    _cancelLoad = true;
 }

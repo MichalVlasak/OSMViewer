@@ -76,6 +76,9 @@ class GpxManager : public QObject, public StoreConfigInterface
 
         static void downloadTilesForGpx(const GpxItem & gpxItem);
 
+    public slots:
+        void cancelLoadGpx();
+
     signals:
         void gpxCurrentLoadingSignals(QString filePath);
         void gpxWasLoadedSignals(int fileId);
@@ -99,6 +102,7 @@ class GpxManager : public QObject, public StoreConfigInterface
         static int itemIdCounter;
         QStringList _filePathsToLoadInFuture;
         bool _isAllLoaded = false;
+        volatile bool _cancelLoad = false;
 };
 
 #endif // GPXMANAGER_H

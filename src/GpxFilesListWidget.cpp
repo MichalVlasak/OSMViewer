@@ -28,10 +28,12 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
     QObject::connect(_ui->clearSelection, SIGNAL(clicked(bool)), SLOT(clearSelection()));
     QObject::connect(_ui->clearHighlighted, SIGNAL(clicked(bool)), SLOT(clearHighlighted()));
     QObject::connect(_ui->downloadTilesForGpx, SIGNAL(clicked(bool)), SLOT(downloadTilesForGpx()));
+    QObject::connect(_ui->cancelLoad, SIGNAL(clicked(QAbstractButton*)), SIGNAL(cancelLoadSignal()));
     QObject::connect(_gpxManager, SIGNAL(gpxWasLoadedSignals(int)), SLOT(gpxWasLoadedSlot(int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusLoad(int,int)), SLOT(gpxStatusLoad(int,int)));
     QObject::connect(_gpxManager, SIGNAL(gpxStatusAllLoaded()), SLOT(gpxStatusAllLoaded()));
     QObject::connect(_gpxManager, SIGNAL(gpxCurrentLoadingSignals(QString)), SLOT(gpxCurrentLoadingSignals(QString)));
+    QObject::connect(this, SIGNAL(cancelLoadSignal()), _gpxManager, SLOT(cancelLoadGpx()));
     QObject::connect(_ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), _ui->tableView, SLOT(dataChanged(QModelIndex,QModelIndex)));
     QObject::connect(_timer, SIGNAL(timeout()), SLOT(checkDownloadRunning()));

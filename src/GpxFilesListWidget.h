@@ -26,6 +26,7 @@ class GpxFilesListWidget : public QWidget
         void deleteGpxSignal(int id);
         void deleteAllSignal();
         void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);
+        void cancelLoadSignal();
 
     private slots:
         void addFile();
