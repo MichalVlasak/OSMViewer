@@ -26,6 +26,8 @@ class OSMTileDownloaderSetupWidget : public QWidget
         void changeBaseUrlFromCombo(QString url);
         void settingsChanged();
         void checkDownloadRunning();
+        void downloaderChangeBaseUrl(QString url);
+        void downloaderChangeThreadsCount(int threads);
 
     private:
         Ui::OSMTileDownloaderSetupWidget *_ui;

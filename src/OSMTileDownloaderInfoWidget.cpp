@@ -94,24 +94,34 @@ void OSMTileDownloaderInfoWidget::setLevelRange(int levelFrom, int levelTo)
 
 void OSMTileDownloaderInfoWidget::downloadedItem(int level, int col, int row)
 {
-    _ui->levelValue->setText(QString::number(level));
-    _ui->columnValue->setText(QString::number(col));
-    _ui->rowValue->setText(QString::number(row));
-
-    LevelInfoMap::iterator it = _levelInfo.find(level);
-
-    if(it != _levelInfo.end())
+    if(row > _ui->rowProgress->value() || col > _ui->columnProgress->value() || level > _ui->levelProgress->value())
     {
-        _ui->columnProgress->setMinimum(it->second.colFrom);
-        _ui->columnProgress->setMaximum(it->second.colTo);
-
-        _ui->rowProgress->setMinimum(it->second.rowFrom);
-        _ui->rowProgress->setMaximum(it->second.rowTo);
+        _ui->rowValue->setText(QString::number(row));
+        _ui->rowProgress->setValue(row);
     }
 
-    _ui->levelProgress->setValue(level);
-    _ui->columnProgress->setValue(col);
-    _ui->rowProgress->setValue(row);
+    if(col > _ui->columnProgress->value() || level > _ui->levelProgress->value())
+    {
+        _ui->columnValue->setText(QString::number(col));
+        _ui->columnProgress->setValue(col);
+    }
+
+    if(level > _ui->levelProgress->value())
+    {
+        _ui->levelValue->setText(QString::number(level));
+        _ui->levelProgress->setValue(level);
+
+        LevelInfoMap::iterator it = _levelInfo.find(level);
+
+        if(it != _levelInfo.end())
+        {
+            _ui->columnProgress->setMinimum(it->second.colFrom);
+            _ui->columnProgress->setMaximum(it->second.colTo);
+
+            _ui->rowProgress->setMinimum(it->second.rowFrom);
+            _ui->rowProgress->setMaximum(it->second.rowTo);
+        }
+    }
 }
 
 void OSMTileDownloaderInfoWidget::cancel()

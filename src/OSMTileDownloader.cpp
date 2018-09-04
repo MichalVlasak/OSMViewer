@@ -34,6 +34,8 @@ OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
 void OSMTileDownloader::setBaseUrl(QString url)
 {
     _baseWebRootUrl = url;
+
+    emit changeBaseUrl(_baseWebRootUrl);
 }
 
 bool OSMTileDownloader::isFreeQueue()
@@ -349,6 +351,11 @@ void OSMTileDownloader::storeConfig(QDomDocument &document, QDomElement &rootEle
     downloaderElement.appendChild(threadsCountElement);
     QDomText threadsCountText = document.createTextNode(QString::number(getThreads()));
     threadsCountElement.appendChild(threadsCountText);
+
+    QDomElement baseUrlElement = document.createElement("BaseUrl");
+    downloaderElement.appendChild(baseUrlElement);
+    QDomText baseUrlText = document.createTextNode(getBaseUrl());
+    baseUrlElement.appendChild(baseUrlText);
 }
 
 bool OSMTileDownloader::restoreConfig(QDomDocument &document)
@@ -380,6 +387,14 @@ bool OSMTileDownloader::restoreConfig(QDomDocument &document)
                 if(value.isEmpty() == false)
                 {
                     setThreads(value.toInt());
+                    result = true;
+                }
+
+                value = AppSettings::getValueString(downloadSettingNode, "BaseUrl");
+
+                if(value.isEmpty() == false)
+                {
+                    setBaseUrl(value);
                     result = true;
                 }
             }

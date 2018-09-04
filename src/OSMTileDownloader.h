@@ -55,6 +55,7 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         void downloadItemIsDone();
         void allItemIsDownloaded();
         void doDownladSignal(QUrl url);
+        void changeBaseUrl(QString url);
 
     private:
         bool saveToDisk(const QUrl & url, QIODevice *data, QString & fileName);

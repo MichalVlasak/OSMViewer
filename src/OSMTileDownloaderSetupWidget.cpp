@@ -31,7 +31,8 @@ OSMTileDownloaderSetupWidget::OSMTileDownloaderSetupWidget(OSMTileDownloader * d
     QObject::connect(_ui->baseUrlCombo, SIGNAL(currentIndexChanged(QString)), SLOT(changeBaseUrlFromCombo(QString)));
     QObject::connect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), SLOT(settingsChanged()));
     QObject::connect(_ui->threads, SIGNAL(valueChanged(int)), SLOT(settingsChanged()));
-    QObject::connect(_downloader, SIGNAL(changeThreadsCount(int)), _ui->threads, SLOT(setValue(int)));
+    QObject::connect(_downloader, SIGNAL(changeThreadsCount(int)), SLOT(downloaderChangeThreadsCount(int)));
+    QObject::connect(_downloader, SIGNAL(changeBaseUrl(QString)), SLOT(downloaderChangeBaseUrl(QString)));
     QObject::connect(_timer, SIGNAL(timeout()), SLOT(checkDownloadRunning()));
 }
 
@@ -54,6 +55,7 @@ void OSMTileDownloaderSetupWidget::clickedButton(QAbstractButton *button)
         else if(btn == _ui->buttonBox->button(QDialogButtonBox::Ok))
         {
             _downloader->setThreads(size_t(_ui->threads->value()));
+            _downloader->setBaseUrl(_ui->baseUrlEdit->text());
             _isSettingsChanged = false;
             updateSettingsChanged();
         }
@@ -63,7 +65,24 @@ void OSMTileDownloaderSetupWidget::clickedButton(QAbstractButton *button)
 void OSMTileDownloaderSetupWidget::changeBaseUrlFromCombo(QString url)
 {
     _ui->baseUrlEdit->setText(url);
-    _downloader->setBaseUrl(url);
+}
+
+void OSMTileDownloaderSetupWidget::downloaderChangeBaseUrl(QString url)
+{
+    QObject::disconnect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), this, SLOT(settingsChanged()));
+
+    _ui->baseUrlCombo->setCurrentIndex(_ui->baseUrlCombo->findText(url));
+
+    QObject::connect(_ui->baseUrlEdit, SIGNAL(textChanged(QString)), SLOT(settingsChanged()));
+}
+
+void OSMTileDownloaderSetupWidget::downloaderChangeThreadsCount(int threads)
+{
+    QObject::disconnect(_ui->threads, SIGNAL(valueChanged(int)), this, SLOT(settingsChanged()));
+
+    _ui->threads->setValue(threads);
+
+    QObject::connect(_ui->threads, SIGNAL(valueChanged(int)), SLOT(settingsChanged()));
 }
 
 void OSMTileDownloaderSetupWidget::settingsChanged()
