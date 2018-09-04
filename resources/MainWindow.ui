@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>390</height>
+    <width>601</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,8 +44,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>487</width>
-     <height>30</height>
+     <width>601</width>
+     <height>36</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -53,8 +53,6 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_CenterPoints"/>
-    <addaction name="action_GPXFiles"/>
-    <addaction name="action_GPXFileInfoTables"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -67,7 +65,7 @@
    </widget>
    <widget class="QMenu" name="menuOSM">
     <property name="title">
-     <string>OSM</string>
+     <string>OS&amp;M</string>
     </property>
     <addaction name="action_OSM_Directory"/>
     <addaction name="action_EnableDownloading"/>
@@ -75,8 +73,16 @@
     <addaction name="action_DownloaderSetup"/>
     <addaction name="action_Projects"/>
    </widget>
+   <widget class="QMenu" name="menuGPX_Files">
+    <property name="title">
+     <string>&amp;GPX Files</string>
+    </property>
+    <addaction name="action_GPXFilesList"/>
+    <addaction name="action_GPXFileInfoTable"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuOSM"/>
+   <addaction name="menuGPX_Files"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -92,7 +98,7 @@
   </action>
   <action name="action_OSM_Directory">
    <property name="text">
-    <string>OSM Directory</string>
+    <string>&amp;OSM Directory</string>
    </property>
   </action>
   <action name="action_EnableDownloading">
@@ -100,7 +106,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Enable Downloading</string>
+    <string>&amp;Enable Downloading</string>
    </property>
   </action>
   <action name="action_DownloaderInfo">
@@ -108,7 +114,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Downloader Info</string>
+    <string>&amp;Downloader Info</string>
    </property>
   </action>
   <action name="action_DownloaderSetup">
@@ -116,12 +122,12 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Downloader Setup</string>
+    <string>Downloader &amp;Setup</string>
    </property>
   </action>
   <action name="action_AboutOSMViewer">
    <property name="text">
-    <string>About OSM Viewer</string>
+    <string>About &amp;OSM Viewer</string>
    </property>
   </action>
   <action name="action_CenterPoints">
@@ -129,7 +135,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Center Points</string>
+    <string>&amp;Center Points</string>
    </property>
   </action>
   <action name="action_Projects">
@@ -137,23 +143,23 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Projects</string>
+    <string>&amp;Projects</string>
    </property>
   </action>
-  <action name="action_GPXFiles">
+  <action name="action_GPXFilesList">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>GPX Files</string>
+    <string>&amp;GPX Files List</string>
    </property>
   </action>
-  <action name="action_GPXFileInfoTables">
+  <action name="action_GPXFileInfoTable">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>GPX File Info Tables</string>
+    <string>GPX &amp;File Info Table</string>
    </property>
   </action>
  </widget>

@@ -121,11 +121,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_ui->action_Projects, SIGNAL(triggered(bool)), _downloadProjectDock, SLOT(setVisible(bool)));
     QObject::connect(_downloadProjectDock, SIGNAL(visibilityChanged(bool)), _ui->action_Projects, SLOT(setChecked(bool)));
 
-    QObject::connect(_ui->action_GPXFiles, SIGNAL(triggered(bool)), _gpxFileListDock, SLOT(setVisible(bool)));
-    QObject::connect(_gpxFileListDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFiles, SLOT(setChecked(bool)));
+    QObject::connect(_ui->action_GPXFilesList, SIGNAL(triggered(bool)), _gpxFileListDock, SLOT(setVisible(bool)));
+    QObject::connect(_gpxFileListDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFilesList, SLOT(setChecked(bool)));
 
-    QObject::connect(_ui->action_GPXFileInfoTables, SIGNAL(triggered(bool)), _gpxInfosDock, SLOT(setVisible(bool)));
-    QObject::connect(_gpxInfosDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFileInfoTables, SLOT(setChecked(bool)));
+    QObject::connect(_ui->action_GPXFileInfoTable, SIGNAL(triggered(bool)), _gpxInfosDock, SLOT(setVisible(bool)));
+    QObject::connect(_gpxInfosDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFileInfoTable, SLOT(setChecked(bool)));
 
     OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
 
