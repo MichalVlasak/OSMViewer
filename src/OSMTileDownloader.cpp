@@ -15,7 +15,6 @@ OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
       _appName(appName)
 {
     _threads = QThread::idealThreadCount();
-    _sessionDownloadCount = 0;
     _allDownloadCount = 0;
 
     _baseWebRootUrllist.append("http://140.211.167.105");
@@ -230,13 +229,11 @@ void OSMTileDownloader::downloadFinished(QNetworkReply *reply)
 
     reply->deleteLater();
 
-    _sessionDownloadCount++;
     _allDownloadCount++;
 
     if (_currentDownloads.isEmpty())
     {
         // all downloads finished
-        _sessionDownloadCount = 0;
         emit allItemIsDownloaded();
     }
 
@@ -289,8 +286,6 @@ void OSMTileDownloader::cancelDownload()
 
     _currentDownloads.clear();
     _downloadingItems.clear();
-
-    _sessionDownloadCount = 0;
 }
 
 void OSMTileDownloader::setThreads(int threads)
@@ -333,11 +328,6 @@ void OSMTileDownloader::setThreads(int threads)
     _threads = threads;
 
     emit changeThreadsCount(_threads);
-}
-
-unsigned OSMTileDownloader::getSessionDownloadCount()
-{
-    return _sessionDownloadCount;
 }
 
 unsigned OSMTileDownloader::getAllDownloadCount()

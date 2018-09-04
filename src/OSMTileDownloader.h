@@ -36,7 +36,6 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         bool isRunning();
         int getThreads() { return _threads; }
         void setThreads(int threads);
-        unsigned getSessionDownloadCount();
         unsigned getAllDownloadCount();
         QString getBaseUrl() { return _baseWebRootUrl; }
         void setBaseUrl(QString url);
@@ -76,7 +75,6 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         QMutex _threadMutex;
         bool _isDownloadingEnable = true;
         int _threads;
-        unsigned _sessionDownloadCount = 0;
         unsigned _allDownloadCount = 0;
         QString _appName;
         int _lastManager = 0;
