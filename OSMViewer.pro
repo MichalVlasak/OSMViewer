@@ -160,3 +160,8 @@ SUBDIRS += \
 
 RC_FILE += \
     resources/icon.rc
+
+TRANSLATIONS += \
+    languages/OSMViewerTranslation_en.ts \
+    languages/OSMViewerTranslation_sk.ts \
+    languages/OSMViewerTranslation_cs.ts

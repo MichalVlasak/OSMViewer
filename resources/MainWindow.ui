@@ -80,9 +80,15 @@
     <addaction name="action_GPXFilesList"/>
     <addaction name="action_GPXFileInfoTable"/>
    </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="title">
+     <string>La&amp;nguage</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menuOSM"/>
    <addaction name="menuGPX_Files"/>
+   <addaction name="menuLanguage"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

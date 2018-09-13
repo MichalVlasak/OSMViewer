@@ -2,4 +2,9 @@
     <qresource prefix="/icons">
         <file alias="mapIcon">icons/WorldMap-50.png</file>
     </qresource>
+    <qresource prefix="/countriesFlags">
+        <file>countriesFlags/cs.png</file>
+        <file>countriesFlags/sk.png</file>
+        <file>countriesFlags/en.png</file>
+    </qresource>
 </RCC>

@@ -56,6 +56,9 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
 
     private:
         void keyPressEvent(QKeyEvent * event);
+        void changeEvent(QEvent* event);
+        void loadLanguage(const QString & language);
+        void createLanguageMenu();
 
     private slots:
         void zoomChanged();
@@ -65,6 +68,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         void downloadSelectedArea(AreaGeometry geometry);
         void findInSelectedArea(AreaGeometry geometry);
         void showAbout();
+        void changeLanguage(QAction * action);
 
     private:
         Ui::MainWindow * _ui;
@@ -97,6 +101,10 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         class GpxInfosWidget * _gpxInfosWidget = nullptr;
         QDockWidget * _gpxInfosDock = nullptr;
         class GpxManager * _gpxManager = nullptr;
+        QString _currentLanguages;
+        QString _langPath;
+        QTranslator _translator;
+        QTranslator _translatorQt;
 };
 
 #endif // MAINWINDOW_H
