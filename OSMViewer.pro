@@ -157,3 +157,6 @@ RESOURCES += \
 
 SUBDIRS += \
     UnitTest.pro
+
+RC_FILE += \
+    resources/icon.rc
