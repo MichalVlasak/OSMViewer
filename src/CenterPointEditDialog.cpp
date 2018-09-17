@@ -19,12 +19,12 @@ CenterPointEditDialog::CenterPointEditDialog(const CenterPointStruct & point, QW
 
     if(point.level != CenterPointStruct::UndefinedLevel)
     {
-        _ui->levelCheckBox->setChecked(true);
-        _ui->level->setValue(point.level);
+        _ui->zoomLevelCheckBox->setChecked(true);
+        _ui->zoomLevel->setValue(point.level);
     }
     else
     {
-        _ui->levelCheckBox->setChecked(false);
+        _ui->zoomLevelCheckBox->setChecked(false);
     }
 
     refreshWgsLine();
@@ -44,7 +44,7 @@ CenterPointStruct CenterPointEditDialog::getCenterPoint()
     CenterPointStruct point;
 
     point.name = _ui->name->text();
-    point.level = (_ui->levelCheckBox->isChecked() == true) ? _ui->level->value() : CenterPointStruct::UndefinedLevel;
+    point.level = (_ui->zoomLevelCheckBox->isChecked() == true) ? _ui->zoomLevel->value() : CenterPointStruct::UndefinedLevel;
     point.position = QPointF(_ui->longitude->value(), _ui->latitude->value());
 
     return point;

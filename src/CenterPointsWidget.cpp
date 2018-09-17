@@ -54,6 +54,11 @@ CenterPointsWidget::~CenterPointsWidget()
     delete _ui;
 }
 
+void CenterPointsWidget::retranslate()
+{
+    _ui->retranslateUi(this);
+}
+
 void CenterPointsWidget::refreshCurrentGroup()
 {
     changeGroup(_ui->groupComboBox->currentText());

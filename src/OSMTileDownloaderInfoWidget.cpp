@@ -50,6 +50,11 @@ void OSMTileDownloaderInfoWidget::initialize()
     QObject::connect(_ui->highlightDownArea, SIGNAL(toggled(bool)), SLOT(highlightDownArea(bool)));
 }
 
+void OSMTileDownloaderInfoWidget::retranslate()
+{
+    _ui->retranslateUi(this);
+}
+
 void OSMTileDownloaderInfoWidget::setLevelInfo(int level, LevelInfo info)
 {
     _levelInfo[level] = info;

@@ -16,6 +16,8 @@ class OSMDownloadProjectWidget : public QWidget
         explicit OSMDownloadProjectWidget(QWidget *parent = 0);
         ~OSMDownloadProjectWidget();
 
+        void retranslate();
+
     public:
         void initialize();
 

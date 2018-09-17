@@ -8,7 +8,7 @@
 #include "Layers/GpxLayer.h"
 
 namespace Ui {
-class GpxFileListWidget;
+class GpxFilesListWidget;
 }
 
 class GpxFilesListWidget : public QWidget
@@ -20,6 +20,7 @@ class GpxFilesListWidget : public QWidget
         ~GpxFilesListWidget();
 
         void setEnabledClearHighlightedButton(bool enabled);
+        void retranslate();
 
     signals:
         void changeSelectedGpsSignal(const GpxManager::GpxIdVector & ids);
@@ -47,7 +48,7 @@ class GpxFilesListWidget : public QWidget
         int getId(const QModelIndex & index);
 
     private:
-        Ui::GpxFileListWidget * _ui;
+        Ui::GpxFilesListWidget * _ui;
         GpxManager * _gpxManager = nullptr;
         GpxFilesListModel * _tableModel = nullptr;
         GpxLayer * _gpxLayer = nullptr;

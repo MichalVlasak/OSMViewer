@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GpxFileListWidget</class>
- <widget class="QWidget" name="GpxFileListWidget">
+ <class>GpxFilesListWidget</class>
+ <widget class="QWidget" name="GpxFilesListWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

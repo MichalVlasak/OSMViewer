@@ -143,14 +143,14 @@ FORMS    += resources/MainWindow.ui \
     resources/GroupEditDialog.ui \
     resources/OSMDownloadProjectWidget.ui \
     resources/ProjectNameDialog.ui \
-    resources/GpxFileListWidget.ui \
     resources/GpxInfoFileWidget.ui \
     resources/GpxInfosWidget.ui \
     resources/RectangleAreaWidget.ui \
     resources/PolygonAreaWidget.ui \
     resources/PointEditorDialog.ui \
     resources/PositionEditorWidget.ui \
-    resources/LineWidget.ui
+    resources/LineWidget.ui \
+    resources/GpxFilesListWidget.ui
 
 RESOURCES += \
     resources/resources.qrc

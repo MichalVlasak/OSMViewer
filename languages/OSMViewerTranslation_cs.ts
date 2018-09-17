@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ">
+<TS version="2.0" language="cs_CZ">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../resources/AboutDialog.ui" line="14"/>
         <location filename="../src/AboutDialog.cpp" line="13"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../resources/AboutDialog.ui" line="29"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Jméno aplikace</translation>
     </message>
     <message>
         <location filename="../resources/AboutDialog.ui" line="50"/>
@@ -25,7 +25,7 @@
         <location filename="../resources/AboutDialog.ui" line="85"/>
         <location filename="../resources/AboutDialog.ui" line="99"/>
         <source>XXX</source>
-        <translation type="unfinished"></translation>
+        <translation>XXX</translation>
     </message>
     <message>
         <location filename="../resources/AboutDialog.ui" line="64"/>
@@ -53,32 +53,36 @@
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="14"/>
         <source>Edit Center Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Editace centrovacího bodu</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="22"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jméno:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="34"/>
         <source>WGS Position</source>
-        <translation type="unfinished"></translation>
+        <translation>WGS pozice</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="53"/>
         <source>Latitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeměpisná šířka:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="73"/>
         <source>Longitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeměpisná délka:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="100"/>
+        <source>Set Zoom Le&amp;vel</source>
+        <translation>Nastavení úrovně &amp;přiblížení</translation>
+    </message>
+    <message>
         <source>Set Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavení úrovně přiblížení</translation>
     </message>
 </context>
 <context>
@@ -86,20 +90,20 @@
     <message>
         <location filename="../src/CenterPointsManager.cpp" line="137"/>
         <source>Import Center Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Import centrovacích bodů</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsManager.cpp" line="137"/>
         <location filename="../src/CenterPointsManager.cpp" line="300"/>
         <location filename="../src/CenterPointsManager.cpp" line="336"/>
         <source>XML (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>XML (*.xml)</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsManager.cpp" line="300"/>
         <location filename="../src/CenterPointsManager.cpp" line="336"/>
         <source>Export Center Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Export centrovacích bodov</translation>
     </message>
 </context>
 <context>
@@ -107,7 +111,7 @@
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="20"/>
@@ -117,7 +121,7 @@
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="28"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jméno:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="35"/>
@@ -161,18 +165,18 @@
         <location filename="../resources/CenterPointsWidget.ui" line="120"/>
         <location filename="../resources/CenterPointsWidget.ui" line="171"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Přidat</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="134"/>
         <location filename="../resources/CenterPointsWidget.ui" line="185"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vymazat</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="192"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vymazat vše</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="206"/>
@@ -190,83 +194,83 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Delete Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Are You sure to delete point &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="302"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Delete All Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="302"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Are You sure to delete all points?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <source>Cannot create new group!
 Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; is exists!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>Cannot change &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; to group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; group!
 Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Are you sure to remove group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Cannot remove group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>&quot;!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -276,7 +280,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/DeleteOldMapsDialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Okno</translation>
     </message>
 </context>
 <context>
@@ -284,88 +288,85 @@ Group &quot;</source>
     <message>
         <location filename="../resources/DeleteOldMapsWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulář</translation>
     </message>
     <message>
         <location filename="../resources/DeleteOldMapsWidget.ui" line="32"/>
         <source>Delete old Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat staré mapy</translation>
     </message>
     <message>
         <location filename="../resources/DeleteOldMapsWidget.ui" line="46"/>
         <source>Delete old maps as</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat mapy starší jak</translation>
     </message>
     <message>
         <location filename="../resources/DeleteOldMapsWidget.ui" line="56"/>
         <source>dd.MM.yyyy HH:mm</source>
-        <translation type="unfinished"></translation>
+        <translation>dd.MM.yyyy HH:mm</translation>
     </message>
     <message>
         <location filename="../resources/DeleteOldMapsWidget.ui" line="65"/>
         <source>Delete all old maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>GpxFileListWidget</name>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="35"/>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="42"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="49"/>
-        <source>Delete All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="56"/>
-        <source>Clear Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="63"/>
-        <source>Clear Highlighted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="70"/>
-        <source>Download Tiles for GPX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="84"/>
-        <source>Current load file:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="91"/>
-        <source>???</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat všechny staré mapy</translation>
     </message>
 </context>
 <context>
     <name>GpxFilesListWidget</name>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="62"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
         <source>Select GPX Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Výběr GPX souboru</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="62"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
         <source>GPX (*.gpx)</source>
-        <translation type="unfinished"></translation>
+        <translation>GPX (*.gpx)</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation>Formulář</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="35"/>
+        <source>Add</source>
+        <translation>Přidat</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="42"/>
+        <source>Delete</source>
+        <translation>Vymazat</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="49"/>
+        <source>Delete All</source>
+        <translation>Vymazat vše</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="56"/>
+        <source>Clear Selection</source>
+        <translation>Zrušit výběr</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="63"/>
+        <source>Clear Highlighted</source>
+        <translation>Zrušit zvíraznění</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="70"/>
+        <source>Download Tiles for GPX</source>
+        <translation>Stáhnout dlaždice pro GPX soubor</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="84"/>
+        <source>Current load file:</source>
+        <translation>Právě načítavaný soubor:</translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="91"/>
+        <source>???</source>
+        <translation>???</translation>
     </message>
 </context>
 <context>
@@ -373,7 +374,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="24"/>
@@ -442,7 +443,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="117"/>
         <source>Clear Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zrušit výběr</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="124"/>
@@ -485,17 +486,17 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GpxInfosWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulář</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfosWidget.ui" line="21"/>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab 1</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfosWidget.ui" line="26"/>
         <source>Tab 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab 2</translation>
     </message>
 </context>
 <context>
@@ -503,22 +504,22 @@ Group &quot;</source>
     <message>
         <location filename="../src/Layers/GpxLayer.cpp" line="83"/>
         <source>Max Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Max výška</translation>
     </message>
     <message>
         <location filename="../src/Layers/GpxLayer.cpp" line="88"/>
         <source>Max Cadention</source>
-        <translation type="unfinished"></translation>
+        <translation>Max kadence</translation>
     </message>
     <message>
         <location filename="../src/Layers/GpxLayer.cpp" line="93"/>
         <source>Max Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Max teplota</translation>
     </message>
     <message>
         <location filename="../src/Layers/GpxLayer.cpp" line="98"/>
         <source>Max Heart Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Max srdeční tep</translation>
     </message>
 </context>
 <context>
@@ -526,12 +527,12 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GroupEditDialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Okno</translation>
     </message>
     <message>
         <location filename="../resources/GroupEditDialog.ui" line="22"/>
         <source>Group Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jméno skupiny:</translation>
     </message>
 </context>
 <context>
@@ -539,32 +540,32 @@ Group &quot;</source>
     <message>
         <location filename="../resources/LineWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulář</translation>
     </message>
     <message>
         <location filename="../resources/LineWidget.ui" line="38"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Editovat</translation>
     </message>
     <message>
         <location filename="../resources/LineWidget.ui" line="45"/>
         <source>Add After</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat za</translation>
     </message>
     <message>
         <location filename="../resources/LineWidget.ui" line="52"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazat</translation>
     </message>
     <message>
         <location filename="../resources/LineWidget.ui" line="63"/>
         <source>Buffer Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Šířka okolí:</translation>
     </message>
     <message>
         <location filename="../resources/LineWidget.ui" line="70"/>
         <source>  [+/-tiles]</source>
-        <translation type="unfinished"></translation>
+        <translation>  [+/-dlaždic]</translation>
     </message>
 </context>
 <context>
@@ -578,88 +579,88 @@ Group &quot;</source>
     <message>
         <location filename="../resources/MainWindow.ui" line="53"/>
         <source>&amp;File</source>
-        <translation>Soubor</translation>
+        <translation>&amp;Soubor</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="61"/>
         <source>&amp;Help</source>
-        <translation>Pomoc</translation>
+        <translation>&amp;Pomoc</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="68"/>
         <source>OS&amp;M</source>
-        <translation>OSM</translation>
+        <translation>OS&amp;M</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="78"/>
         <source>&amp;GPX Files</source>
-        <translation>GPX soubory</translation>
+        <translation>&amp;GPX Soubory</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="85"/>
         <source>La&amp;nguage</source>
-        <translation>Jazyk</translation>
+        <translation>&amp;Jazyk</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="97"/>
         <source>&amp;Quit</source>
-        <translation>Konec</translation>
+        <translation>&amp;Konec</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="102"/>
         <source>&amp;About Qt</source>
-        <translation>O Qt</translation>
+        <translation>O &amp;Qt</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="107"/>
         <source>&amp;OSM Directory</source>
-        <translation>OSD adresář</translation>
+        <translation>OSM &amp;Adresář</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="115"/>
         <source>&amp;Enable Downloading</source>
-        <translation>Yapnout stahování</translation>
+        <translation>&amp;Zapnout stahování</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="123"/>
         <source>&amp;Downloader Info</source>
-        <translation>Informace o stahování</translation>
+        <translation>&amp;Informace o stahování</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="131"/>
         <source>Downloader &amp;Setup</source>
-        <translation>Nastavení stahování</translation>
+        <translation>&amp;Nastavení stahování</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="136"/>
         <source>About &amp;OSM Viewer</source>
-        <translation>O OSM prohlížeči</translation>
+        <translation>O OSM &amp;Prohlížeči</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="144"/>
         <source>&amp;Center Points</source>
-        <translation>Vzstřeďovací bodz</translation>
+        <translation>&amp;Centrovací body</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="152"/>
         <source>&amp;Projects</source>
-        <translation>Projekty</translation>
+        <translation>P&amp;rojekty</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="160"/>
         <source>&amp;GPX Files List</source>
-        <translation>Seznam GPX souborů</translation>
+        <translation>Seznam &amp;GPX souborů</translation>
     </message>
     <message>
         <location filename="../resources/MainWindow.ui" line="168"/>
         <source>GPX &amp;File Info Table</source>
-        <translation>Tabulka s informacemi o GPX souborech</translation>
+        <translation>&amp;Tabulka s informacemi o GPX souboru</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="65"/>
         <location filename="../src/MainWindow.cpp" line="70"/>
         <source>Center Points</source>
-        <translation>Vystřeďovací body</translation>
+        <translation>Centrovací body</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="72"/>
@@ -677,7 +678,7 @@ Group &quot;</source>
         <location filename="../src/MainWindow.cpp" line="86"/>
         <location filename="../src/MainWindow.cpp" line="91"/>
         <source>Download Project</source>
-        <translation>projekty pro stahování</translation>
+        <translation>Projekty pro stahování</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="93"/>
@@ -694,23 +695,23 @@ Group &quot;</source>
     <message>
         <location filename="../src/MainWindow.cpp" line="252"/>
         <source>Zoom Level: </source>
-        <translation>Úroveň přiblížení</translation>
+        <translation>Úroveň přiblížení:</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="253"/>
         <source>Zoom Scale: </source>
-        <translation>Mírka přiblížení</translation>
+        <translation>Mírka přiblížení:</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="322"/>
         <source>Error</source>
-        <translation>Chyba</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="322"/>
         <source>Cannot open download setup dialog: 
 </source>
-        <translation>Není možné otevřít okno s nastavením pro stahování:
+        <translation>Není možné otevřít okno s nastavením stahování:
 </translation>
     </message>
 </context>
@@ -719,64 +720,64 @@ Group &quot;</source>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="21"/>
         <source>Map Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapové menu</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="32"/>
         <source>Enable Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapnout stahování</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="53"/>
         <source>Download Viewed Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Stáhnout zobrazenou oblast</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="58"/>
         <source>Select &amp; Download Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat a stáhnout oblast</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="61"/>
         <location filename="../src/MapContextMenu.cpp" line="79"/>
         <source>Define as Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Definovat jako obdélnik</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="66"/>
         <location filename="../src/MapContextMenu.cpp" line="84"/>
         <source>Define as Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>Definovat jako polygon</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="71"/>
         <source>Define as Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Definovat jako čáru</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="76"/>
         <source>Find GPX&apos;s</source>
-        <translation type="unfinished"></translation>
+        <translation>Najít GPX soubory</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="107"/>
         <source>Center Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Vycentrovat mapu</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="111"/>
         <source>Add to Center Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat do centrovacích bodů</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="115"/>
         <source>Set as Home Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit jako domovský bod</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="121"/>
         <source>Save position to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit pozici do schránky</translation>
     </message>
 </context>
 <context>
@@ -860,7 +861,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="47"/>
@@ -880,7 +881,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="68"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vymazat</translation>
     </message>
 </context>
 <context>
@@ -888,7 +889,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="20"/>
@@ -908,9 +909,9 @@ Group &quot;</source>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="35"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="36"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="37"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="174"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="175"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="176"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="179"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="180"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="181"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -926,7 +927,7 @@ Group &quot;</source>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="111"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="163"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -946,7 +947,7 @@ Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="153"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -956,7 +957,7 @@ Group &quot;</source>
     <message>
         <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
         <source>Error</source>
-        <translation type="unfinished">Chyba</translation>
+        <translation type="unfinished">Error</translation>
     </message>
     <message>
         <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
@@ -970,7 +971,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMTileDownloaderSetupWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderSetupWidget.ui" line="23"/>
@@ -983,7 +984,7 @@ Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderSetupWidget.cpp" line="98"/>
+        <location filename="../src/OSMTileDownloaderSetupWidget.cpp" line="103"/>
         <source>Changed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1001,7 +1002,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="38"/>
@@ -1016,7 +1017,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="52"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vymazat</translation>
     </message>
 </context>
 <context>
@@ -1024,12 +1025,12 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="20"/>
         <source>Latitude:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeměpisná šířka:</translation>
     </message>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="27"/>
@@ -1040,7 +1041,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="43"/>
         <source>Longitude:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeměpisná délka:</translation>
     </message>
 </context>
 <context>
@@ -1081,7 +1082,7 @@ Group &quot;</source>
     <message>
         <location filename="../src/GpxFilesListModel.cpp" line="11"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jméno aplikace</translation>
     </message>
     <message>
         <location filename="../src/GpxFilesListModel.cpp" line="12"/>
@@ -1146,7 +1147,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulář</translation>
     </message>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="20"/>

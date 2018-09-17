@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>353</height>
+    <width>298</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,9 +95,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="levelCheckBox">
+    <widget class="QGroupBox" name="zoomLevelCheckBox">
      <property name="title">
-      <string>Set Level</string>
+      <string>Set Zoom Le&amp;vel</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -117,7 +117,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QSpinBox" name="level">
+       <widget class="QSpinBox" name="zoomLevel">
         <property name="maximum">
          <number>19</number>
         </property>

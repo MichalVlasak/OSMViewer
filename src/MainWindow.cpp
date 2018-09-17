@@ -632,6 +632,12 @@ void MainWindow::changeEvent(QEvent* event)
         {
             case QEvent::LanguageChange:
                 _ui->retranslateUi(this);
+                _downloaderInfoWidget->retranslate();
+                _downloaderSetupWidget->retranslate();
+                _downloadProjectWidget->retranslate();
+                _centerPointsWidget->retranslate();
+                _gpxFileListWidget->retranslate();
+                _gpxInfosWidget->retranslate();
                 break;
 
             case QEvent::LocaleChange:

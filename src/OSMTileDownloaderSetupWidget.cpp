@@ -41,6 +41,11 @@ OSMTileDownloaderSetupWidget::~OSMTileDownloaderSetupWidget()
     delete _ui;
 }
 
+void OSMTileDownloaderSetupWidget::retranslate()
+{
+    _ui->retranslateUi(this);
+}
+
 void OSMTileDownloaderSetupWidget::clickedButton(QAbstractButton *button)
 {
     QPushButton * btn = qobject_cast<QPushButton *>(button);

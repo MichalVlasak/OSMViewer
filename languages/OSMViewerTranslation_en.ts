@@ -77,7 +77,7 @@
     </message>
     <message>
         <location filename="../resources/CenterPointEditDialog.ui" line="100"/>
-        <source>Set Level</source>
+        <source>Set Zoom Le&amp;vel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -190,83 +190,83 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Delete Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Are You sure to delete point &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="277"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="282"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="302"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Delete All Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="302"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Are You sure to delete all points?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <source>Cannot create new group!
 Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="450"/>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="455"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; is exists!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>Cannot change &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; to group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="470"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; group!
 Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="479"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Are you sure to remove group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Cannot remove group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsWidget.cpp" line="489"/>
+        <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>&quot;!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,63 +308,60 @@ Group &quot;</source>
     </message>
 </context>
 <context>
-    <name>GpxFileListWidget</name>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="35"/>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="42"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="49"/>
-        <source>Delete All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="56"/>
-        <source>Clear Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="63"/>
-        <source>Clear Highlighted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="70"/>
-        <source>Download Tiles for GPX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="84"/>
-        <source>Current load file:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/GpxFileListWidget.ui" line="91"/>
-        <source>???</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GpxFilesListWidget</name>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="62"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
         <source>Select GPX Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="62"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
         <source>GPX (*.gpx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="35"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="42"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="49"/>
+        <source>Delete All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="56"/>
+        <source>Clear Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="63"/>
+        <source>Clear Highlighted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="70"/>
+        <source>Download Tiles for GPX</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="84"/>
+        <source>Current load file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/GpxFilesListWidget.ui" line="91"/>
+        <source>???</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -907,9 +904,9 @@ Group &quot;</source>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="35"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="36"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="37"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="174"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="175"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="176"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="179"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="180"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="181"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -925,7 +922,7 @@ Group &quot;</source>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="111"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="163"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -945,7 +942,7 @@ Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="153"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -982,7 +979,7 @@ Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderSetupWidget.cpp" line="98"/>
+        <location filename="../src/OSMTileDownloaderSetupWidget.cpp" line="103"/>
         <source>Changed</source>
         <translation type="unfinished"></translation>
     </message>

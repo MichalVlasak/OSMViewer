@@ -18,6 +18,8 @@ class OSMTileDownloaderSetupWidget : public QWidget
         explicit OSMTileDownloaderSetupWidget(OSMTileDownloader * downloader, QWidget *parent = 0);
         ~OSMTileDownloaderSetupWidget();
 
+        void retranslate();
+
     private:
         void updateSettingsChanged();
 

@@ -20,6 +20,11 @@ GpxInfosWidget::~GpxInfosWidget()
     delete _ui;
 }
 
+void GpxInfosWidget::retranslate()
+{
+    _ui->retranslateUi(this);
+}
+
 void GpxInfosWidget::changeSelectedGps(const GpxManager::GpxIdVector &ids)
 {
     _showedGpxIds = ids;

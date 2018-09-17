@@ -32,6 +32,7 @@ class OSMTileDownloaderInfoWidget : public QWidget
         void setLevelInfo(int level, LevelInfo info);
         void setLevelRange(int levelFrom, int levelTo);
         void initialize();
+        void retranslate();
 
     signals:
         void cancelDownloading();

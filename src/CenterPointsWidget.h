@@ -22,6 +22,7 @@ class CenterPointsWidget : public QWidget
         void setLastAdded(const QString & pointName);
         QString getCurrentGroupName() const;
         void fillPointsList();
+        void retranslate();
 
     private slots:
         void centerHome();

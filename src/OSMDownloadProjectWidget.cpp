@@ -27,6 +27,11 @@ OSMDownloadProjectWidget::~OSMDownloadProjectWidget()
     delete _ui;
 }
 
+void OSMDownloadProjectWidget::retranslate()
+{
+    _ui->retranslateUi(this);
+}
+
 void OSMDownloadProjectWidget::initialize()
 {
     reloadProjects();

@@ -18,6 +18,8 @@ class GpxInfosWidget : public QWidget
         GpxInfosWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
         ~GpxInfosWidget();
 
+        void retranslate();
+
     public slots:
         void changeSelectedGps(const GpxManager::GpxIdVector & ids);
         void deleteGpx(int id);

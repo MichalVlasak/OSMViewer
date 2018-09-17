@@ -1,5 +1,5 @@
 #include "GpxFilesListWidget.h"
-#include "ui_GpxFileListWidget.h"
+#include "ui_GpxFilesListWidget.h"
 #include "MainWindow.h"
 
 #include <QFileDialog>
@@ -9,7 +9,7 @@
 
 GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
-    _ui(new Ui::GpxFileListWidget),
+    _ui(new Ui::GpxFilesListWidget),
     _gpxManager(gpxManager),
     _gpxLayer(gpxLayer)
 {
@@ -53,6 +53,11 @@ GpxFilesListWidget::GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLa
 GpxFilesListWidget::~GpxFilesListWidget()
 {
     delete _ui;
+}
+
+void GpxFilesListWidget::retranslate()
+{
+    _ui->retranslateUi(this);
 }
 
 void GpxFilesListWidget::addFile()
