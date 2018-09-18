@@ -67,42 +67,42 @@ MainWindow::MainWindow(QWidget *parent) :
     _centerPointsDock->setWidget(_centerPointsWidget);
     _centerPointsDock->hide();
     _centerPointsDock->setFloating(true);
-    _centerPointsDock->setObjectName(tr("Center Points"));
+    _centerPointsDock->setObjectName("Center Points");
 
     _downloaderInfoDock = new QDockWidget(tr("Downloader Info"), this);
     _downloaderInfoDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _downloaderInfoDock->setWidget(_downloaderInfoWidget);
     _downloaderInfoDock->hide();
     _downloaderInfoDock->setFloating(true);
-    _downloaderInfoDock->setObjectName(tr("Downloader Info"));
+    _downloaderInfoDock->setObjectName("Downloader Info");
 
     _downloaderSetupDock = new QDockWidget(tr("Downloader Setup"), this);
     _downloaderSetupDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _downloaderSetupDock->setWidget(_downloaderSetupWidget);
     _downloaderSetupDock->hide();
     _downloaderSetupDock->setFloating(true);
-    _downloaderSetupDock->setObjectName(tr("Downloader Setup"));
+    _downloaderSetupDock->setObjectName("Downloader Setup");
 
     _downloadProjectDock = new QDockWidget(tr("Download Project"), this);
     _downloadProjectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _downloadProjectDock->setWidget(_downloadProjectWidget);
     _downloadProjectDock->hide();
     _downloadProjectDock->setFloating(true);
-    _downloadProjectDock->setObjectName(tr("Download Project"));
+    _downloadProjectDock->setObjectName("Download Project");
 
     _gpxFileListDock = new QDockWidget(tr("GPX List"), this);
     _gpxFileListDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _gpxFileListDock->setWidget(_gpxFileListWidget);
     _gpxFileListDock->hide();
     _gpxFileListDock->setFloating(true);
-    _gpxFileListDock->setObjectName(tr("GPX List"));
+    _gpxFileListDock->setObjectName("GPX List");
 
     _gpxInfosDock = new QDockWidget(tr("GPX Info Tables"), this);
     _gpxInfosDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _gpxInfosDock->setWidget(_gpxInfosWidget);
     _gpxInfosDock->hide();
     _gpxInfosDock->setFloating(true);
-    _gpxInfosDock->setObjectName(tr("GPX Info Tables"));
+    _gpxInfosDock->setObjectName("GPX Info Tables");
 
     addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
@@ -633,11 +633,17 @@ void MainWindow::changeEvent(QEvent* event)
             case QEvent::LanguageChange:
                 _ui->retranslateUi(this);
                 _downloaderInfoWidget->retranslate();
+                _downloaderInfoDock->setWindowTitle(QApplication::translate("MainWindow", "Downloader Info", nullptr));
                 _downloaderSetupWidget->retranslate();
+                _downloaderSetupDock->setWindowTitle(QApplication::translate("MainWindow", "Downloader Setup", nullptr));
                 _downloadProjectWidget->retranslate();
+                _downloadProjectDock->setWindowTitle(QApplication::translate("MainWindow", "Download Project", nullptr));
                 _centerPointsWidget->retranslate();
+                _centerPointsDock->setWindowTitle(QApplication::translate("MainWindow", "Center Points", nullptr));
                 _gpxFileListWidget->retranslate();
+                _gpxFileListDock->setWindowTitle(QApplication::translate("MainWindow", "GPX List", nullptr));
                 _gpxInfosWidget->retranslate();
+                _gpxInfosDock->setWindowTitle(QApplication::translate("MainWindow", "GPX Info Tables", nullptr));
                 break;
 
             case QEvent::LocaleChange:

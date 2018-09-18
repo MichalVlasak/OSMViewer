@@ -699,37 +699,37 @@ Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="65"/>
-        <location filename="../src/MainWindow.cpp" line="70"/>
+        <location filename="../src/MainWindow.cpp" line="642"/>
         <source>Center Points</source>
         <translation>Centrovací body</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="72"/>
-        <location filename="../src/MainWindow.cpp" line="77"/>
+        <location filename="../src/MainWindow.cpp" line="636"/>
         <source>Downloader Info</source>
         <translation>Informace o stahování</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="79"/>
-        <location filename="../src/MainWindow.cpp" line="84"/>
+        <location filename="../src/MainWindow.cpp" line="638"/>
         <source>Downloader Setup</source>
         <translation>Nastavení stahování</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="86"/>
-        <location filename="../src/MainWindow.cpp" line="91"/>
+        <location filename="../src/MainWindow.cpp" line="640"/>
         <source>Download Project</source>
         <translation>Projekty pro stahování</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="93"/>
-        <location filename="../src/MainWindow.cpp" line="98"/>
+        <location filename="../src/MainWindow.cpp" line="644"/>
         <source>GPX List</source>
         <translation>Seznam GPX souborů</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="100"/>
-        <location filename="../src/MainWindow.cpp" line="105"/>
+        <location filename="../src/MainWindow.cpp" line="646"/>
         <source>GPX Info Tables</source>
         <translation>Tabulka s informacemi o GPX souboru</translation>
     </message>
