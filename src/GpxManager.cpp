@@ -237,7 +237,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
 
     if (document.setContent(&file) == false)
     {
-        QMessageBox::warning(MainWindow::getInstance(), QObject::tr("Cannot load!"), QObject::tr("Cannot load file") + filePath + QObject::tr("!"));
+        QMessageBox::warning(MainWindow::getInstance(), QObject::tr("Cannot load!"), QObject::tr("Cannot load file ") + filePath + QObject::tr("!"));
 
         return;
     }

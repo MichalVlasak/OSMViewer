@@ -58,6 +58,7 @@ GpxFilesListWidget::~GpxFilesListWidget()
 void GpxFilesListWidget::retranslate()
 {
     _ui->retranslateUi(this);
+    reloadGpx();
 }
 
 void GpxFilesListWidget::addFile()

@@ -246,7 +246,7 @@ Group &quot;</source>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
-        <source>&quot; group!
+        <source>&quot;!
 Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,14 +308,47 @@ Group &quot;</source>
     </message>
 </context>
 <context>
+    <name>GpxFilesListModel</name>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="7"/>
+        <source>File Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="8"/>
+        <source>Start Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="9"/>
+        <source>Trip Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="10"/>
+        <source>Author Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GpxFilesListWidget</name>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="68"/>
         <source>Select GPX Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="68"/>
         <source>GPX (*.gpx)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1055,36 +1088,6 @@ Group &quot;</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="7"/>
-        <source>File Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="8"/>
-        <source>Start Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="9"/>
-        <source>Trip Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="10"/>
-        <source>Author Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="6"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
@@ -1128,7 +1131,7 @@ Group &quot;</source>
     </message>
     <message>
         <location filename="../src/GpxManager.cpp" line="240"/>
-        <source>Cannot load file</source>
+        <source>Cannot load file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>

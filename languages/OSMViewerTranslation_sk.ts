@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sk_SK">
+<TS version="2.1" language="sk_SK">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -82,7 +82,7 @@
     </message>
     <message>
         <source>Set Level</source>
-        <translation>Nastvenie úrovne priblíženia</translation>
+        <translation type="vanished">Nastvenie úrovne priblíženia</translation>
     </message>
 </context>
 <context>
@@ -111,168 +111,176 @@
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="20"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Domov</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="28"/>
         <source>Name:</source>
-        <translation type="unfinished">Meno:</translation>
+        <translation>Meno:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="35"/>
         <source>--</source>
-        <translation type="unfinished"></translation>
+        <translation>--</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="46"/>
         <location filename="../resources/CenterPointsWidget.ui" line="157"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Vycentrovať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="66"/>
         <location filename="../resources/CenterPointsWidget.ui" line="127"/>
         <location filename="../resources/CenterPointsWidget.ui" line="178"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Editovať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="78"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatné</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="86"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hľadať:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="98"/>
         <source>GroupBox</source>
-        <translation type="unfinished"></translation>
+        <translation>Skupinový box</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="106"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skupina:</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="120"/>
         <location filename="../resources/CenterPointsWidget.ui" line="171"/>
         <source>Add</source>
-        <translation type="unfinished">Pridať</translation>
+        <translation>Pridať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="134"/>
         <location filename="../resources/CenterPointsWidget.ui" line="185"/>
         <source>Delete</source>
-        <translation type="unfinished">Vymazať</translation>
+        <translation>Vymazať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="192"/>
         <source>Delete All</source>
-        <translation type="unfinished">Vymazať všetko</translation>
+        <translation>Vymazať všetko</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="206"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importovať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="213"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportovať</translation>
     </message>
     <message>
         <location filename="../resources/CenterPointsWidget.ui" line="220"/>
         <source>Export All</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportovať všetko</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Delete Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazať bod</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <source>Are You sure to delete point &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ste si istý, že chtete vymazať bod &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="282"/>
         <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;?</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Delete All Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazať všetky body</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="307"/>
         <source>Are You sure to delete all points?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ste si istým že chcete vymazať všetky body?</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varovanie</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <source>Cannot create new group!
 Group &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieje možné vytvoriť novú skupinu!
+Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; is exists!</source>
-        <translation type="unfinished"></translation>
+        <translation> už existuje!</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>Cannot change &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieje možné zmeniť &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; to group &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot; na skupinu &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
+        <source>&quot;!
+Group &quot;</source>
+        <translation>&quot;!
+Skupina &quot;</translation>
+    </message>
+    <message>
         <source>&quot; group!
 Group &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&quot;!
+Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Remove group</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstrániť skupinu</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="484"/>
         <source>Are you sure to remove group &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ste si istý, že chcete odstrániť skupinu &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>Cannot remove group &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieje možné odstrániť skupinu &quot;</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>&quot;!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;!</translation>
     </message>
 </context>
 <context>
@@ -312,14 +320,47 @@ Group &quot;</source>
     </message>
 </context>
 <context>
+    <name>GpxFilesListModel</name>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="7"/>
+        <source>File Name</source>
+        <translation>Meno súboru</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="8"/>
+        <source>Start Time</source>
+        <translation>Začiatočný čas</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="9"/>
+        <source>Trip Time</source>
+        <translation>Ttrvanie výjazdu</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="10"/>
+        <source>Author Name</source>
+        <translation>Meno autora</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
+        <source>Name</source>
+        <translation>Meno</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
+        <source>Description</source>
+        <translation>Popis</translation>
+    </message>
+</context>
+<context>
     <name>GpxFilesListWidget</name>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="68"/>
         <source>Select GPX Files</source>
         <translation>Výber GPX súboru</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListWidget.cpp" line="67"/>
+        <location filename="../src/GpxFilesListWidget.cpp" line="68"/>
         <source>GPX (*.gpx)</source>
         <translation>GPX (*.gpx)</translation>
     </message>
@@ -374,31 +415,31 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="24"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabuľka</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="46"/>
         <source>Show Maximum on Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobraz maximum na mape</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="52"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="150"/>
         <location filename="../src/GpxInfoFileWidget.cpp" line="287"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="59"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="157"/>
         <location filename="../src/GpxInfoFileWidget.cpp" line="392"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Teplota</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="66"/>
@@ -406,79 +447,79 @@ Group &quot;</source>
         <location filename="../src/GpxInfoFileWidget.cpp" line="342"/>
         <location filename="../src/GpxInfoFileWidget.cpp" line="356"/>
         <source>Cadention</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadencia</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="73"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="171"/>
         <location filename="../src/GpxInfoFileWidget.cpp" line="314"/>
         <source>Heart Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Srdečný tep</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="83"/>
         <source>Table Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Výber v tabuľke</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="89"/>
         <source>Max Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Max výška</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="96"/>
         <source>Max Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Max teplota</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="103"/>
         <source>Max Cadention</source>
-        <translation type="unfinished"></translation>
+        <translation>Max kadencia</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="110"/>
         <source>Max Heart Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Max srdečný tep</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="117"/>
         <source>Clear Selection</source>
-        <translation type="unfinished">Zrušiť výber</translation>
+        <translation>Zrušiť výber</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="124"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Vycentrovať</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="135"/>
         <source>Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Graf</translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="144"/>
         <source>Show Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobraz graf</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileWidget.cpp" line="267"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Čas</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileWidget.cpp" line="291"/>
         <source>Elevation [m]</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška [m]</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileWidget.cpp" line="318"/>
         <source>Heart Rate [bpm]</source>
-        <translation type="unfinished"></translation>
+        <translation>Srdečný tep [bpm]</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileWidget.cpp" line="378"/>
         <source>Temperature [°C]</source>
-        <translation type="unfinished"></translation>
+        <translation>Teplota [°C]</translation>
     </message>
 </context>
 <context>
@@ -785,27 +826,27 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMDirectoryPathDialog.ui" line="14"/>
         <source>Select OSM Tiles Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Výber adresára s OSM dlaždicami</translation>
     </message>
     <message>
         <location filename="../resources/OSMDirectoryPathDialog.ui" line="22"/>
         <source>OSM Directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM adresár:</translation>
     </message>
     <message>
         <location filename="../resources/OSMDirectoryPathDialog.ui" line="32"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../resources/OSMDirectoryPathDialog.ui" line="56"/>
         <source>Default Path</source>
-        <translation type="unfinished"></translation>
+        <translation>predvolená cesta</translation>
     </message>
     <message>
         <location filename="../src/OSMDirectoryPathDialog.cpp" line="42"/>
         <source>Select OSM Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Výber adresára s OSM dlaždicami</translation>
     </message>
 </context>
 <context>
@@ -813,47 +854,47 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="14"/>
         <source>OSM Download Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Oblasť pre sťahovanie OSM dlaždíc</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="22"/>
         <source>Map Level From:</source>
-        <translation type="unfinished"></translation>
+        <translation>Úroveň mapy od:</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="36"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="43"/>
         <source>Map LevelTo:</source>
-        <translation type="unfinished"></translation>
+        <translation>Úroveň mapy do:</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="57"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadAreaDialog.ui" line="87"/>
         <source>Save As Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložiť ako projekt</translation>
     </message>
     <message>
         <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
         <source>Overwrite Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepísať projekt</translation>
     </message>
     <message>
         <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
         <source>Are You sure to overwrite project &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ste si istý, že chcete prepísať projekt &quot;</translation>
     </message>
     <message>
         <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
         <source>&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;?</translation>
     </message>
 </context>
 <context>
@@ -861,27 +902,27 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="47"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvoriť</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="54"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizovať</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="61"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Načítať</translation>
     </message>
     <message>
         <location filename="../resources/OSMDownloadProjectWidget.ui" line="68"/>
         <source>Delete</source>
-        <translation type="unfinished">Vymazať</translation>
+        <translation>Vymazať</translation>
     </message>
 </context>
 <context>
@@ -889,17 +930,17 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="20"/>
         <source>Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Úroveň:</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="27"/>
         <source>Row:</source>
-        <translation type="unfinished"></translation>
+        <translation>Riadok:</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="40"/>
@@ -913,43 +954,43 @@ Group &quot;</source>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="180"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="181"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="54"/>
         <source>Highlight Downloading Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvýrazniť sťahovanú oblasť</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="97"/>
         <source>Downloading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sťahovanie:</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="111"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="163"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="138"/>
         <source>Tiles Count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Počet dlaždíc:</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="167"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukončiť</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="176"/>
         <source>Column:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stĺpec:</translation>
     </message>
     <message>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Áno</translation>
     </message>
 </context>
 <context>
@@ -957,13 +998,13 @@ Group &quot;</source>
     <message>
         <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
         <source>Error</source>
-        <translation type="unfinished">Error</translation>
+        <translation>Chyba</translation>
     </message>
     <message>
         <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
         <source>Error by preparing download:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba počas prípravy sťahovania:</translation>
     </message>
 </context>
 <context>
@@ -971,22 +1012,22 @@ Group &quot;</source>
     <message>
         <location filename="../resources/OSMTileDownloaderSetupWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderSetupWidget.ui" line="23"/>
         <source>OSM Base URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>Základná OSM URL adresa:</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderSetupWidget.ui" line="30"/>
         <source>Threads:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlákna:</translation>
     </message>
     <message>
         <location filename="../src/OSMTileDownloaderSetupWidget.cpp" line="103"/>
         <source>Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmenené</translation>
     </message>
 </context>
 <context>
@@ -994,7 +1035,7 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PointEditorDialog.ui" line="14"/>
         <source>Point Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor bodu</translation>
     </message>
 </context>
 <context>
@@ -1002,22 +1043,22 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="38"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Editovať</translation>
     </message>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="45"/>
         <source>Add After</source>
-        <translation type="unfinished"></translation>
+        <translation>Pridať za</translation>
     </message>
     <message>
         <location filename="../resources/PolygonAreaWidget.ui" line="52"/>
         <source>Delete</source>
-        <translation type="unfinished">Vymazať</translation>
+        <translation>Vymazať</translation>
     </message>
 </context>
 <context>
@@ -1025,23 +1066,23 @@ Group &quot;</source>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="20"/>
         <source>Latitude:</source>
-        <translation type="unfinished">Zemepisná šírka:</translation>
+        <translation>Zemepisná šírka:</translation>
     </message>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="27"/>
         <location filename="../resources/PositionEditorWidget.ui" line="50"/>
         <source> [º]</source>
-        <translation type="unfinished"></translation>
+        <translation> [º]</translation>
     </message>
     <message>
         <location filename="../resources/PositionEditorWidget.ui" line="43"/>
         <source>Longitude:</source>
-        <translation type="unfinished">Zemepisná dĺžka:</translation>
+        <translation>Zemepisná dĺžka:</translation>
     </message>
 </context>
 <context>
@@ -1049,97 +1090,91 @@ Group &quot;</source>
     <message>
         <location filename="../resources/ProjectNameDialog.ui" line="14"/>
         <source>Set Project Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenie mena pre projekt</translation>
     </message>
     <message>
         <location filename="../resources/ProjectNameDialog.ui" line="22"/>
         <source>Project Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Meno projektu:</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="7"/>
         <source>File Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Meno súboru</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="8"/>
         <source>Start Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Začiatočný čas</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="9"/>
         <source>Trip Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ttrvanie výjazdu</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="10"/>
         <source>Author Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Meno autora</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
         <source>Name</source>
-        <translation type="unfinished">Meno aplikácie</translation>
+        <translation type="vanished">Meno</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Popis</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="6"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Čas</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="7"/>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="8"/>
         <source>Heart Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Srdečný tep</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="9"/>
         <source>Cadention</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadencia</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="10"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Teplota</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="11"/>
         <location filename="../src/hmi/PolygonAreaTableModel.cpp" line="6"/>
         <source>Latitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemepisná šírka</translation>
     </message>
     <message>
         <location filename="../src/GpxInfoFileModel.cpp" line="12"/>
         <location filename="../src/hmi/PolygonAreaTableModel.cpp" line="7"/>
         <source>Longitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemepisná dĺžka</translation>
     </message>
     <message>
         <location filename="../src/GpxManager.cpp" line="240"/>
         <source>Cannot load!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieje možné načítať!</translation>
     </message>
     <message>
         <location filename="../src/GpxManager.cpp" line="240"/>
-        <source>Cannot load file</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot load file </source>
+        <translation>Nieje možné načítať súbor </translation>
     </message>
     <message>
         <location filename="../src/GpxManager.cpp" line="240"/>
         <source>!</source>
-        <translation type="unfinished"></translation>
+        <translation>!</translation>
     </message>
 </context>
 <context>
@@ -1147,29 +1182,29 @@ Group &quot;</source>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formulár</translation>
+        <translation>Formulár</translation>
     </message>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="20"/>
         <source>Top Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Vľavo hore</translation>
     </message>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="26"/>
         <location filename="../resources/RectangleAreaWidget.ui" line="94"/>
         <source>Lat:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemepisná šírka:</translation>
     </message>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="33"/>
         <location filename="../resources/RectangleAreaWidget.ui" line="87"/>
         <source>Lon:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemepisná dĺžka:</translation>
     </message>
     <message>
         <location filename="../resources/RectangleAreaWidget.ui" line="81"/>
         <source>Bottom Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Vpravo dole</translation>
     </message>
 </context>
 </TS>

@@ -472,7 +472,7 @@ void CenterPointsWidget::editGroup()
         }
         else
         {
-            QMessageBox::warning(this, tr("Warning"), tr("Cannot change \"") + oldGroupName + tr("\" to group \"") + groupName + tr("\" group!\nGroup \"") + groupName + tr("\" is exists!"));
+            QMessageBox::warning(this, tr("Warning"), tr("Cannot change \"") + oldGroupName + tr("\" to group \"") + groupName + tr("\"!\nGroup \"") + groupName + tr("\" is exists!"));
         }
     }
 }
