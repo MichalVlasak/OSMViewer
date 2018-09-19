@@ -2,6 +2,8 @@
 #define GPXTABLEINFOFILEWIDGET_H
 
 #include <QWidget>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
 
 #include "GpxInfoFileModel.h"
 #include "GpxInfoFileWidgetConfig.h"
@@ -63,6 +65,12 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         class QCPGraph * _elevationGraph = nullptr;
         class QCPGraph * _heartRateGraph = nullptr;
         class QCPGraph * _temperatureGraph = nullptr;
+        QtCharts::QChartView * _chartView = nullptr;
+        QtCharts::QChart * _chart = nullptr;
+        QtCharts::QLineSeries * _elevationGraph_2 = nullptr;
+        QtCharts::QLineSeries * _heartRateGraph_2 = nullptr;
+        QtCharts::QLineSeries * _cadentionGraph_2 = nullptr;
+        QtCharts::QLineSeries * _temperatureGraph_2 = nullptr;
 };
 
 #endif // GPXTABLEINFOFILEWIDGET_H
