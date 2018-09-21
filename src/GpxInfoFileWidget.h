@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
+#include <QGestureEvent>
 
 #include "GpxInfoFileModel.h"
 #include "GpxInfoFileWidgetConfig.h"
@@ -63,8 +64,8 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         GpxManager * _gpxManager = nullptr;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
-        QtCharts::QChartView * _chartView = nullptr;
-        QtCharts::QChart * _chart = nullptr;
+        QtCharts::QChartView  * _chartView = nullptr;
+        QtCharts::QChart      * _chart = nullptr;
         QtCharts::QLineSeries * _elevationGraph_2 = nullptr;
         QtCharts::QLineSeries * _heartRateGraph_2 = nullptr;
         QtCharts::QLineSeries * _cadentionGraph_2 = nullptr;

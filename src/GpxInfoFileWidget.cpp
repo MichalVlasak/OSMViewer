@@ -43,10 +43,14 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
 
     _chartView->setRubberBand(QtCharts::QChartView::HorizontalRubberBand);
     _chartView->setRenderHint(QPainter::Antialiasing);
-    _chartView->setMouseTracking(true);
+
+    _chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
     layout->addWidget(_chartView);
     layout->setMargin(0);
+
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
 
     _ui->graphWidget->setLayout(layout);
 
