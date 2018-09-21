@@ -49,9 +49,6 @@ GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLaye
     layout->addWidget(_chartView);
     layout->setMargin(0);
 
-    grabGesture(Qt::PanGesture);
-    grabGesture(Qt::PinchGesture);
-
     _ui->graphWidget->setLayout(layout);
 
     fillTable();
@@ -78,18 +75,20 @@ GpxInfoFileWidget::~GpxInfoFileWidget()
     delete _ui;
 }
 
+void GpxInfoFileWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::MouseButton::LeftButton)
+    {
+        _chart->zoomReset();
+        return;
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
 void GpxInfoFileWidget::wheelEvent(QWheelEvent * wheelEvent)
 {
     QWidget::wheelEvent(wheelEvent);
-
-//    if(wheelEvent->delta() > 0)
-//    {
-//        _chart->zoomIn();
-//    }
-//    else
-//    {
-//        _chart->zoomOut();
-//    }
 
     if (wheelEvent->angleDelta().y() > 0)
     {
@@ -211,7 +210,6 @@ void GpxInfoFileWidget::fillGraph()
 
         //_chart->legend()->hide();
         _chart->createDefaultAxes();
-        _chart->setTitle("Simple line chart example");
 
         const GpxManager::GpxVector & gpxVector = _gpxManager->getGpxVector();
 
@@ -219,6 +217,8 @@ void GpxInfoFileWidget::fillGraph()
         {
             if(item.fileId == _gpxId)
             {
+                _chart->setTitle(item.name);
+
                 double startTime;
                 double endTime;
                 double minElevation = std::numeric_limits<double>::max();
@@ -306,7 +306,7 @@ void GpxInfoFileWidget::fillGraph()
                 }
 
                 QtCharts::QDateTimeAxis *axisX = new QtCharts::QDateTimeAxis;
-                axisX->setTickCount(8);
+                //axisX->setTickCount(8);
                 axisX->setFormat("hh:mm:ss");
                 axisX->setTitleText(tr("Time"));
                 axisX->setMin(QDateTime::fromMSecsSinceEpoch(startTime));

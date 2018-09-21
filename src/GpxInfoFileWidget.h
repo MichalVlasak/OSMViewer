@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
-#include <QGestureEvent>
 
 #include "GpxInfoFileModel.h"
 #include "GpxInfoFileWidgetConfig.h"
@@ -57,6 +56,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
 
         void wheelEvent(QWheelEvent * wheelEvent);
         void zoomX(qreal factor, qreal xcenter);
+        void mouseDoubleClickEvent(QMouseEvent * event);
 
     private:
         Ui::GpxInfoFileWidget * _ui = nullptr;
