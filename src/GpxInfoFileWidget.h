@@ -54,17 +54,15 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         void setShowingBigestHeartRate(GpxManager::GpxItem & item);
         void setShowingBigestTemperature(GpxManager::GpxItem & item);
 
+        void wheelEvent(QWheelEvent * wheelEvent);
+        void zoomX(qreal factor, qreal xcenter);
+
     private:
         Ui::GpxInfoFileWidget * _ui = nullptr;
         GpxInfoFileModel * _tableModel = nullptr;
         GpxManager * _gpxManager = nullptr;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
-        class QCustomPlot * _plot = nullptr;
-        class QCPGraph * _cadentionGraph = nullptr;
-        class QCPGraph * _elevationGraph = nullptr;
-        class QCPGraph * _heartRateGraph = nullptr;
-        class QCPGraph * _temperatureGraph = nullptr;
         QtCharts::QChartView * _chartView = nullptr;
         QtCharts::QChart * _chart = nullptr;
         QtCharts::QLineSeries * _elevationGraph_2 = nullptr;
