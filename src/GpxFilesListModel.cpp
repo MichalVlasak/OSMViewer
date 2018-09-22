@@ -65,7 +65,7 @@ void GpxFilesListModel::addNewItem(const GpxManager::GpxItem & item)
 
         if(item.startTime.isNull() == false)
         {
-            QDateTime time = item.startTime.toDateTime();
+            QDateTime time = item.startTime.toDateTime().toLocalTime();
 
             startTime = time.toString("dd.MM.yyyy HH:mm");
         }

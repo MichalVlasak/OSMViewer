@@ -43,7 +43,7 @@ void GpxInfoFileModel::setItemPoints(const GpxManager::PointVector & points)
 
             if(point.time.isNull() == false && point.time.canConvert<QDateTime>() == true)
             {
-                QDateTime time = point.time.toDateTime();
+                QDateTime time = point.time.toDateTime().toLocalTime();
 
                 setData(index, time.toString("HH:mm:ss"));
             }
