@@ -418,29 +418,29 @@ Group &quot;</source>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="52"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="150"/>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="287"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="331"/>
         <source>Elevation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="59"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="157"/>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="392"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="405"/>
         <source>Temperature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="66"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="164"/>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="342"/>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="356"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="374"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="380"/>
         <source>Cadention</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/GpxInfoFileWidget.ui" line="73"/>
         <location filename="../resources/GpxInfoFileWidget.ui" line="171"/>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="314"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="355"/>
         <source>Heart Rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -490,23 +490,18 @@ Group &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="267"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="311"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="291"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="324"/>
         <source>Elevation [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="318"/>
+        <location filename="../src/GpxInfoFileWidget.cpp" line="349"/>
         <source>Heart Rate [bpm]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GpxInfoFileWidget.cpp" line="378"/>
-        <source>Temperature [°C]</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
