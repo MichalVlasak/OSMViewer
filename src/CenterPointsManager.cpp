@@ -1,7 +1,10 @@
 #include "CenterPointsManager.h"
 #include "AppSettings.h"
+#include "MainWindow.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QProgressDialog>
 
 CenterPointsManager::CenterPointsManager(QObject * parent)
     : QObject(parent),
@@ -130,33 +133,24 @@ void CenterPointsManager::removeAllCenterPoints()
     emit pointsWasRemoved();
 }
 
-void CenterPointsManager::importPoints()
+void CenterPointsManager::importXml(const QString & fileName)
 {
-    QWidget * widget = qobject_cast<QWidget*>(parent());
-
-    QString fileName = QFileDialog::getOpenFileName(widget, tr("Import Center Points"), _importExportLastPath, tr("XML (*.xml)"));
-
-    if(fileName.isEmpty() == true)
-    {
-        return;
-    }
-
-    QFile file(fileName);
-
     QDomDocument document;
+    QFile file(fileName);
+    QFileInfo fileInfo(fileName);
 
     if (document.setContent(&file) == false)
     {
-        /*std::cerr << "Error: Parse error at line " << errorLine << ", "
-                  << "column " << errorColumn << ": "
-                  << qPrintable(errorStr) << std::endl;*/
+        QMessageBox::warning(MainWindow::getInstance(), tr("XML Error"), tr("Cannot read XML file \"") + fileName + tr("\"!"));
         return;
     }
 
-    QFileInfo fileInfo(fileName);
     _importExportLastPath = fileInfo.dir().path();
 
     QDomElement rootElem = document.firstChildElement("OSMViewerCenterPoints");
+
+    QProgressDialog progressDialog(tr("Import XML \"") + fileName + tr("\" ..."), tr("Abort import"), 0, 100, MainWindow::getInstance());
+    progressDialog.setWindowModality(Qt::WindowModal);
 
     if(rootElem.isNull() == false)
     {
@@ -186,6 +180,15 @@ void CenterPointsManager::importPoints()
                             {
                                 QString groupName = AppSettings::getValueString(groupNode, "Name");
 
+                                CenterPointsMap::iterator it = _pointsMap.find(groupName);
+
+                                if(it == _pointsMap.end())
+                                {
+                                    CenterPointsVector points;
+                                    _pointsMap[groupName] = points;
+                                    it = _pointsMap.find(groupName);
+                                }
+
                                 QDomNodeList pointsNodeList = groupNode.toElement().elementsByTagName("Points");
 
                                 for(int iPoints = 0; iPoints < pointsNodeList.size(); iPoints++)
@@ -195,9 +198,19 @@ void CenterPointsManager::importPoints()
                                     if(pointsNode.isNull() == false)
                                     {
                                         QDomNodeList pointNode = pointsNode.toElement().elementsByTagName("Point");
+                                        int pointNodeCount = pointNode.size();
 
-                                        for(int iPoint = 0; iPoint < pointNode.size(); iPoint++)
+                                        for(int iPoint = 0; iPoint < pointNodeCount; iPoint++)
                                         {
+                                            float percentage = (static_cast<float>(iPoint) / static_cast<float>(pointNodeCount)) * 100.;
+
+                                            progressDialog.setValue(static_cast<int>(percentage));
+
+                                            if(progressDialog.wasCanceled() == true)
+                                            {
+                                                break;
+                                            }
+
                                             QDomNode pPointNode = pointNode.at(iPoint);
 
                                             if(pPointNode.isNull() == false)
@@ -215,11 +228,23 @@ void CenterPointsManager::importPoints()
                                                     point.level = level.toInt();
                                                     point.position = QPointF(lon.toDouble(), lat.toDouble());
 
-                                                    addCenterPoint(groupName, point, false);
+                                                    if(it != _pointsMap.end())
+                                                    {
+                                                        CenterPointsVector & points = it->second;
+                                                        points.push_back(point);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
+                                }
+
+                                if(it != _pointsMap.end())
+                                {
+                                    CenterPointsVector & points = it->second;
+                                    std::sort(points.begin(), points.end(), compare);
+
+                                    emit pointsWasAdded();
                                 }
                             }
                         }
@@ -227,6 +252,182 @@ void CenterPointsManager::importPoints()
                 }
             }
         }
+    }
+}
+
+void CenterPointsManager::importCsv(const QString &fileName)
+{
+    QFile file(fileName);
+
+    if(file.open(QIODevice::ReadOnly) == true)
+    {
+        QFileInfo fileInfo(fileName);
+
+        _importExportLastPath = fileInfo.dir().path();
+
+        QTextStream in(&file);
+        int colCount = -1;
+        int colCityName = -1;
+        int colLat = -1;
+        int colLng = -1;
+        int colCountry = -1;
+
+        auto trimedItem = [](QString item)
+        {
+            item = item.trimmed();
+
+            while(item.indexOf("\"") == 0)
+            {
+                item = item.remove(0, 1);
+            }
+
+            while(item.indexOf("\"") == item.size() - 1)
+            {
+                item = item.remove(item.size() - 1, 1);
+            }
+
+            return item;
+        };
+
+        if(!in.atEnd())
+        {
+            QString firstLine = in.readLine();
+            QStringList firstLineList = firstLine.split(",");
+
+            if(firstLineList.size() > 0)
+            {
+                colCount = firstLineList.size();
+
+                for(int i = 0; i < colCount; i++)
+                {
+                    QString headerItem = trimedItem(firstLineList.at(i));
+
+                    if(headerItem.compare("city_ascii", Qt::CaseInsensitive) == 0)
+                    {
+                        colCityName = i;
+                    }
+                    else if(headerItem.compare("lat", Qt::CaseInsensitive) == 0)
+                    {
+                        colLat = i;
+                    }
+                    else if(headerItem.compare("lng", Qt::CaseInsensitive) == 0)
+                    {
+                        colLng = i;
+                    }
+                    else if(headerItem.compare("country", Qt::CaseInsensitive) == 0)
+                    {
+                        colCountry = i;
+                    }
+                }
+            }
+        }
+
+        int maxIndex = colCityName;
+
+        maxIndex = std::max(maxIndex, colLat);
+        maxIndex = std::max(maxIndex, colLng);
+        maxIndex = std::max(maxIndex, colCountry);
+
+        qint64 fileSize = file.size();
+        float prevPercentage = 0.;
+        QString groupName = fileInfo.baseName();
+
+        CenterPointsMap::iterator it = _pointsMap.find(groupName);
+
+        if(it == _pointsMap.end())
+        {
+            CenterPointsVector points;
+            _pointsMap[groupName] = points;
+            it = _pointsMap.find(groupName);
+        }
+
+        QProgressDialog progressDialog(tr("Import CSV \"") + fileName + tr("\" ..."), tr("Abort import"), 0, 100, MainWindow::getInstance());
+        progressDialog.setWindowModality(Qt::WindowModal);
+
+        while (!in.atEnd())
+        {
+            qint64 pos = in.pos();
+            float percentage = (static_cast<float>(pos) / static_cast<float>(fileSize)) * 100.;
+
+            if(percentage > (prevPercentage + 0.1))
+            {
+                progressDialog.setValue(static_cast<int>(percentage));
+
+                if(progressDialog.wasCanceled() == true)
+                {
+                    break;
+                }
+
+                prevPercentage = percentage;
+            }
+
+            QString line = in.readLine();
+            QStringList lineList = line.split(",");
+
+            if(maxIndex <= lineList.size())
+            {
+                QString cityName = trimedItem(lineList.at(colCityName));
+                QString lat = trimedItem(lineList.at(colLat));
+                QString lon = trimedItem(lineList.at(colLng));
+                QString country = trimedItem(lineList.at(colCountry));
+
+                if(cityName.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
+                {
+                    QString name = cityName;
+
+                    if(country.isEmpty() == false)
+                    {
+                        name += " (" + country + ")";
+                    }
+
+                    CenterPointStruct point;
+
+                    point.name = name;
+                    point.level = 10;
+                    point.position = QPointF(lon.toDouble(), lat.toDouble());
+
+                    if(it != _pointsMap.end())
+                    {
+                        CenterPointsVector & points = it->second;
+                        points.push_back(point);
+                    }
+                }
+            }
+        }
+
+        if(it != _pointsMap.end())
+        {
+            CenterPointsVector & points = it->second;
+            std::sort(points.begin(), points.end(), compare);
+
+            emit pointsWasAdded();
+        }
+
+        file.close();
+    }
+}
+
+void CenterPointsManager::importPoints()
+{
+    QWidget * widget = qobject_cast<QWidget*>(parent());
+
+    QString fileName = QFileDialog::getOpenFileName(widget, tr("Import Center Points"), _importExportLastPath, tr("XML (*.xml);;CSV (from https://simplemaps.com/data/world-cities) (*.csv)"));
+
+    if(fileName.isEmpty() == true)
+    {
+        return;
+    }
+
+    QFileInfo fileInfo(fileName);
+    QString suffix = fileInfo.suffix();
+
+    if(suffix.compare("XML", Qt::CaseInsensitive) == 0)
+    {
+        importXml(fileName);
+    }
+    else if(suffix.compare("CSV", Qt::CaseInsensitive) == 0)
+    {
+        importCsv(fileName);
     }
 }
 

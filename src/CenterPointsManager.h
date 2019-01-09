@@ -55,6 +55,8 @@ class CenterPointsManager : public QObject, public StoreConfigInterface
     private:
         void prepareXmlDocument(const QString & fileName, QDomDocument & doc, QDomElement & groupsElement);
         void savePointsToXml(CenterPointsMap::iterator it, QDomDocument & doc, QDomElement & groupsElement);
+        void importXml(const QString & fileName);
+        void importCsv(const QString & fileName);
 
     private:
         CenterPointStruct _homePosition;
