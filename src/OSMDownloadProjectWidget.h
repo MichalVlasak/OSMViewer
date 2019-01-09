@@ -33,7 +33,7 @@ class OSMDownloadProjectWidget : public QWidget
         void openProject(QString projectName);
 
     private:
-        Ui::OSMDownloadProjectWidgetForm *_ui;
+        Ui::OSMDownloadProjectWidgetForm *_ui = nullptr;
         QStringListModel * _listModel = nullptr;
 };
 

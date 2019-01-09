@@ -18,7 +18,7 @@ class GroupEditDialog : public QDialog
         QString getGroupName() const;
 
     private:
-        Ui::GroupEditDialog * _ui;
+        Ui::GroupEditDialog * _ui = nullptr;
 };
 
 #endif // GROUPEDITDIALOG_H

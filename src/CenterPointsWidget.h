@@ -49,8 +49,8 @@ class CenterPointsWidget : public QWidget
         QStringList getPointsListForGroup(const QString & groupName);
 
     private:
-        Ui::CenterPointsWidget * _ui;
-        CenterPointsManager * _pointsManager;
+        Ui::CenterPointsWidget * _ui = nullptr;
+        CenterPointsManager * _pointsManager = nullptr;
         QStringListModel * _listModel = nullptr;
         QString _lastAdded;
         QString _findText;

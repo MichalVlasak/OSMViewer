@@ -18,7 +18,7 @@ class PointEditorDialog : public QDialog
         QPointF getCurrentPosition() const;
 
     private:
-        Ui::PointEditorDialog * _ui;
+        Ui::PointEditorDialog * _ui = nullptr;
 };
 
 #endif // POINTEDITORDIALOG_H

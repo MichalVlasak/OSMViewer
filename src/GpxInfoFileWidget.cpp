@@ -5,7 +5,7 @@
 #include <QtCharts/QDateTimeAxis>
 #include <QtCharts/QValueAxis>
 
-GpxInfoFileWidget::GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
+GpxInfoFileWidget::GpxInfoFileWidget(GpxManagerPtr gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfoFileWidget),
     _gpxManager(gpxManager),

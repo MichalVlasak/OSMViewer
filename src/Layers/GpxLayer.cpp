@@ -11,7 +11,7 @@ GpxLayer::GpxLayer(MapSettings & mapSettings, QWidget * parent)
 {
 }
 
-void GpxLayer::setGpxManager(GpxManager *gpxManager)
+void GpxLayer::setGpxManager(GpxManagerPtr gpxManager)
 {
     _gpxManager = gpxManager;
 }

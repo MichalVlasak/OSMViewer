@@ -32,10 +32,10 @@ class OSMTileDownloaderSetupWidget : public QWidget
         void downloaderChangeThreadsCount(int threads);
 
     private:
-        Ui::OSMTileDownloaderSetupWidget *_ui;
-        OSMTileDownloader * _downloader;
+        Ui::OSMTileDownloaderSetupWidget *_ui = nullptr;
+        OSMTileDownloader * _downloader = nullptr;
         bool _isSettingsChanged;
-        QTimer * _timer;
+        QTimer * _timer = nullptr;
 };
 
 #endif // DOWNLOADERSETUPWIDGET_H

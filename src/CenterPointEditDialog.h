@@ -24,7 +24,7 @@ class CenterPointEditDialog : public QDialog
         void refreshLatLonSpinBox();
 
     private:
-        Ui::CenterPointEditDialog * _ui;
+        Ui::CenterPointEditDialog * _ui = nullptr;
 };
 
 #endif // CENTERPOINTEDITDIALOG_H

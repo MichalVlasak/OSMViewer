@@ -7,12 +7,12 @@
 class GpxFileFinder
 {
     public:
-        GpxFileFinder(GpxManager * gpxManager);
+        GpxFileFinder(GpxManagerPtr gpxManager);
 
         void find(const AreaGeometry & geometry) const;
 
     private:
-        GpxManager * _gpxManager = nullptr;
+        GpxManagerPtr _gpxManager;
 };
 
 #endif // GPXFILEFINDER_H

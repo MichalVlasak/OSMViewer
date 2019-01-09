@@ -143,7 +143,7 @@ QVariant GpxFilesListModel::data(const QModelIndex &index, int role) const
 
                         if(mainWin != nullptr)
                         {
-                            GpxManager * gpxManager = mainWin->getGpxManager();
+                            GpxManagerPtr gpxManager = mainWin->getGpxManager();
 
                             if(gpxManager != nullptr)
                             {

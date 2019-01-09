@@ -105,4 +105,6 @@ class GpxManager : public QObject, public StoreConfigInterface
         volatile bool _cancelLoad = false;
 };
 
+typedef std::shared_ptr<GpxManager> GpxManagerPtr;
+
 #endif // GPXMANAGER_H

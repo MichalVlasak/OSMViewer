@@ -4,7 +4,7 @@
 
 #include <QTabWidget>
 
-GpxInfosWidget::GpxInfosWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
+GpxInfosWidget::GpxInfosWidget(GpxManagerPtr gpxManager, GpxLayer * gpxLayer, QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GpxInfosWidget),
     _gpxManager(gpxManager),

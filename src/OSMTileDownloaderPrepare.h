@@ -28,8 +28,8 @@ class OSMTileDownloaderPrepare : public QThread
 
     private:
         OSMDownloadAreaDialog::Setup _setup;
-        OSMTileDownloader * _downloader;
-        OSMTileDownloaderInfoWidget * _infoWidget;
+        OSMTileDownloader * _downloader = nullptr;
+        OSMTileDownloaderInfoWidget * _infoWidget = nullptr;
         QString _tilesPath;
         bool _runPrepare = true;
         class DownloadAreaHighlight * _downloadAreaHighlight = nullptr;

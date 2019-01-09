@@ -18,7 +18,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
         Q_OBJECT
 
     public:
-        GpxInfoFileWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent = 0);
+        GpxInfoFileWidget(GpxManagerPtr gpxManager, GpxLayer * gpxLayer, int gpxId, QWidget *parent = 0);
         ~GpxInfoFileWidget();
 
     signals:
@@ -61,7 +61,7 @@ class GpxInfoFileWidget : public QWidget, public GpxInfoFileWidgetConfig
     private:
         Ui::GpxInfoFileWidget * _ui = nullptr;
         GpxInfoFileModel * _tableModel = nullptr;
-        GpxManager * _gpxManager = nullptr;
+        GpxManagerPtr _gpxManager;
         int _gpxId = GpxManager::ErrorId;
         GpxLayer * _gpxLayer = nullptr;
         QtCharts::QChartView  * _chartView = nullptr;

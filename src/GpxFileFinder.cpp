@@ -2,7 +2,7 @@
 #include "GpxFilesListWidget.h"
 #include "MainWindow.h"
 
-GpxFileFinder::GpxFileFinder(GpxManager * gpxManager)
+GpxFileFinder::GpxFileFinder(GpxManagerPtr gpxManager)
     : _gpxManager(gpxManager)
 {
 }

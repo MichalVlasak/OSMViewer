@@ -23,7 +23,7 @@ class OSMDirectoryPathDialog : public QDialog
         void selectDirectory();
 
     private:
-        Ui::OSMDirectoryPathDialog *ui;
+        Ui::OSMDirectoryPathDialog *ui = nullptr;
 };
 
 #endif // OSMDIRECTORYPATHDIALOG_H

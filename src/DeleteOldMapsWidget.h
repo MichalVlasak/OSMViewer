@@ -43,7 +43,7 @@ class DeleteOldMapsWidget : public QWidget
         void setEnabledDeleteAll(bool enable);
 
     private:
-        Ui::DeleteOldMapsWidget *_ui;
+        Ui::DeleteOldMapsWidget *_ui = nullptr;
 };
 
 #endif // DELETEOLDMAPSWIDGET_H

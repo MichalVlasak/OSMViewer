@@ -19,7 +19,7 @@ class ProjectNameDialog : public QDialog
         const QString getProjectName() const;
 
     private:
-        Ui::ProjectNameDialog *_ui;
+        Ui::ProjectNameDialog *_ui = nullptr;
 };
 
 #endif // PROJECTNAMEDIALOG_H

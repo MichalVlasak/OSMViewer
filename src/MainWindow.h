@@ -22,6 +22,9 @@ namespace Ui {
 class MainWindow;
 }
 
+class GpxManager;
+typedef std::shared_ptr<GpxManager> GpxManagerPtr;
+
 class MainWindow : public QMainWindow, public StoreConfigInterface
 {
         Q_OBJECT
@@ -51,7 +54,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         // interface zo StoreConfigInterface
         void storeConfig(QDomDocument & document, QDomElement & rootElement);
         bool restoreConfig(QDomDocument & document);
-        class GpxManager * getGpxManager();
+        GpxManagerPtr getGpxManager();
         class GpxFilesListWidget * getGpxFilesListWidget();
 
     private:
@@ -71,7 +74,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         void changeLanguage(QAction * action);
 
     private:
-        Ui::MainWindow * _ui;
+        Ui::MainWindow * _ui = nullptr;
         AppSettings _appSettings;
         OSMTileDownloader * _downloader = nullptr;
         QDockWidget * _downloaderInfoDock = nullptr;
@@ -84,9 +87,9 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         QString _applicationName;
         DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
 
-        QLabel * _zoomLevelLabel;
-        QLabel * _zoomScaleLabel;
-        QLabel * _mouseWgs;
+        QLabel * _zoomLevelLabel = nullptr;
+        QLabel * _zoomScaleLabel = nullptr;
+        QLabel * _mouseWgs = nullptr;
         QRect _rect;
         double _lastMouseLat = 0.;
         double _lastMouseLon = 0.;
@@ -100,7 +103,7 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         QDockWidget * _gpxFileListDock = nullptr;
         class GpxInfosWidget * _gpxInfosWidget = nullptr;
         QDockWidget * _gpxInfosDock = nullptr;
-        class GpxManager * _gpxManager = nullptr;
+        GpxManagerPtr _gpxManager;
         QString _currentLanguages;
         QString _langPath;
         QTranslator _translator;

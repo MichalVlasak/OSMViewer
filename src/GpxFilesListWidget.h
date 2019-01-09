@@ -16,7 +16,7 @@ class GpxFilesListWidget : public QWidget
         Q_OBJECT
 
     public:
-        GpxFilesListWidget(GpxManager * gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
+        GpxFilesListWidget(GpxManagerPtr gpxManager, GpxLayer * gpxLayer, QWidget *parent = 0);
         ~GpxFilesListWidget();
 
         void setEnabledClearHighlightedButton(bool enabled);
@@ -48,8 +48,8 @@ class GpxFilesListWidget : public QWidget
         int getId(const QModelIndex & index);
 
     private:
-        Ui::GpxFilesListWidget * _ui;
-        GpxManager * _gpxManager = nullptr;
+        Ui::GpxFilesListWidget * _ui = nullptr;
+        GpxManagerPtr _gpxManager;
         GpxFilesListModel * _tableModel = nullptr;
         GpxLayer * _gpxLayer = nullptr;
         QTimer * _timer = nullptr;

@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GpxLayer * gpxLayer = _ui->paintWidget->getGpxLayer();
 
-    _gpxManager = new GpxManager();
+    _gpxManager = std::make_shared<GpxManager>();
     gpxLayer->setGpxManager(_gpxManager);
     _gpxFileListWidget = new GpxFilesListWidget(_gpxManager, gpxLayer, this);
     _gpxInfosWidget = new GpxInfosWidget(_gpxManager, gpxLayer, this);
@@ -204,12 +204,10 @@ MainWindow::~MainWindow()
     _appSettings.storeConfig(_downloadAreaHighlight);
     _appSettings.storeConfig(_centerPointsManager);
     _appSettings.storeConfig(&_downloadProjectModel);
-    _appSettings.storeConfig(_gpxManager);
+    _appSettings.storeConfig(_gpxManager.get());
 
     //while(_downloader2->isRunning() == true);
 
-    delete _gpxManager;
-    delete _downloader;
     delete _ui;
 }
 
@@ -237,7 +235,7 @@ void MainWindow::initialize()
         _downloadProjectWidget->initialize();
     }
 
-    _appSettings.restoreConfig(_gpxManager);
+    _appSettings.restoreConfig(_gpxManager.get());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
@@ -530,7 +528,7 @@ bool MainWindow::restoreConfig(QDomDocument &document)
     return result;
 }
 
-GpxManager * MainWindow::getGpxManager()
+GpxManagerPtr MainWindow::getGpxManager()
 {
     return _gpxManager;
 }

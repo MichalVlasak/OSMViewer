@@ -22,7 +22,7 @@ class DeleteOldMapsDialog : public QDialog
         void setEnabledDeleteAll(bool enable);
 
     private:
-        Ui::DeleteOldMapsDialog * _ui;
+        Ui::DeleteOldMapsDialog * _ui = nullptr;
 };
 
 #endif // DELETEOLDMAPSDIALOG_H

@@ -18,7 +18,7 @@ class GpxLayer : public QWidget, public BaseLayer
         void mouseMoveEvent(QMouseEvent * mouseEvent);
 
         void setCurrentGpxIndexes(const GpxManager::GpxIdVector & ids);
-        void setGpxManager(GpxManager * gpxManager);
+        void setGpxManager(GpxManagerPtr gpxManager);
 
         void highlightSelectedPoint(int gpxId, size_t idx);
         void removeSelectedPoint(int gpxId);
@@ -34,7 +34,7 @@ class GpxLayer : public QWidget, public BaseLayer
         void paintPoint(QPainter & painter, const GpxManager::GpxItem & item, size_t posIdx, const QString & title = "");
 
     private:
-        GpxManager * _gpxManager = nullptr;
+        GpxManagerPtr _gpxManager;
         GpxManager::GpxIdVector _currentGpx;
         int _mouseX = -1;
         int _mouseY = -1;

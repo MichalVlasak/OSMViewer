@@ -16,7 +16,7 @@ class AboutDialog : public QDialog
         ~AboutDialog();
 
     private:
-        Ui::AboutDialog * _ui;
+        Ui::AboutDialog * _ui = nullptr;
 };
 
 #endif // ABOUTDIALOG_H

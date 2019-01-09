@@ -42,7 +42,7 @@ class OSMDownloadAreaDialog : public QDialog
         void saveAsProject();
 
     private:
-        Ui::OSMDownloadAreaDialog *_ui;
+        Ui::OSMDownloadAreaDialog *_ui = nullptr;
         Setup _setup;
         QString _projectName;
         AreaGeometryWigdetInterface * _geometryWidget = nullptr;

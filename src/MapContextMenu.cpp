@@ -90,7 +90,7 @@ void MapContextMenu::show(const QPointF &pos)
 
         if(mainWin != nullptr)
         {
-            GpxManager * gpxManager = mainWin->getGpxManager();
+            GpxManagerPtr gpxManager = mainWin->getGpxManager();
 
             if(gpxManager != nullptr)
             {

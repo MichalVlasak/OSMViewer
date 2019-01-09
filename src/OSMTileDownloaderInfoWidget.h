@@ -47,10 +47,10 @@ class OSMTileDownloaderInfoWidget : public QWidget
         typedef std::map<int, LevelInfo> LevelInfoMap;
 
     private:
-        Ui::OSMTileDownloaderInfoWidget *_ui;
+        Ui::OSMTileDownloaderInfoWidget *_ui = nullptr;
         LevelInfoMap _levelInfo;
-        OSMTileDownloader * _downloader;
-        QTimer * _timer;
+        OSMTileDownloader * _downloader = nullptr;
+        QTimer * _timer = nullptr;
         int _levelFrom, _levelTo;
 };
 
