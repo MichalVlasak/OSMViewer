@@ -34,9 +34,6 @@ class CenterPointsManager : public QObject, public StoreConfigInterface
         void exportAllGroups();
         void exportGroup(const QString & groupName);
 
-        const QString & getImportExportLastPath() const;
-        void setImportExportLastPath(const QString & path);
-
         static void storePoint(const CenterPointStruct & point, QDomElement & element, QDomDocument & doc);
 
         bool createNewGroup(const QString & groupName);
@@ -62,6 +59,7 @@ class CenterPointsManager : public QObject, public StoreConfigInterface
         CenterPointStruct _homePosition;
         CenterPointsMap _pointsMap;
         QString _importExportLastPath;
+        QString _importLastSuffix;
 };
 
 #endif // CENTERPOINTSMANAGER_H

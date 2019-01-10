@@ -146,6 +146,7 @@ void CenterPointsManager::importXml(const QString & fileName)
     }
 
     _importExportLastPath = fileInfo.dir().path();
+    _importLastSuffix = fileInfo.suffix();
 
     QDomElement rootElem = document.firstChildElement("OSMViewerCenterPoints");
 
@@ -264,6 +265,7 @@ void CenterPointsManager::importCsv(const QString &fileName)
         QFileInfo fileInfo(fileName);
 
         _importExportLastPath = fileInfo.dir().path();
+        _importLastSuffix = fileInfo.suffix();
 
         QTextStream in(&file);
         int colCount = -1;
@@ -271,6 +273,7 @@ void CenterPointsManager::importCsv(const QString &fileName)
         int colLat = -1;
         int colLng = -1;
         int colCountry = -1;
+        int colPopulation = -1;
 
         auto trimedItem = [](QString item)
         {
@@ -281,9 +284,12 @@ void CenterPointsManager::importCsv(const QString &fileName)
                 item = item.remove(0, 1);
             }
 
-            while(item.indexOf("\"") == item.size() - 1)
+            if(item.size() > 0)
             {
-                item = item.remove(item.size() - 1, 1);
+                while(item.indexOf("\"") == item.size() - 1)
+                {
+                    item = item.remove(item.size() - 1, 1);
+                }
             }
 
             return item;
@@ -318,6 +324,10 @@ void CenterPointsManager::importCsv(const QString &fileName)
                     {
                         colCountry = i;
                     }
+                    else if(headerItem.compare("population", Qt::CaseInsensitive) == 0)
+                    {
+                        colPopulation = i;
+                    }
                 }
             }
         }
@@ -327,6 +337,7 @@ void CenterPointsManager::importCsv(const QString &fileName)
         maxIndex = std::max(maxIndex, colLat);
         maxIndex = std::max(maxIndex, colLng);
         maxIndex = std::max(maxIndex, colCountry);
+        maxIndex = std::max(maxIndex, colPopulation);
 
         qint64 fileSize = file.size();
         float prevPercentage = 0.;
@@ -370,6 +381,7 @@ void CenterPointsManager::importCsv(const QString &fileName)
                 QString lat = trimedItem(lineList.at(colLat));
                 QString lon = trimedItem(lineList.at(colLng));
                 QString country = trimedItem(lineList.at(colCountry));
+                QString population = trimedItem(lineList.at(colPopulation));
 
                 if(cityName.isEmpty() == false && lat.isEmpty() == false && lon.isEmpty() == false)
                 {
@@ -380,10 +392,46 @@ void CenterPointsManager::importCsv(const QString &fileName)
                         name += " (" + country + ")";
                     }
 
+                    int level = 10;
+
+                    if(population.isEmpty() == false)
+                    {
+                        bool isOk = false;
+                        float populationFloat = population.toFloat(&isOk);
+
+                        if(isOk == true)
+                        {
+                            if(populationFloat < 50000)
+                            {
+                                level = 16;
+                            }
+                            if(populationFloat < 100000)
+                            {
+                                level = 15;
+                            }
+                            else if(populationFloat < 300000)
+                            {
+                                level = 14;
+                            }
+                            else if(populationFloat < 1000000)
+                            {
+                                level = 13;
+                            }
+                            else if(populationFloat < 5000000)
+                            {
+                                level = 12;
+                            }
+                            else if(populationFloat < 10000000)
+                            {
+                                level = 11;
+                            }
+                        }
+                    }
+
                     CenterPointStruct point;
 
                     point.name = name;
-                    point.level = 10;
+                    point.level = level;
                     point.position = QPointF(lon.toDouble(), lat.toDouble());
 
                     if(it != _pointsMap.end())
@@ -410,8 +458,20 @@ void CenterPointsManager::importCsv(const QString &fileName)
 void CenterPointsManager::importPoints()
 {
     QWidget * widget = qobject_cast<QWidget*>(parent());
+    QString xmlFilter = tr("XML (*.xml)");
+    QString csvFilter = tr("CSV (*.csv)"); //(from https://simplemaps.com/data/world-cities)
+    QString selectedFilter = xmlFilter;
 
-    QString fileName = QFileDialog::getOpenFileName(widget, tr("Import Center Points"), _importExportLastPath, tr("XML (*.xml);;CSV (from https://simplemaps.com/data/world-cities) (*.csv)"));
+    if(_importLastSuffix.compare("XML", Qt::CaseInsensitive) == 0)
+    {
+        selectedFilter = xmlFilter;
+    }
+    else if(_importLastSuffix.compare("CSV", Qt::CaseInsensitive) == 0)
+    {
+        selectedFilter = csvFilter;
+    }
+
+    QString fileName = QFileDialog::getOpenFileName(widget, tr("Import Center Points"), _importExportLastPath, xmlFilter + ";;" + csvFilter, &selectedFilter);
 
     if(fileName.isEmpty() == true)
     {
@@ -566,16 +626,6 @@ void CenterPointsManager::exportGroup(const QString &groupName)
     }
 }
 
-const QString & CenterPointsManager::getImportExportLastPath() const
-{
-    return _importExportLastPath;
-}
-
-void CenterPointsManager::setImportExportLastPath(const QString &path)
-{
-    _importExportLastPath = path;
-}
-
 bool CenterPointsManager::createNewGroup(const QString &groupName)
 {
     CenterPointsMap::iterator it = _pointsMap.find(groupName);
@@ -635,8 +685,13 @@ void CenterPointsManager::storeConfig(QDomDocument &document, QDomElement &rootE
 
     QDomElement importExportPathElement = document.createElement("LastPathForImportExport");
     centerPointsElement.appendChild(importExportPathElement);
-    QDomText importExportPathText = document.createTextNode(getImportExportLastPath());
+    QDomText importExportPathText = document.createTextNode(_importExportLastPath);
     importExportPathElement.appendChild(importExportPathText);
+
+    QDomElement importSuffixPathElement = document.createElement("LastSuffixForImport");
+    centerPointsElement.appendChild(importSuffixPathElement);
+    QDomText importSuffixPathText = document.createTextNode(_importLastSuffix);
+    importSuffixPathElement.appendChild(importSuffixPathText);
 
     QDomElement homePointElement = document.createElement("HomePoint");
     centerPointsElement.appendChild(homePointElement);
@@ -693,7 +748,16 @@ bool CenterPointsManager::restoreConfig(QDomDocument &document)
 
                 if(path.isEmpty() == false)
                 {
-                    setImportExportLastPath(path);
+                    _importExportLastPath = path;
+
+                    result = true;
+                }
+
+                QString suffix = AppSettings::getValueString(centerPointsNode, "LastSuffixForImport");
+
+                if(suffix.isEmpty() == false)
+                {
+                    _importLastSuffix = suffix;
 
                     result = true;
                 }
