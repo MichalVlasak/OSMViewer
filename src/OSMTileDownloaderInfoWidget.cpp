@@ -127,6 +127,7 @@ void OSMTileDownloaderInfoWidget::downloadedItem(int level, int col, int row)
             _ui->rowProgress->setMaximum(it->second.rowTo);
         }
     }
+    _ui->allDownloadCount->setText(QString::number(_downloader->getAllDownloadCount()));
 }
 
 void OSMTileDownloaderInfoWidget::cancel()
