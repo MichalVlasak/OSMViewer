@@ -79,6 +79,7 @@ class OSMTileDownloader : public QObject, public StoreConfigInterface
         unsigned _allDownloadCount = 0;
         QString _appName;
         int _lastManager = 0;
+        QTimer * _timer = nullptr;
 };
 
 #endif // OSMTILEDOWNLOADER_H

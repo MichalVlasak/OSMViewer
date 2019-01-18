@@ -28,7 +28,16 @@ OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
         QObject::connect(_managers[i], SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
     }
 
+    _timer = new QTimer(this);
+
+    _timer->setInterval(1000);
+
     QObject::connect(this, SIGNAL(doDownladSignal(QUrl)), SLOT(doDownload(QUrl)));
+
+    // downloadItemIsDone budem emitovat v obmedzenom mnozstve, ak by som ho emitoval po
+    // kazdom stiahnuti tak to zahlti rendering poziadavkami na rendering
+    // timer je aktivny len pocat stahovania
+    QObject::connect(_timer, SIGNAL(timeout()), SIGNAL(downloadItemIsDone()));
 }
 
 void OSMTileDownloader::setBaseUrl(QString url)
@@ -102,6 +111,11 @@ bool OSMTileDownloader::addDownloadItem(const OSMTileDownloader::DownloadItem & 
         {
             QMutexLocker lock(&_mutex);
             _downloadingItems.append(itemStruct);
+
+            if(_timer->isActive() == false)
+            {
+                _timer->start();
+            }
         }
 
         emit doDownladSignal(url);
@@ -153,27 +167,23 @@ bool OSMTileDownloader::saveToDisk(const QUrl &url, QIODevice *data, QString & f
             }
         }
 
-        if(isFinded == false)
+        if(isFinded == true)
         {
-            if(_downloadingItems.size() > 0)
+            QFile file(basename);
+
+            if (!file.open(QIODevice::WriteOnly))
             {
-                basename = _downloadingItems[0].basePath + path;
+                std::cerr << "Could not open " << qPrintable(basename) << " for writing: " << qPrintable(file.errorString()) << std::endl;
+                return false;
             }
+
+            file.write(data->readAll());
+            file.close();
+
+            fileName = basename;
+
+            return true;
         }
-
-        QFile file(basename);
-        if (!file.open(QIODevice::WriteOnly))
-        {
-            std::cerr << "Could not open " << qPrintable(basename) << " for writing: " << qPrintable(file.errorString()) << std::endl;
-            return false;
-        }
-
-        file.write(data->readAll());
-        file.close();
-
-        fileName = basename;
-
-        return true;
     }
 
     return false;
@@ -237,9 +247,12 @@ void OSMTileDownloader::downloadFinished(QNetworkReply *reply)
     {
         // all downloads finished
         emit allItemIsDownloaded();
-    }
 
-    emit downloadItemIsDone();
+        if(_timer->isActive() == true)
+        {
+            _timer->stop();
+        }
+    }
 }
 
 void OSMTileDownloader::setDownloadingEnable(bool enabled)
