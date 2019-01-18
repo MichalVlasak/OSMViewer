@@ -80,6 +80,21 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
     QDomText projectLevelToText = doc.createTextNode(QString::number(project.setup.levelTo));
     projectLevelToElement.appendChild(projectLevelToText);
 
+    QDomElement deleteTilesEnabled = doc.createElement("DeleteTilesEnabled");
+    element.appendChild(deleteTilesEnabled);
+    QDomText deleteTilesEnabledText = doc.createTextNode(QString::number(project.setup.deleteSettings.deleteEnabled));
+    deleteTilesEnabled.appendChild(deleteTilesEnabledText);
+
+    QDomElement deleteTilesType = doc.createElement("DeleteTilesType");
+    element.appendChild(deleteTilesType);
+    QDomText deleteTilesTypeText = doc.createTextNode(QString::number(project.setup.deleteSettings.deleteType));
+    deleteTilesType.appendChild(deleteTilesTypeText);
+
+    QDomElement deleteTilesTime = doc.createElement("DeleteTilesTime");
+    element.appendChild(deleteTilesTime);
+    QDomText deleteTilesTimeText = doc.createTextNode(project.setup.deleteSettings.deleteTime.toString(Qt::DateFormat::ISODate));
+    deleteTilesTime.appendChild(deleteTilesTimeText);
+
     if(project.setup.geometry.geometryType == AreaGeometry::Type::Rectangle &&
        project.setup.geometry.geometry.isNull() == false &&
        project.setup.geometry.geometry.canConvert<QRectF>() == true)
@@ -220,6 +235,40 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                             QDomNodeList lineNodeList = projectNode.toElement().elementsByTagName("Line");
 
                             OSMDownloadProjectModel::Project project;
+                            QString value = AppSettings::getValueString(projectNode, "DeleteTilesEnabled");
+
+                            if(value.isEmpty() == false)
+                            {
+                                bool deleteTiles = (value.toInt() == 0) ? false : true;
+                                project.setup.deleteSettings.deleteEnabled = deleteTiles;
+                            }
+                            else
+                            {
+                                project.setup.deleteSettings.deleteEnabled = false;
+                            }
+
+                            value = AppSettings::getValueString(projectNode, "DeleteTilesType");
+
+                            if(value.isEmpty() == false)
+                            {
+                                project.setup.deleteSettings.deleteType = DeleteOldMapsWidget::DeleteType(value.toInt());
+                            }
+                            else
+                            {
+                                project.setup.deleteSettings.deleteType = DeleteOldMapsWidget::DeleteOldAsTime;
+                            }
+
+                            value = AppSettings::getValueString(projectNode, "DeleteTilesTime");
+
+                            if(value.isEmpty() == false)
+                            {
+                                project.setup.deleteSettings.deleteTime = QDateTime::fromString(value, Qt::DateFormat::ISODate);
+                            }
+                            else
+                            {
+                                project.setup.deleteSettings.deleteTime = QDateTime::currentDateTime();
+                            }
+
                             bool isOK;
 
                             project.name = projectName;
