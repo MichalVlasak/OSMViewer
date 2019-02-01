@@ -38,6 +38,8 @@ OSMTileDownloader::OSMTileDownloader(const QString & appName, QObject *parent)
     // kazdom stiahnuti tak to zahlti rendering poziadavkami na rendering
     // timer je aktivny len pocat stahovania
     QObject::connect(_timer, SIGNAL(timeout()), SIGNAL(downloadItemIsDone()));
+    QObject::connect(this, SIGNAL(startTimerSignal()), _timer, SLOT(start()));
+    QObject::connect(this, SIGNAL(stopTimerSignal()), _timer, SLOT(stop()));
 }
 
 void OSMTileDownloader::setBaseUrl(QString url)
@@ -114,7 +116,7 @@ bool OSMTileDownloader::addDownloadItem(const OSMTileDownloader::DownloadItem & 
 
             if(_timer->isActive() == false)
             {
-                _timer->start();
+                emit startTimerSignal();
             }
         }
 
@@ -228,7 +230,7 @@ void OSMTileDownloader::downloadFinished(QNetworkReply *reply)
 
             if (saveToDisk(url, reply, fileName))
             {
-                std::cout << "Download of " << url.toEncoded().constData() << " succeeded (saved to " << qPrintable(fileName) << ")" << std::endl;
+                //std::cout << "Download of " << url.toEncoded().constData() << " succeeded (saved to " << qPrintable(fileName) << ")" << std::endl;
             }
         }
     }
@@ -250,7 +252,7 @@ void OSMTileDownloader::downloadFinished(QNetworkReply *reply)
 
         if(_timer->isActive() == true)
         {
-            _timer->stop();
+            emit stopTimerSignal();
         }
     }
 }

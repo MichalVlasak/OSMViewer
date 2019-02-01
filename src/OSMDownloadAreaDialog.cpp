@@ -9,6 +9,7 @@
 #include <QSpinBox>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QLayout>
 #include <exception>
 
 OSMDownloadAreaDialog::OSMDownloadAreaDialog(const Setup & setup, const QString & projectName, QWidget *parent)
@@ -32,12 +33,8 @@ OSMDownloadAreaDialog::OSMDownloadAreaDialog(const Setup & setup, const QString 
     _ui->levelTo->setMinimum(_setup.levelFrom);
 
     _geometryWidget = AreaGeometryWigdetInterface::createGeometryWidget(setup.geometry, this);
-    QHBoxLayout * hLayout = new QHBoxLayout(this);
-
-    hLayout->addWidget(_geometryWidget);
-    hLayout->setMargin(0);
-
-    _ui->geometryWidget->setLayout(hLayout);
+    _ui->geometryWidget->layout()->addWidget(_geometryWidget);
+    _ui->geometryWidget->layout()->setMargin(0);
 
     _ui->deleteOldMapsWidget->setDeleteSettings(_setup.deleteSettings);
 

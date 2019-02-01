@@ -13,6 +13,7 @@ class PaintingWidget : public QWidget
         Q_OBJECT
     public:
         explicit PaintingWidget(QWidget *parent = 0);
+        virtual ~PaintingWidget();
 
     public:
         void setCenterPosition(const QPointF & center);
@@ -99,6 +100,7 @@ class PaintingWidget : public QWidget
         SelectedAreaState _selectedAreaState;
         class OSMLayer * _osmLayer = nullptr;
         class GpxLayer * _gpxLayer = nullptr;
+        class GridLayer * _gridLayer = nullptr;
         QPolygonF _selectedPolygon;
         QPolygonF _selectedLine;
         AreaGeometry _selectGeometry;

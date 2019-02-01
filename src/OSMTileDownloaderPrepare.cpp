@@ -1,5 +1,4 @@
 #include "OSMTileDownloaderPrepare.h"
-#include "GeometryDownloaderPrepare.h"
 
 #include "Layers/DownloadAreaHighlight.h"
 
@@ -12,6 +11,15 @@ OSMTileDownloaderPrepare::OSMTileDownloaderPrepare(OSMTileDownloader * downloade
       _infoWidget(infoWidget)
 {
     QObject::connect(_infoWidget, SIGNAL(cancelDownloading()), SLOT(cancelDownloading()));
+}
+
+OSMTileDownloaderPrepare::~OSMTileDownloaderPrepare()
+{
+    if(_prepareSetup != nullptr)
+    {
+        delete _prepareSetup;
+        _prepareSetup = nullptr;
+    }
 }
 
 void OSMTileDownloaderPrepare::setDownloadAreaHighlight(DownloadAreaHighlight * downloadAreaHighlight)
@@ -32,18 +40,41 @@ void OSMTileDownloaderPrepare::setDownloadParameters(OSMDownloadAreaDialog::Setu
         _downloadAreaHighlight->setDownloadParams(setup);
     }
 
+    if(_prepareSetup != nullptr)
+    {
+        delete _prepareSetup;
+        _prepareSetup = nullptr;
+    }
+
+    _prepareSetup = new GeometryDownloaderPrepare::DownloaderPrepareSetup(_setup, _runPrepare, _downloader, _infoWidget, _tilesPath);
+
+    try
+    {
+        _prepareImpl = GeometryDownloaderPrepare::createGeometryDownloaderPrepare(*_prepareSetup, this);
+    }
+    catch(std::exception & ex)
+    {
+        QMessageBox::warning(_infoWidget, tr("Error"), tr("Error by preparing download:\n") + QString::fromStdString(std::string(ex.what())));
+    }
+
     start();
 }
 
 void OSMTileDownloaderPrepare::run()
 {
-    GeometryDownloaderPrepare::DownloaderPrepareSetup prepareSetup(_setup, _runPrepare, _downloader, _infoWidget, _tilesPath);
-
     try
     {
-        GeometryDownloaderPrepare * prepare = GeometryDownloaderPrepare::createGeometryDownloaderPrepare(prepareSetup, this);
+        if(_prepareImpl != nullptr)
+        {
+            _prepareImpl->prepare();
+        }
 
-        prepare->prepare();
+        // priprava prebehla, nastavenie mozem vymazat
+        if(_prepareSetup != nullptr)
+        {
+            delete _prepareSetup;
+            _prepareSetup = nullptr;
+        }
 
         if(_downloadAreaHighlight != nullptr)
         {

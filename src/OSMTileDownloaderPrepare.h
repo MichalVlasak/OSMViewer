@@ -6,12 +6,14 @@
 #include "OSMDownloadAreaDialog.h"
 #include "OSMTileDownloader.h"
 #include "OSMTileDownloaderInfoWidget.h"
+#include "GeometryDownloaderPrepare.h"
 
 class OSMTileDownloaderPrepare : public QThread
 {
         Q_OBJECT
     public:
         explicit OSMTileDownloaderPrepare(OSMTileDownloader * downloader, OSMTileDownloaderInfoWidget * infoWidget, QObject *parent = 0);
+        virtual ~OSMTileDownloaderPrepare();
 
     public:
         void setDownloadParameters(OSMDownloadAreaDialog::Setup setup, const QString & tilesPath);
@@ -33,6 +35,8 @@ class OSMTileDownloaderPrepare : public QThread
         QString _tilesPath;
         bool _runPrepare = true;
         class DownloadAreaHighlight * _downloadAreaHighlight = nullptr;
+        GeometryDownloaderPrepare * _prepareImpl = nullptr;
+        GeometryDownloaderPrepare::DownloaderPrepareSetup * _prepareSetup = nullptr;
 };
 
 #endif // OSMTILEDOWNLOADERPREPARE_H

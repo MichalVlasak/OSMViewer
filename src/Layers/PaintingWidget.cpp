@@ -28,14 +28,30 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     
     _osmLayer = new OSMLayer(_mapSettings);
     _gpxLayer = new GpxLayer(_mapSettings, this);
+    _gridLayer = new GridLayer(_mapSettings);
     
     _layers.push_back(LayerInfo(_osmLayer, "OSM"));
     _layers.push_back(LayerInfo(_gpxLayer, "GPX"));
-    _layers.push_back(LayerInfo(new GridLayer(_mapSettings), "Grid"));
+    _layers.push_back(LayerInfo(_gridLayer, "Grid"));
     
     setMouseTracking(true);
     
     QObject::connect(_gpxLayer, SIGNAL(refreshView()), SLOT(repaint()));
+}
+
+PaintingWidget::~PaintingWidget()
+{
+    if(_osmLayer != nullptr)
+    {
+        delete _osmLayer;
+        _osmLayer = nullptr;
+    }
+
+    if(_gridLayer != nullptr)
+    {
+        delete _gridLayer;
+        _gridLayer = nullptr;
+    }
 }
 
 void PaintingWidget::addLayer(BaseLayer *layer, QString layerName)
