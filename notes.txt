@@ -1,3 +1,5 @@
 Co je na plane pre vyvoj:
 - okrem zobrazenia oblasti ktora sa prave stahuje, zobrazit jednotlive dlazdice ktore sa stahuju
 - export oblasti s dlazdicami
+- upravit stahovanie ciary aby pokrylo vsetky dlazdiceprekryvajuce ciaru
+- pridat definovanie oblasti formou kruhu
