@@ -38,6 +38,7 @@ class GpxManager : public QObject, public StoreConfigInterface
                 time_t tripTime = 0;
                 int fileId = ErrorId;
                 PointVector pointVector;
+                double totalDistance = 0.; // v metroch
 
                 int biggestElevetionIdx = ErrorId;
                 bool showBiggestElevetion = false;

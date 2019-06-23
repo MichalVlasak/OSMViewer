@@ -16,7 +16,7 @@ class GpxFilesListModel : public QStandardItemModel
          */
         enum class HeaderTableEnum
         {
-            FileName, Description, Name, AuthorName, StartTime, TripTime, Last
+            FileName, Description, Name, AuthorName, StartTime, TripTime, Distance, Last
         };
 
         static const int ERROR_INDEX = -1;

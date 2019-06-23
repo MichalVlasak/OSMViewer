@@ -315,6 +315,7 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                         float maxTemperature = 0.;
                         int maxCadention = 0;
                         int maxHeartRate = 0;
+                        int lastWgsPoint = 0;
 
                         for(int i = 0; i < size; i++)
                         {
@@ -376,6 +377,39 @@ void GpxManager::loadXml(const QString &filePath, GpxItem & gpxItem)
                                     {
                                         point.lat = lat;
                                         point.lon = lon;
+
+                                        if(i > 0)
+                                        {
+                                            const Point & prevPoint = gpxItem.pointVector[lastWgsPoint];
+
+                                            double distanceLon = std::cos(prevPoint.lat * M_PI / 180.) * (std::fabs(prevPoint.lon - point.lon) * 60.); // v namornych milach
+                                            double distanceLat = std::fabs(prevPoint.lat - point.lat) * 60.; // v namornych milach
+                                            double distance = std::sqrt(std::pow(distanceLat, 2.) + std::pow(distanceLon, 2.)); // v namornych milach
+                                            double elevationDiff = 0;
+
+                                            if(point.elevation.isNull() == false)
+                                            {
+                                                bool isOk = false;
+                                                double currentElevation = point.elevation.toDouble(&isOk);
+
+                                                if(isOk == true)
+                                                {
+                                                    if(prevPoint.elevation.isNull() == false)
+                                                    {
+                                                        double prevElevation = prevPoint.elevation.toDouble(&isOk);
+
+                                                        if(isOk == true)
+                                                        {
+                                                            elevationDiff = std::fabs(currentElevation - prevElevation);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            gpxItem.totalDistance += std::sqrt(std::pow(distance * 1852., 2.) + std::pow(elevationDiff, 2.)); // v metroch
+                                        }
+
+                                        lastWgsPoint = i;
                                     }
                                 }
 

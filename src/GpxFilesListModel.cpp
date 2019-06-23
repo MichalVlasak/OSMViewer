@@ -7,9 +7,10 @@ GpxFilesListModel::GpxFilesListModel(QObject *parent)
     _headerMap[HeaderTableEnum::FileName]    = {0, tr("File Name")};
     _headerMap[HeaderTableEnum::StartTime]   = {1, tr("Start Time")};
     _headerMap[HeaderTableEnum::TripTime]    = {2, tr("Trip Time")};
-    _headerMap[HeaderTableEnum::AuthorName]  = {3, tr("Author Name")};
-    _headerMap[HeaderTableEnum::Name]        = {4, tr("Name")};
-    _headerMap[HeaderTableEnum::Description] = {5, tr("Description")};
+    _headerMap[HeaderTableEnum::Distance]    = {3, tr("Distance [km]")};
+    _headerMap[HeaderTableEnum::AuthorName]  = {4, tr("Author Name")};
+    _headerMap[HeaderTableEnum::Name]        = {5, tr("Name")};
+    _headerMap[HeaderTableEnum::Description] = {6, tr("Description")};
 
     initializeTableHeader();
 }
@@ -57,6 +58,12 @@ void GpxFilesListModel::addNewItem(const GpxManager::GpxItem & item)
     {
         index = this->index(row, _headerMap[HeaderTableEnum::AuthorName].col);
         setData(index, item.authorName);
+    }
+
+    if(_headerMap.find(HeaderTableEnum::Distance) != _headerMap.end())
+    {
+        index = this->index(row, _headerMap[HeaderTableEnum::Distance].col);
+        setData(index, QString().sprintf("%.2f", item.totalDistance / 1000.));
     }
 
     if(_headerMap.find(HeaderTableEnum::StartTime) != _headerMap.end())
