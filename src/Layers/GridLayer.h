@@ -6,7 +6,8 @@
 class GridLayer : public BaseLayer
 {
     public:
-        explicit GridLayer(MapSettings & mapSettings);
+        explicit GridLayer(const QString & layerName, MapSettings & mapSettings);
+        virtual ~GridLayer() = default;
 
     public:
         void paintEvent(QPainter & painter);
@@ -31,7 +32,7 @@ class GridLayer : public BaseLayer
                 int level;
                 bool isPrinted;
         };
-        typedef std::vector<GridLevelInfo> GridLevels;
+        using GridLevels = std::vector<GridLevelInfo>;
         GridLevels _gridLevel;
 
         void paintGrid(GridLevelInfo levelInfo, QPainter & painter);

@@ -8,7 +8,8 @@
 class OSMLayer : public BaseLayer, public StoreConfigInterface
 {
     public:
-        explicit OSMLayer(MapSettings & mapSettings);
+        explicit OSMLayer(const QString & layerName, MapSettings & mapSettings);
+        virtual ~OSMLayer() = default;
 
         static const int TileSize = 256;
         static const QString DefaultMapDirectory;

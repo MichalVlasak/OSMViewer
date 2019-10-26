@@ -8,12 +8,22 @@
 #include "src/CenterPointStruct.h"
 #include "src/hmi/AreaGeometry.h"
 
-class PaintingWidget : public QWidget
+class PaintingWidget : public QWidget, public StoreConfigInterface
 {
         Q_OBJECT
     public:
         explicit PaintingWidget(QWidget *parent = 0);
         virtual ~PaintingWidget();
+
+        using Layers = std::vector<BaseLayer*>;
+
+        struct LayerInfo
+        {
+                QString name;
+                bool isVisible = false;
+        };
+
+        using LayersSettings = std::vector<LayerInfo>;
 
     public:
         void setCenterPosition(const QPointF & center);
@@ -22,7 +32,7 @@ class PaintingWidget : public QWidget
         QString getOSMDirectoryPath();
         void setOSMDirectoryPath(QString path);
 
-        void addLayer(BaseLayer * layer, QString layerName);
+        void addLayer(BaseLayer * layer);
 
         class OSMLayer * getOSMLayer();
         class GpxLayer * getGpxLayer();
@@ -31,6 +41,12 @@ class PaintingWidget : public QWidget
         QPointF getBottomRight();
 
         void centerToPoint(const CenterPointStruct & centerPoint);
+
+        const Layers & getLayers() const;
+
+        // interface zo StoreConfigInterface
+        void storeConfig(QDomDocument & document, QDomElement & rootElement);
+        bool restoreConfig(QDomDocument & document);
 
     signals:
         void mouseCursorWgsChanged(double lat, double lon);
@@ -49,20 +65,6 @@ class PaintingWidget : public QWidget
         void keyPressEvent(QKeyEvent * keyEvent);
 
     private:
-        struct LayerInfo
-        {
-                LayerInfo(BaseLayer * l, const QString s)
-                {
-                    layer = l;
-                    name = s;
-                }
-
-                BaseLayer * layer = nullptr;
-                QString name;
-        };
-
-        typedef std::vector<LayerInfo> Layers;
-
         enum SelectedAreaState
         {
             Unselecting,
@@ -81,6 +83,8 @@ class PaintingWidget : public QWidget
     private:
         void centerToWgs(double lon, double lat);
         QPointF getWgsPointFromPixelsPoint(const QPoint & point);
+        LayersSettings generateLayerSettings();
+        void restoreLayerSettings(const LayersSettings & settings);
 
     private slots:
         void startSelectAndDownloadAreaRec();

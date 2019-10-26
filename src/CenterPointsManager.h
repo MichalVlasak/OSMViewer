@@ -15,8 +15,8 @@ class CenterPointsManager : public QObject, public StoreConfigInterface
         Q_OBJECT
 
     public:
-        typedef std::vector<CenterPointStruct> CenterPointsVector;
-        typedef std::map<QString, CenterPointsVector> CenterPointsMap; // meno skupiny, zoznam bodov pre skupinu
+        using CenterPointsVector = std::vector<CenterPointStruct>;
+        using CenterPointsMap = std::map<QString, CenterPointsVector>; // meno skupiny, zoznam bodov pre skupinu
 
     public:
         explicit CenterPointsManager(QObject * parent = nullptr);

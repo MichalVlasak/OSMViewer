@@ -61,6 +61,7 @@ SOURCES += src/main.cpp\
     src/GpxFilesListWidget.cpp \
     src/GpxInfosWidget.cpp \
     src/GpxInfoFileWidgetConfig.cpp \
+    src/hmi/MapLayersWidget.cpp \
     src/hmi/RectangleAreaWidget.cpp \
     src/hmi/AreaGeometry.cpp \
     src/hmi/AreaGeometryWigdetInterface.cpp \
@@ -114,6 +115,7 @@ HEADERS  += src/MainWindow.h \
     src/GpxFilesListWidget.h \
     src/GpxInfosWidget.h \
     src/GpxInfoFileWidgetConfig.h \
+    src/hmi/MapLayersWidget.h \
     src/hmi/RectangleAreaWidget.h \
     src/hmi/AreaGeometry.h \
     src/hmi/AreaGeometryWigdetInterface.h \
@@ -148,7 +150,8 @@ FORMS    += resources/MainWindow.ui \
     resources/PointEditorDialog.ui \
     resources/PositionEditorWidget.ui \
     resources/LineWidget.ui \
-    resources/GpxFilesListWidget.ui
+    resources/GpxFilesListWidget.ui \
+    resources/MapLayersForm.ui
 
 RESOURCES += \
     resources/resources.qrc

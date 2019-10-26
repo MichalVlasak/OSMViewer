@@ -4,9 +4,9 @@
 #include <QPainter>
 #include <QTimer>
 
-DownloadAreaHighlight::DownloadAreaHighlight(MapSettings & mapSettings, QObject * parent)
+DownloadAreaHighlight::DownloadAreaHighlight(const QString & layerName, MapSettings & mapSettings, QObject * parent)
     : QObject(parent),
-      BaseLayer(mapSettings)
+      BaseLayer(layerName, mapSettings)
 {
     clearDownloadParams();
 }

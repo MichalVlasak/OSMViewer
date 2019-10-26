@@ -48,7 +48,7 @@ class GpxFilesListModel : public QStandardItemModel
          * novej polozky TableItem do tabulky sa uz len pomocou identifikatora polozky zisti
          * v ktorom stlpci sa ma tato polozka nachadzat a tam ju aj vlozi.
          */
-        typedef std::map<HeaderTableEnum, HeaderIdent> HeaderMap;
+        using HeaderMap = std::map<HeaderTableEnum, HeaderIdent>;
 
     private: // Members
         HeaderMap _headerMap;

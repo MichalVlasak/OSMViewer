@@ -11,8 +11,8 @@
 
 const QString OSMLayer::DefaultMapDirectory = "./tile.openstreetmap.org/";
 
-OSMLayer::OSMLayer(MapSettings & mapSettings)
-    : BaseLayer(mapSettings)
+OSMLayer::OSMLayer(const QString & layerName, MapSettings & mapSettings)
+    : BaseLayer(layerName, mapSettings)
 {
     //_tilesPath = "/opt/rsys/var/cache/tile.openstreetmap.org/";
     _tilesPath = DefaultMapDirectory;

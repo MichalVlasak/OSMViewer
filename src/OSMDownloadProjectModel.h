@@ -28,7 +28,7 @@ class OSMDownloadProjectModel : public QObject, public StoreConfigInterface
                 OSMDownloadAreaDialog::Setup setup;
         };
 
-        typedef std::vector<Project> ProjectVector;
+        using ProjectVector = std::vector<Project>;
 
     public:
         OSMDownloadProjectModel();

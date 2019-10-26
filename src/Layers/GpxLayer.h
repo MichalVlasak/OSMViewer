@@ -10,7 +10,7 @@ class GpxLayer : public QWidget, public BaseLayer
         Q_OBJECT
 
     public:
-        GpxLayer(MapSettings & mapSettings, QWidget *parent = 0);
+        GpxLayer(const QString & layerName, MapSettings & mapSettings, QWidget *parent = 0);
         virtual ~GpxLayer() = default;
 
     public:
@@ -30,7 +30,7 @@ class GpxLayer : public QWidget, public BaseLayer
         void changeSelectedPoint(int gpxId, size_t idx);
 
     private:
-        typedef std::map<int, size_t> SelectedPointsMap; // int - ID GPX suboru, size_t - index vybrany v tabulke bodov pre dany GPX
+        using SelectedPointsMap = std::map<int, size_t>; // int - ID GPX suboru, size_t - index vybrany v tabulke bodov pre dany GPX
         void paintPoint(QPainter & painter, const GpxManager::GpxItem & item, size_t posIdx, const QString & title = "");
 
     private:

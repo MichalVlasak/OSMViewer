@@ -10,8 +10,8 @@
 
 #include <QDebug>
 
-GridLayer::GridLayer(MapSettings & mapSettings)
-    : BaseLayer(mapSettings)
+GridLayer::GridLayer(const QString & layerName, MapSettings & mapSettings)
+    : BaseLayer(layerName, mapSettings)
 {
     _gridLevel.push_back(GridLevelInfo(QColor(Qt::red)    , 1.0, 60. * 60. * 10., 0, false));
     _gridLevel.push_back(GridLevelInfo(QColor(Qt::gray)   , 1.0, 60. * 60.      , 1, false));

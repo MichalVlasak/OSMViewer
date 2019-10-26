@@ -44,7 +44,7 @@ class OSMTileDownloaderInfoWidget : public QWidget
         void highlightDownArea(bool value);
 
     private:
-        typedef std::map<int, LevelInfo> LevelInfoMap;
+        using LevelInfoMap = std::map<int, LevelInfo>;
 
     private:
         Ui::OSMTileDownloaderInfoWidget *_ui = nullptr;

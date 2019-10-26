@@ -26,7 +26,7 @@ class GpxManager : public QObject, public StoreConfigInterface
                 QVariant heartRate; // vklada sa int
         };
 
-        typedef std::vector<Point> PointVector;
+        using PointVector = std::vector<Point>;
 
         struct GpxItem
         {
@@ -55,8 +55,8 @@ class GpxManager : public QObject, public StoreConfigInterface
                 bool highlight = false;
         };
 
-        typedef std::vector<GpxItem> GpxVector;
-        typedef std::vector<int> GpxIdVector;
+        using GpxVector = std::vector<GpxItem>;
+        using GpxIdVector = std::vector<int>;
 
     public:
         // interface zo StoreConfigInterface
@@ -92,7 +92,7 @@ class GpxManager : public QObject, public StoreConfigInterface
         void loadGpxFilesInFuture();
 
     private:
-        typedef QFutureWatcher<void> GpxLoaderWatcher;
+        using GpxLoaderWatcher = QFutureWatcher<void>;
 
     private slots:
         void gpxWasLoaded();
@@ -106,6 +106,6 @@ class GpxManager : public QObject, public StoreConfigInterface
         volatile bool _cancelLoad = false;
 };
 
-typedef std::shared_ptr<GpxManager> GpxManagerPtr;
+using GpxManagerPtr = std::shared_ptr<GpxManager>;
 
 #endif // GPXMANAGER_H

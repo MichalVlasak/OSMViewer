@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>601</width>
-     <height>36</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -53,6 +53,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_CenterPoints"/>
+    <addaction name="action_MapLayers"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -166,6 +167,14 @@
    </property>
    <property name="text">
     <string>GPX &amp;File Info Table</string>
+   </property>
+  </action>
+  <action name="action_MapLayers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Map Layers</string>
    </property>
   </action>
  </widget>

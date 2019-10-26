@@ -26,13 +26,13 @@ PaintingWidget::PaintingWidget(QWidget *parent)
     _selectGeometry.geometry.clear();
     _selectGeometry.geometryType = AreaGeometry::Type::Undefined;
     
-    _osmLayer = new OSMLayer(_mapSettings);
-    _gpxLayer = new GpxLayer(_mapSettings, this);
-    _gridLayer = new GridLayer(_mapSettings);
+    _osmLayer = new OSMLayer("OSM", _mapSettings);
+    _gpxLayer = new GpxLayer("GPX", _mapSettings, this);
+    _gridLayer = new GridLayer("Grid", _mapSettings);
     
-    _layers.push_back(LayerInfo(_osmLayer, "OSM"));
-    _layers.push_back(LayerInfo(_gpxLayer, "GPX"));
-    _layers.push_back(LayerInfo(_gridLayer, "Grid"));
+    _layers.push_back(_osmLayer);
+    _layers.push_back(_gpxLayer);
+    _layers.push_back(_gridLayer);
     
     setMouseTracking(true);
     
@@ -54,9 +54,48 @@ PaintingWidget::~PaintingWidget()
     }
 }
 
-void PaintingWidget::addLayer(BaseLayer *layer, QString layerName)
+void PaintingWidget::addLayer(BaseLayer *layer)
 {
-    _layers.push_back(LayerInfo(layer, layerName));
+    _layers.push_back(layer);
+}
+
+const PaintingWidget::Layers & PaintingWidget::getLayers() const
+{
+    return _layers;
+}
+
+PaintingWidget::LayersSettings PaintingWidget::generateLayerSettings()
+{
+    LayersSettings settings;
+
+    for(BaseLayer * layer : _layers)
+    {
+        if(layer != nullptr)
+        {
+            LayerInfo info = {layer->getLayerName(), layer->isVisible()};
+
+            settings.push_back(info);
+        }
+    }
+
+    return settings;
+}
+
+void PaintingWidget::restoreLayerSettings(const LayersSettings &settings)
+{
+    for(const LayerInfo & info : settings)
+    {
+        for(BaseLayer * layer : _layers)
+        {
+            if(layer != nullptr)
+            {
+                if(info.name.compare(layer->getLayerName()) == 0)
+                {
+                    layer->setVisible(info.isVisible);
+                }
+            }
+        }
+    }
 }
 
 void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
@@ -67,11 +106,11 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
     {
         QPainter painter(_mapSettings.widget);
         
-        for(size_t i = 0; i < _layers.size(); i++)
+        for(BaseLayer * layer : _layers)
         {
-            if(_layers[i].layer != nullptr)
+            if(layer != nullptr && layer->isVisible() == true)
             {
-                _layers[i].layer->paintEvent(painter);
+                layer->paintEvent(painter);
             }
         }
 
@@ -145,12 +184,12 @@ QPointF PaintingWidget::getWgsPointFromPixelsPoint(const QPoint &point)
 void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     QWidget::mouseMoveEvent(mouseEvent);
-    
-    for(size_t i = 0; i < _layers.size(); i++)
+
+    for(BaseLayer * layer : _layers)
     {
-        if(_layers[i].layer != nullptr)
+        if(layer != nullptr && layer->isVisible() == true)
         {
-            _layers[i].layer->mouseMoveEvent(mouseEvent);
+            layer->mouseMoveEvent(mouseEvent);
         }
     }
     
@@ -616,4 +655,75 @@ void PaintingWidget::centerMapToPixels(QPoint pos)
 GpxLayer * PaintingWidget::getGpxLayer()
 {
     return _gpxLayer;
+}
+
+void PaintingWidget::storeConfig(QDomDocument &document, QDomElement &rootElement)
+{
+    LayersSettings settings = generateLayerSettings();
+
+    QDomElement layerSettingsElement = document.createElement("LayerSettings");
+    rootElement.appendChild(layerSettingsElement);
+
+    for(const LayerInfo & info : settings)
+    {
+        QDomElement layerElement = document.createElement("Layer");
+        layerSettingsElement.appendChild(layerElement);
+
+        QDomElement layerNameElement = document.createElement("Name");
+        layerElement.appendChild(layerNameElement);
+        QDomText layerText = document.createTextNode(info.name);
+        layerNameElement.appendChild(layerText);
+
+        QDomElement layerVisibleElement = document.createElement("Visible");
+        layerElement.appendChild(layerVisibleElement);
+        QDomText layerVisibleText = document.createTextNode(QString::number(info.isVisible));
+        layerVisibleElement.appendChild(layerVisibleText);
+    }
+}
+
+bool PaintingWidget::restoreConfig(QDomDocument &document)
+{
+    bool result = false;
+    LayersSettings settings;
+
+    QDomElement rootElem = document.firstChildElement("OSMViewer");
+
+    if(rootElem.isNull() == false)
+    {
+        QDomNodeList layerSettingsNodes = rootElem.elementsByTagName("LayerSettings");
+
+        for(int iLayerSettings = 0; iLayerSettings < layerSettingsNodes.size(); iLayerSettings++)
+        {
+            QDomNode layerSettingsNode = layerSettingsNodes.at(iLayerSettings);
+
+            if(layerSettingsNode.isNull() == false)
+            {
+                QDomNodeList layerNodeList = layerSettingsNode.toElement().elementsByTagName("Layer");
+
+                for(int iLayer = 0; iLayer < layerNodeList.size(); iLayer++)
+                {
+                    QDomNode layerNode = layerNodeList.at(iLayer);
+
+                    if(layerNode.isNull() == false)
+                    {
+                        QString name = AppSettings::getValueString(layerNode, "Name");
+                        QString visible = AppSettings::getValueString(layerNode, "Visible");
+
+                        if(name.isEmpty() == false && visible.isEmpty() == false)
+                        {
+                            LayerInfo info = {name, static_cast<bool>(visible.toInt())};
+
+                            settings.push_back(info);
+
+                            result = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    restoreLayerSettings(settings);
+
+    return result;
 }

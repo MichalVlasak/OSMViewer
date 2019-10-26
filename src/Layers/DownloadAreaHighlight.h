@@ -12,7 +12,8 @@ class DownloadAreaHighlight : public QObject, public BaseLayer, public StoreConf
         Q_OBJECT
 
     public:
-        explicit DownloadAreaHighlight(MapSettings & mapSettings, QObject * parent = nullptr);
+        explicit DownloadAreaHighlight(const QString & layerName, MapSettings & mapSettings, QObject * parent = nullptr);
+        virtual ~DownloadAreaHighlight() = default;
 
     public:
         void paintEvent(QPainter & painter);

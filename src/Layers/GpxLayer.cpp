@@ -5,9 +5,9 @@
 
 #include <iostream>
 
-GpxLayer::GpxLayer(MapSettings & mapSettings, QWidget * parent)
+GpxLayer::GpxLayer(const QString & layerName, MapSettings & mapSettings, QWidget * parent)
     : QWidget(parent),
-      BaseLayer(mapSettings)
+      BaseLayer(layerName, mapSettings)
 {
 }
 

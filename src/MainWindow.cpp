@@ -8,6 +8,7 @@
 #include "GpxFilesListWidget.h"
 #include "GpxInfosWidget.h"
 #include "GpxFileFinder.h"
+#include "hmi/MapLayersWidget.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -57,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _gpxFileListWidget = new GpxFilesListWidget(_gpxManager, gpxLayer, this);
     _gpxInfosWidget = new GpxInfosWidget(_gpxManager, gpxLayer, this);
 
+    _mapLayersWidget = new MapLayersWidget(this);
+
     QObject::connect(_gpxFileListWidget, SIGNAL(changeSelectedGpsSignal(GpxManager::GpxIdVector)), _gpxInfosWidget, SLOT(changeSelectedGps(GpxManager::GpxIdVector)));
     QObject::connect(_gpxFileListWidget, SIGNAL(deleteAllSignal()), _gpxInfosWidget, SLOT(deleteAll()));
     QObject::connect(_gpxFileListWidget, SIGNAL(deleteGpxSignal(int)), _gpxInfosWidget, SLOT(deleteGpx(int)));
@@ -104,11 +107,19 @@ MainWindow::MainWindow(QWidget *parent) :
     _gpxInfosDock->setFloating(true);
     _gpxInfosDock->setObjectName("GPX Info Tables");
 
+    _mapLayersDock = new QDockWidget(tr("Map Layers"), this);
+    _mapLayersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _mapLayersDock->setWidget(_mapLayersWidget);
+    _mapLayersDock->hide();
+    _mapLayersDock->setFloating(true);
+    _mapLayersDock->setObjectName("Map Layers");
+
     addDockWidget(Qt::RightDockWidgetArea, _centerPointsDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderInfoDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloaderSetupDock);
     addDockWidget(Qt::RightDockWidgetArea, _downloadProjectDock);
     addDockWidget(Qt::RightDockWidgetArea, _gpxFileListDock);
+    addDockWidget(Qt::RightDockWidgetArea, _mapLayersDock);
 
     QObject::connect(_ui->action_CenterPoints, SIGNAL(triggered(bool)), _centerPointsDock, SLOT(setVisible(bool)));
     QObject::connect(_centerPointsDock, SIGNAL(visibilityChanged(bool)), _ui->action_CenterPoints, SLOT(setChecked(bool)));
@@ -127,6 +138,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(_ui->action_GPXFileInfoTable, SIGNAL(triggered(bool)), _gpxInfosDock, SLOT(setVisible(bool)));
     QObject::connect(_gpxInfosDock, SIGNAL(visibilityChanged(bool)), _ui->action_GPXFileInfoTable, SLOT(setChecked(bool)));
+
+    QObject::connect(_ui->action_MapLayers, SIGNAL(triggered(bool)), _mapLayersDock, SLOT(setVisible(bool)));
+    QObject::connect(_mapLayersDock, SIGNAL(visibilityChanged(bool)), _ui->action_MapLayers, SLOT(setChecked(bool)));
 
     OSMLayer * osmLayer = _ui->paintWidget->getOSMLayer();
 
@@ -180,8 +194,8 @@ MainWindow::MainWindow(QWidget *parent) :
     _appSettings.restoreConfig(_ui->paintWidget->getOSMLayer());
     zoomChanged();
 
-    _downloadAreaHighlight = new DownloadAreaHighlight(_ui->paintWidget->getMapSettings(), this);
-    _ui->paintWidget->addLayer(_downloadAreaHighlight, "DownloadAreaHighlight");
+    _downloadAreaHighlight = new DownloadAreaHighlight("Download Area", _ui->paintWidget->getMapSettings(), this);
+    _ui->paintWidget->addLayer(_downloadAreaHighlight);
     _downloaderPrepare->setDownloadAreaHighlight(_downloadAreaHighlight);
     _appSettings.restoreConfig(_downloadAreaHighlight);
 
@@ -193,6 +207,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _centerPointsWidget->fillPointsList();
 
     createLanguageMenu();
+
+    _appSettings.restoreConfig(_ui->paintWidget);
+    _mapLayersWidget->initialize(_ui->paintWidget);
 }
 
 MainWindow::~MainWindow()
@@ -200,6 +217,7 @@ MainWindow::~MainWindow()
     _appSettings.storeConfig(&(_ui->paintWidget->getMapSettings()));
     _appSettings.storeConfig(this);
     _appSettings.storeConfig(_ui->paintWidget->getOSMLayer());
+    _appSettings.storeConfig(_ui->paintWidget);
     _appSettings.storeConfig(_downloader);
     _appSettings.storeConfig(_downloadAreaHighlight);
     _appSettings.storeConfig(_centerPointsManager);

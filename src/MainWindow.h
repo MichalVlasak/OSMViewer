@@ -23,7 +23,7 @@ class MainWindow;
 }
 
 class GpxManager;
-typedef std::shared_ptr<GpxManager> GpxManagerPtr;
+using GpxManagerPtr = std::shared_ptr<GpxManager>;
 
 class MainWindow : public QMainWindow, public StoreConfigInterface
 {
@@ -108,6 +108,8 @@ class MainWindow : public QMainWindow, public StoreConfigInterface
         QString _langPath;
         QTranslator _translator;
         QTranslator _translatorQt;
+        QDockWidget * _mapLayersDock = nullptr;
+        class MapLayersWidget * _mapLayersWidget = nullptr;
 };
 
 #endif // MAINWINDOW_H

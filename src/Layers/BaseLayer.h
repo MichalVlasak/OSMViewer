@@ -9,7 +9,8 @@
 class BaseLayer
 {
     public:
-        explicit BaseLayer(MapSettings & mapSettings);
+        explicit BaseLayer(const QString & layerName, MapSettings & mapSettings);
+        ~BaseLayer() = default;
 
     public:
         virtual void paintEvent(QPainter & painter) = 0;
@@ -18,8 +19,17 @@ class BaseLayer
         virtual void mousePressEvent(QMouseEvent * mouseEvent);
         virtual void keyPressEvent(QKeyEvent * keyEvent);
 
+        void setVisible(bool visible);
+        bool isVisible() const;
+
+        const QString & getLayerName() const;
+
     protected:
         MapSettings & _mapSettings;
+        QString _layerName;
+        bool _isVisible;
 };
+
+Q_DECLARE_METATYPE(BaseLayer*)
 
 #endif // BASELAYER_H
