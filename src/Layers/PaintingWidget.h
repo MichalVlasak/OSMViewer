@@ -71,11 +71,13 @@ class PaintingWidget : public QWidget, public StoreConfigInterface
             PrepareForSelectAndDownloadRec,
             PrepareForSelectAndDownloadPoly,
             PrepareForSelectAndDownloadLine,
+            PrepareForSelectAndDownloadCircle,
             PrepareForSelectAndFindRec,
             PrepareForSelectAndFindPoly,
             SelectAndDownloadRec,
             SelectAndDownloadPoly,
             SelectAndDownloadLine,
+            SelectAndDownloadCircle,
             SelectAndFindRec,
             SelectAndFindPoly
         };
@@ -85,11 +87,13 @@ class PaintingWidget : public QWidget, public StoreConfigInterface
         QPointF getWgsPointFromPixelsPoint(const QPoint & point);
         LayersSettings generateLayerSettings();
         void restoreLayerSettings(const LayersSettings & settings);
+        void createCircleGeometry();
 
     private slots:
         void startSelectAndDownloadAreaRec();
         void startSelectAndDownloadAreaPoly();
         void startSelectAndDownloadAreaLine();
+        void startSelectAndDownloadAreaCircle();
         void startSelectAndFindAreaRec();
         void startSelectAndFindAreaPoly();
         void centerMapToPixels(QPoint pos);
@@ -108,6 +112,7 @@ class PaintingWidget : public QWidget, public StoreConfigInterface
         QPolygonF _selectedPolygon;
         QPolygonF _selectedLine;
         AreaGeometry _selectGeometry;
+        AreaGeometry::CircleGeometry _circle; // z dovodu jednoduchosti kreslenia su suradnice aj radius v pixeloch
 };
 
 #endif // PAINTINGWIDGET_H

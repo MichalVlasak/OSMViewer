@@ -10,15 +10,16 @@ class MapSettings : public StoreConfigInterface
 {
     public:
         MapSettings();
+        MapSettings(const MapSettings & settings);
 
-        double getPixelForLat(double lat);
-        double getPixelForLon(double lon);
-        double getLonForPixelOld(double pix);
-        double getLonForPixel(double pix);
-        double getLatForPixel(double pix);
+        double getPixelForLat(double lat) const;
+        double getPixelForLon(double lon) const;
+        double getLonForPixelOld(double pix) const;
+        double getLonForPixel(double pix) const;
+        double getLatForPixel(double pix) const;
 
-        int windowPixelToMapPixelX(int pix);
-        int windowPixelToMapPixelY(int pix);
+        int windowPixelToMapPixelX(int pix) const;
+        int windowPixelToMapPixelY(int pix) const;
 
         static int long2tilex(double lon, int z);
         static int lat2tiley(double lat, int z);

@@ -13,6 +13,15 @@ MapSettings::MapSettings()
 {
 }
 
+MapSettings::MapSettings(const MapSettings &settings)
+{
+    worldCenter = settings.worldCenter;
+    oldCenter = settings.oldCenter;
+    movingStartPoint = settings.movingStartPoint;
+    widget = settings.widget;
+    zoom = settings.zoom;
+}
+
 int MapSettings::long2tilex(double lon, int z)
 {
     int retVal = (int)(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
@@ -72,21 +81,21 @@ double MapSettings::tiley2lat2(int y, int z)
     return 180.0 / M_PI * atan(sin(n));
 }
 
-double MapSettings::getPixelForLat(double lat)
+double MapSettings::getPixelForLat(double lat) const
 {
     double offset = (OSMLayer::TileSize / 2.) * pow(2., zoom.getCurrentZoomLevel());
 
     return offset + worldCenter.y() - (offset * (1. + log( tan(lat * M_PI/180.0) + 1.0 / cos(lat * M_PI/180.0)) / M_PI));
 }
 
-double MapSettings::getPixelForLon(double lon)
+double MapSettings::getPixelForLon(double lon) const
 {
     double degToPixel =  OSMLayer::TileSize / zoom.getCurrentDegreeForTile();
 
     return worldCenter.x() + (lon * degToPixel);
 }
 
-double MapSettings::getLonForPixelOld(double pix)
+double MapSettings::getLonForPixelOld(double pix) const
 {
     double lon = (pix - worldCenter.x()) * zoom.getCurrentDegreeForTile();
 
@@ -104,7 +113,7 @@ double MapSettings::getLonForPixelOld(double pix)
     return lon;
 }
 
-double MapSettings::getLonForPixel(double pix)
+double MapSettings::getLonForPixel(double pix) const
 {
     double mapSize = pow(2, zoom.getCurrentZoomLevel()) * OSMLayer::TileSize;
 
@@ -113,7 +122,7 @@ double MapSettings::getLonForPixel(double pix)
     return longitude;
 }
 
-double MapSettings::getLatForPixel(double pix)
+double MapSettings::getLatForPixel(double pix) const
 {
     if(pix < 0)
     {
@@ -132,13 +141,13 @@ double MapSettings::getLatForPixel(double pix)
     return latitude;
 }
 
-int MapSettings::windowPixelToMapPixelX(int pix)
+int MapSettings::windowPixelToMapPixelX(int pix) const
 {
     int mapSize = int(pow(2, zoom.getCurrentZoomLevel())) * OSMLayer::TileSize;
     return pix - worldCenter.x() + (mapSize / 2);
 }
 
-int MapSettings::windowPixelToMapPixelY(int pix)
+int MapSettings::windowPixelToMapPixelY(int pix) const
 {
     int mapSize = int(pow(2, zoom.getCurrentZoomLevel())) * OSMLayer::TileSize;
     return pix - worldCenter.y() + (mapSize / 2);

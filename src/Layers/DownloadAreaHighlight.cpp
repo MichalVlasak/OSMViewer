@@ -68,6 +68,23 @@ void DownloadAreaHighlight::paintEvent(QPainter & painter)
             painter.setBrush(QColor(255, 0, 0));
             painter.drawPolyline(polygonPix);
         }
+        else if(_setup.geometry.geometryType == AreaGeometry::Type::Circle &&
+                _setup.geometry.geometry.isNull() == false &&
+                _setup.geometry.geometry.canConvert<AreaGeometry::CircleGeometry>() == true)
+        {
+            AreaGeometry::CircleGeometry circleGeometry = _setup.geometry.geometry.value<AreaGeometry::CircleGeometry>();
+
+            QPolygonF polygonPix;
+
+            for(const QPointF & point : circleGeometry.polygonizedCircle)
+            {
+                polygonPix.push_back(QPointF(_mapSettings.getPixelForLon(point.x()), _mapSettings.getPixelForLat(point.y())));
+            }
+
+            painter.setPen(QPen(QColor(255, 0, 0, 50), 1));
+            painter.setBrush(QColor(255, 0, 0, 50));
+            painter.drawPolygon(polygonPix);
+        }
     }
 }
 

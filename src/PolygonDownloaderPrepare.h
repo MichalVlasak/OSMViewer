@@ -10,6 +10,9 @@ class PolygonDownloaderPrepare : public GeometryDownloaderPrepare
         virtual ~PolygonDownloaderPrepare() = default;
 
         void prepare();
+
+    protected:
+        void preparePolygon(const QPolygonF & polygon, int maxCol, int maxRow, int level);
 };
 
 #endif // POLYGONDOWNLOADERPREPARE_H

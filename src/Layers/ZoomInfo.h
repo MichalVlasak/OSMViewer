@@ -9,6 +9,8 @@ class ZoomInfo : public QObject
 
     public:
         ZoomInfo();
+        ZoomInfo(const ZoomInfo & zi);
+        ZoomInfo operator=(const ZoomInfo & zi);
 
         static const unsigned MaxZoomLevel = 20;
 
@@ -21,10 +23,10 @@ class ZoomInfo : public QObject
 
         void setCurrentZoomLevel(unsigned level);
 
-        unsigned getCurrentZoomLevel();
-        unsigned getCurrentScale();
-        QString getCurrentScaleString();
-        float getCurrentDegreeForTile();
+        unsigned getCurrentZoomLevel() const;
+        unsigned getCurrentScale() const;
+        QString getCurrentScaleString() const;
+        float getCurrentDegreeForTile() const;
 
     signals:
         void zoomChanged();

@@ -27,7 +27,20 @@ ZoomInfo::ZoomInfo()
     _zoomScale.push_back(ZoomStruct(1000     ,      0.298, 360. / pow(2., 19)));
 }
 
-unsigned ZoomInfo::getCurrentZoomLevel()
+ZoomInfo::ZoomInfo(const ZoomInfo &zi)
+{
+    _zoomLevel = zi._zoomLevel;
+    _zoomScale = zi._zoomScale;
+}
+
+ZoomInfo ZoomInfo::operator=(const ZoomInfo &zi)
+{
+    ZoomInfo zoomInfo(zi);
+
+    return zoomInfo;
+}
+
+unsigned ZoomInfo::getCurrentZoomLevel() const
 {
     return _zoomLevel;
 }
@@ -85,7 +98,7 @@ void ZoomInfo::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-unsigned ZoomInfo::getCurrentScale()
+unsigned ZoomInfo::getCurrentScale() const
 {
     if(_zoomLevel < _zoomScale.size())
     {
@@ -95,12 +108,12 @@ unsigned ZoomInfo::getCurrentScale()
     return 0;
 }
 
-QString ZoomInfo::getCurrentScaleString()
+QString ZoomInfo::getCurrentScaleString() const
 {
     return "1:" + QString::number(getCurrentScale());
 }
 
-float ZoomInfo::getCurrentDegreeForTile()
+float ZoomInfo::getCurrentDegreeForTile() const
 {
     if(_zoomLevel < _zoomScale.size())
     {
@@ -112,5 +125,12 @@ float ZoomInfo::getCurrentDegreeForTile()
 
 void ZoomInfo::setCurrentZoomLevel(unsigned level)
 {
-    _zoomLevel = level;
+    if(level < MaxZoomLevel)
+    {
+        _zoomLevel = level;
+    }
+    else
+    {
+        _zoomLevel = MaxZoomLevel - 1;
+    }
 }

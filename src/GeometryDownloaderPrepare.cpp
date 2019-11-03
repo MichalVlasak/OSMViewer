@@ -2,6 +2,7 @@
 #include "RectangleDownloaderPrepare.h"
 #include "PolygonDownloaderPrepare.h"
 #include "LineDownloaderPrepare.h"
+#include "CircleDownloaderPrepare.h"
 
 GeometryDownloaderPrepare::GeometryDownloaderPrepare(const DownloaderPrepareSetup & prepareSetup, QObject * parent)
     : QObject(parent),
@@ -29,6 +30,12 @@ GeometryDownloaderPrepare * GeometryDownloaderPrepare::createGeometryDownloaderP
             prepareSetup._downloadSetup.geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
     {
         return new LineDownloaderPrepare(prepareSetup, parent);
+    }
+    else if(prepareSetup._downloadSetup.geometry.geometryType == AreaGeometry::Type::Circle &&
+            prepareSetup._downloadSetup.geometry.geometry.isNull() == false &&
+            prepareSetup._downloadSetup.geometry.geometry.canConvert<AreaGeometry::CircleGeometry>() == true)
+    {
+        return new CircleDownloaderPrepare(prepareSetup, parent);
     }
     else
     {

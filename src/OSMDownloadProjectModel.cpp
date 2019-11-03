@@ -185,6 +185,33 @@ void OSMDownloadProjectModel::storeProject(const Project & project, QDomElement 
             projectLongitudeFromElement.appendChild(projectLongitudeFromText);
         }
     }
+    else if(project.setup.geometry.geometryType == AreaGeometry::Type::Circle &&
+            project.setup.geometry.geometry.isNull() == false &&
+            project.setup.geometry.geometry.canConvert<AreaGeometry::CircleGeometry>() == true)
+    {
+        AreaGeometry::CircleGeometry circleGeometry = project.setup.geometry.geometry.value<AreaGeometry::CircleGeometry>();
+
+        QDomElement circleElement = doc.createElement("Circle");
+        element.appendChild(circleElement);
+
+        QDomElement centerPointElement = doc.createElement("CenterPoint");
+        circleElement.appendChild(centerPointElement);
+
+        QDomElement centerLatitudeFromElement = doc.createElement("Latitude");
+        centerPointElement.appendChild(centerLatitudeFromElement);
+        QDomText centerLatitudeFromText = doc.createTextNode(QString::number(circleGeometry.centerPoint.y(), 'g', 13));
+        centerLatitudeFromElement.appendChild(centerLatitudeFromText);
+
+        QDomElement centerLongitudeFromElement = doc.createElement("Longitude");
+        centerPointElement.appendChild(centerLongitudeFromElement);
+        QDomText centerLongitudeFromText = doc.createTextNode(QString::number(circleGeometry.centerPoint.x(), 'g', 13));
+        centerLongitudeFromElement.appendChild(centerLongitudeFromText);
+
+        QDomElement radiusDegElement = doc.createElement("RadiusDeg");
+        circleElement.appendChild(radiusDegElement);
+        QDomText circleRadiusDegFromText = doc.createTextNode(QString::number(circleGeometry.radius, 'g', 13));
+        radiusDegElement.appendChild(circleRadiusDegFromText);
+    }
 }
 
 void OSMDownloadProjectModel::storeConfig(QDomDocument &document, QDomElement &rootElement)
@@ -233,6 +260,7 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
                             QDomNodeList rectangleNodeList = projectNode.toElement().elementsByTagName("Rectangle");
                             QDomNodeList polygonNodeList = projectNode.toElement().elementsByTagName("Polygon");
                             QDomNodeList lineNodeList = projectNode.toElement().elementsByTagName("Line");
+                            QDomNodeList circleNodeList = projectNode.toElement().elementsByTagName("Circle");
 
                             OSMDownloadProjectModel::Project project;
                             QString value = AppSettings::getValueString(projectNode, "DeleteTilesEnabled");
@@ -418,6 +446,60 @@ bool OSMDownloadProjectModel::restoreConfig(QDomDocument &document)
 
                                         project.setup.geometry.geometryType = AreaGeometry::Type::Line;
                                         project.setup.geometry.geometry = QVariant::fromValue(lineGeometry);
+
+                                        result &= addProject(project);
+
+                                        break;
+                                    }
+                                }
+                            }
+                            else if(circleNodeList.size() > 0)
+                            {
+                                for(int icircle = 0; icircle < circleNodeList.size(); icircle++)
+                                {
+                                    QDomNode circleNode = circleNodeList.at(icircle);
+
+                                    if(circleNode.isNull() == false)
+                                    {
+                                        AreaGeometry::CircleGeometry circle;
+
+                                        QString radiusDegStr = AppSettings::getValueString(circleNode, "RadiusDeg");
+
+                                        if(radiusDegStr.isEmpty() == false)
+                                        {
+                                            circle.radius = radiusDegStr.toDouble(&isOK);
+
+                                            if(isOK == false) break;
+                                        }
+
+                                        QDomNodeList centerPointNodes = rootElem.elementsByTagName("CenterPoint");
+
+                                        for(int iCenterPoint = 0; iCenterPoint < centerPointNodes.size(); iCenterPoint++)
+                                        {
+                                            QDomNode centerPointNode = centerPointNodes.at(iCenterPoint);
+
+                                            if(centerPointNode.isNull() == false)
+                                            {
+                                                QString latStr = AppSettings::getValueString(centerPointNode, "Latitude");
+                                                QString lonStr = AppSettings::getValueString(centerPointNode, "Longitude");
+
+                                                if(latStr.isEmpty() == false && lonStr.isEmpty() == false)
+                                                {
+                                                    double lat = latStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    double lon = lonStr.toDouble(&isOK);
+
+                                                    if(isOK == false) break;
+
+                                                    circle.centerPoint = QPointF(lon, lat);
+                                                }
+                                            }
+                                        }
+
+                                        project.setup.geometry.geometryType = AreaGeometry::Type::Circle;
+                                        project.setup.geometry.geometry = QVariant::fromValue(circle);
 
                                         result &= addProject(project);
 

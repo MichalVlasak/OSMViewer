@@ -73,6 +73,11 @@ void MapContextMenu::show(const QPointF &pos)
         downloadSubMenu->addAction(selectAndDownloadAreaLine);
         QObject::connect(selectAndDownloadAreaLine, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaLine()));
 
+        QAction * selectAndDownloadAreaCircle = new QAction(tr("Define as Circle"), this);
+        selectAndDownloadAreaCircle->setDisabled(window->getOSMTileDownloader()->isRunning() || window->getOSMTileDownloaderprepare()->isRunning());
+        downloadSubMenu->addAction(selectAndDownloadAreaCircle);
+        QObject::connect(selectAndDownloadAreaCircle, SIGNAL(triggered(bool)), SIGNAL(selectAndDownloadAreaCircle()));
+
         QMenu * findSubMenu = new QMenu(tr("Find GPX's"), menu);
         menu->addMenu(findSubMenu);
 

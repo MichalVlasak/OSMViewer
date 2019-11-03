@@ -8,7 +8,6 @@
 RectangleDownloaderPrepare::RectangleDownloaderPrepare(const DownloaderPrepareSetup & prepareSetup, QObject * parent)
     : GeometryDownloaderPrepare(prepareSetup, parent)
 {
-
 }
 
 void RectangleDownloaderPrepare::prepare()

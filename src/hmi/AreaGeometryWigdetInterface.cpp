@@ -2,6 +2,7 @@
 #include "RectangleAreaWidget.h"
 #include "PolygonAreaWidget.h"
 #include "LineWidget.h"
+#include "CircleWidget.h"
 
 AreaGeometryWigdetInterface::AreaGeometryWigdetInterface(QWidget * parent)
     : QWidget(parent)
@@ -31,6 +32,12 @@ AreaGeometryWigdetInterface * AreaGeometryWigdetInterface::createGeometryWidget(
             geometry.geometry.canConvert<AreaGeometry::LineBufferGeometry>() == true)
     {
         return new LineWidget(geometry, parent);
+    }
+    else if(geometry.geometryType == AreaGeometry::Type::Circle &&
+            geometry.geometry.isNull() == false &&
+            geometry.geometry.canConvert<AreaGeometry::CircleGeometry>() == true)
+    {
+        return new CircleWidget(geometry, parent);
     }
     else
     {

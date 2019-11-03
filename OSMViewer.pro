@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += src/main.cpp\
+    src/CircleDownloaderPrepare.cpp \
         src/MainWindow.cpp \
     src/Layers/BaseLayer.cpp \
     src/Layers/OSMLayer.cpp \
@@ -61,6 +62,7 @@ SOURCES += src/main.cpp\
     src/GpxFilesListWidget.cpp \
     src/GpxInfosWidget.cpp \
     src/GpxInfoFileWidgetConfig.cpp \
+    src/hmi/CircleWidget.cpp \
     src/hmi/MapLayersWidget.cpp \
     src/hmi/RectangleAreaWidget.cpp \
     src/hmi/AreaGeometry.cpp \
@@ -77,6 +79,7 @@ SOURCES += src/main.cpp\
     src/GpxFileFinder.cpp
 
 HEADERS  += src/MainWindow.h \
+    src/CircleDownloaderPrepare.h \
     src/Layers/BaseLayer.h \
     src/Layers/OSMLayer.h \
     src/Layers/GridLayer.h \
@@ -115,6 +118,7 @@ HEADERS  += src/MainWindow.h \
     src/GpxFilesListWidget.h \
     src/GpxInfosWidget.h \
     src/GpxInfoFileWidgetConfig.h \
+    src/hmi/CircleWidget.h \
     src/hmi/MapLayersWidget.h \
     src/hmi/RectangleAreaWidget.h \
     src/hmi/AreaGeometry.h \
@@ -151,7 +155,8 @@ FORMS    += resources/MainWindow.ui \
     resources/PositionEditorWidget.ui \
     resources/LineWidget.ui \
     resources/GpxFilesListWidget.ui \
-    resources/MapLayersForm.ui
+    resources/MapLayersForm.ui \
+    resources/CircleWidget.ui
 
 RESOURCES += \
     resources/resources.qrc

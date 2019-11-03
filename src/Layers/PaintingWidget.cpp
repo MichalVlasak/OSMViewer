@@ -137,13 +137,17 @@ void PaintingWidget::paintEvent(QPaintEvent *paintEvent)
         else if(_selectedAreaState == SelectAndDownloadLine)
         {
             QPolygon pxPolygon;
-            
+
             for(const QPointF & point : _selectedLine)
             {
                 pxPolygon.push_back(QPoint(int(_mapSettings.getPixelForLon(point.x())), int(_mapSettings.getPixelForLat(point.y()))));
             }
-            
+
             painter.drawPolyline(pxPolygon);
+        }
+        else if(_selectedAreaState == SelectAndDownloadCircle)
+        {
+            painter.drawEllipse(_circle.centerPoint, _circle.radius, _circle.radius);
         }
     }
 }
@@ -161,6 +165,11 @@ void PaintingWidget::startSelectAndDownloadAreaPoly()
 void PaintingWidget::startSelectAndDownloadAreaLine()
 {
     _selectedAreaState = PrepareForSelectAndDownloadLine;
+}
+
+void PaintingWidget::startSelectAndDownloadAreaCircle()
+{
+    _selectedAreaState = PrepareForSelectAndDownloadCircle;
 }
 
 void PaintingWidget::startSelectAndFindAreaPoly()
@@ -214,8 +223,12 @@ void PaintingWidget::mouseMoveEvent(QMouseEvent *mouseEvent)
         {
             _selectedLine.erase(_selectedLine.end() - 1);
         }
-        
+
         _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
+    }
+    else if(_selectedAreaState == SelectAndDownloadCircle)
+    {
+        _circle.radius = fabs(QLineF(_circle.centerPoint, point).length());
     }
     else
     {
@@ -266,9 +279,16 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         else if(_selectedAreaState == PrepareForSelectAndDownloadLine)
         {
             _selectedAreaState = SelectAndDownloadLine;
-            
+
             _selectedLine.clear();
             _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
+        }
+        else if(_selectedAreaState == PrepareForSelectAndDownloadCircle)
+        {
+            _selectedAreaState = SelectAndDownloadCircle;
+
+            _circle.centerPoint = point;
+            _circle.radius = 0.;
         }
         else if(_selectedAreaState == PrepareForSelectAndFindRec)
         {
@@ -314,6 +334,12 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
         else if(_selectedAreaState == SelectAndDownloadLine)
         {
             _selectedLine.push_back(getWgsPointFromPixelsPoint(point));
+        }
+        else if(_selectedAreaState == SelectAndDownloadCircle)
+        {
+            _circle.radius = fabs(QLineF(_circle.centerPoint, point).length());
+
+            createCircleGeometry();
         }
         else if(_selectedAreaState == SelectAndFindRec)
         {
@@ -373,6 +399,7 @@ void PaintingWidget::mousePressEvent(QMouseEvent *mouseEvent)
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaRec()), SLOT(startSelectAndDownloadAreaRec()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaPoly()), SLOT(startSelectAndDownloadAreaPoly()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaLine()), SLOT(startSelectAndDownloadAreaLine()));
+                QObject::connect(_contextMenu, SIGNAL(selectAndDownloadAreaCircle()), SLOT(startSelectAndDownloadAreaCircle()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndFindAreaPoly()), SLOT(startSelectAndFindAreaPoly()));
                 QObject::connect(_contextMenu, SIGNAL(selectAndFindAreaRec()), SLOT(startSelectAndFindAreaRec()));
                 QObject::connect(_contextMenu, SIGNAL(centerMap(QPoint)), SLOT(centerMapToPixels(QPoint)));
@@ -445,6 +472,10 @@ void PaintingWidget::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
             
             _selectedAreaState = Unselecting;
             _selectedLine.clear();
+        }
+        else if(_selectedAreaState == SelectAndDownloadCircle)
+        {
+            createCircleGeometry();
         }
         else if(_selectedAreaState == SelectAndFindPoly)
         {
@@ -726,4 +757,24 @@ bool PaintingWidget::restoreConfig(QDomDocument &document)
     restoreLayerSettings(settings);
 
     return result;
+}
+
+void PaintingWidget::createCircleGeometry()
+{
+    AreaGeometry geometry;
+    AreaGeometry::CircleGeometry circleGeom;
+
+    // pixeli prevediem na WGS suradnice a radius na vzdialenost v stupnoch medzi stredom a kruznicou v smere osi X
+    circleGeom.centerPoint = QPointF(_mapSettings.getLonForPixelOld(_circle.centerPoint.x()), _mapSettings.getLatForPixel(_mapSettings.windowPixelToMapPixelY(_circle.centerPoint.y())));
+    circleGeom.radius = fabs(circleGeom.centerPoint.x() - _mapSettings.getLonForPixelOld(_circle.centerPoint.x() + _circle.radius));
+
+    // spolygonizujem kruh v pixelovych suradniciach a tie prevediem do WSG a s nimi sa bude dalej pracovat
+    AreaGeometry::CircleGeometry::circleToPolygon(circleGeom, _mapSettings);
+
+    geometry.geometryType = AreaGeometry::Type::Circle;
+    geometry.geometry = QVariant::fromValue(circleGeom);
+
+    emit downloadSelectedArea(geometry);
+
+    _selectedAreaState = Unselecting;
 }
