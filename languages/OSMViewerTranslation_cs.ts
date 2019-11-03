@@ -88,20 +88,62 @@
 <context>
     <name>CenterPointsManager</name>
     <message>
-        <location filename="../src/CenterPointsManager.cpp" line="137"/>
+        <location filename="../src/CenterPointsManager.cpp" line="474"/>
         <source>Import Center Points</source>
         <translation>Import centrovacích bodů</translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsManager.cpp" line="137"/>
-        <location filename="../src/CenterPointsManager.cpp" line="300"/>
-        <location filename="../src/CenterPointsManager.cpp" line="336"/>
+        <location filename="../src/CenterPointsManager.cpp" line="461"/>
+        <location filename="../src/CenterPointsManager.cpp" line="561"/>
+        <location filename="../src/CenterPointsManager.cpp" line="597"/>
         <source>XML (*.xml)</source>
         <translation>XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/CenterPointsManager.cpp" line="300"/>
-        <location filename="../src/CenterPointsManager.cpp" line="336"/>
+        <location filename="../src/CenterPointsManager.cpp" line="144"/>
+        <source>XML Error</source>
+        <translation>Chyba XML</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="144"/>
+        <source>Cannot read XML file &quot;</source>
+        <translation>Není možné načítat XML soubor</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="144"/>
+        <source>&quot;!</source>
+        <translation>&quot;!</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="153"/>
+        <source>Import XML &quot;</source>
+        <translation>Načítaní XML &quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="153"/>
+        <location filename="../src/CenterPointsManager.cpp" line="355"/>
+        <source>&quot; ...</source>
+        <translation>&quot; ...</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="153"/>
+        <location filename="../src/CenterPointsManager.cpp" line="355"/>
+        <source>Abort import</source>
+        <translation>Ukončení načítáaní</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="355"/>
+        <source>Import CSV &quot;</source>
+        <translation>Načítání CSV &quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="462"/>
+        <source>CSV (*.csv)</source>
+        <translation>CSV (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../src/CenterPointsManager.cpp" line="561"/>
+        <location filename="../src/CenterPointsManager.cpp" line="597"/>
         <source>Export Center Points</source>
         <translation>Export centrovacích bodov</translation>
     </message>
@@ -237,7 +279,7 @@ Skupina &quot;</translation>
         <location filename="../src/CenterPointsWidget.cpp" line="455"/>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
         <source>&quot; is exists!</source>
-        <translation> už jestvuje!</translation>
+        <translation>&quot; již jestvuje!</translation>
     </message>
     <message>
         <location filename="../src/CenterPointsWidget.cpp" line="475"/>
@@ -281,6 +323,39 @@ Skupina &quot;</translation>
         <location filename="../src/CenterPointsWidget.cpp" line="494"/>
         <source>&quot;!</source>
         <translation>&quot;!</translation>
+    </message>
+</context>
+<context>
+    <name>CircleWidget</name>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation>Formulář</translation>
+    </message>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="20"/>
+        <source>Circle</source>
+        <translation>Kruh</translation>
+    </message>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="26"/>
+        <source>Lat:</source>
+        <translation>Zeměpisná šířka:</translation>
+    </message>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="52"/>
+        <source>Lon:</source>
+        <translation>Zeměpisná délka:</translation>
+    </message>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="78"/>
+        <source>Radius (as Longitude):</source>
+        <translation>Poloměr (v zeměpisné délce):</translation>
+    </message>
+    <message>
+        <location filename="../resources/CircleWidget.ui" line="91"/>
+        <source>°</source>
+        <translation>°</translation>
     </message>
 </context>
 <context>
@@ -338,16 +413,21 @@ Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/GpxFilesListModel.cpp" line="10"/>
+        <source>Distance [km]</source>
+        <translation>Vzdálenost [km]</translation>
+    </message>
+    <message>
+        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
         <source>Author Name</source>
         <translation>Jméno autora</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="11"/>
+        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
         <source>Name</source>
         <translation>Jméno</translation>
     </message>
     <message>
-        <location filename="../src/GpxFilesListModel.cpp" line="12"/>
+        <location filename="../src/GpxFilesListModel.cpp" line="13"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -612,7 +692,7 @@ Skupina &quot;</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../resources/MainWindow.ui" line="14"/>
-        <location filename="../src/MainWindow.cpp" line="31"/>
+        <location filename="../src/MainWindow.cpp" line="32"/>
         <source>Open Street Map Viewer</source>
         <translation>Open Street Map Prohlížeč</translation>
     </message>
@@ -622,136 +702,142 @@ Skupina &quot;</translation>
         <translation>&amp;Soubor</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="61"/>
+        <location filename="../resources/MainWindow.ui" line="62"/>
         <source>&amp;Help</source>
         <translation>&amp;Pomoc</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="68"/>
+        <location filename="../resources/MainWindow.ui" line="69"/>
         <source>OS&amp;M</source>
         <translation>OS&amp;M</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="78"/>
+        <location filename="../resources/MainWindow.ui" line="79"/>
         <source>&amp;GPX Files</source>
         <translation>&amp;GPX Soubory</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="85"/>
+        <location filename="../resources/MainWindow.ui" line="86"/>
         <source>La&amp;nguage</source>
         <translation>&amp;Jazyk</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="97"/>
+        <location filename="../resources/MainWindow.ui" line="98"/>
         <source>&amp;Quit</source>
         <translation>&amp;Konec</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="102"/>
+        <location filename="../resources/MainWindow.ui" line="103"/>
         <source>&amp;About Qt</source>
         <translation>O &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="107"/>
+        <location filename="../resources/MainWindow.ui" line="108"/>
         <source>&amp;OSM Directory</source>
         <translation>OSM &amp;Adresář</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="115"/>
+        <location filename="../resources/MainWindow.ui" line="116"/>
         <source>&amp;Enable Downloading</source>
         <translation>&amp;Zapnout stahování</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="123"/>
+        <location filename="../resources/MainWindow.ui" line="124"/>
         <source>&amp;Downloader Info</source>
         <translation>&amp;Informace o stahování</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="131"/>
+        <location filename="../resources/MainWindow.ui" line="132"/>
         <source>Downloader &amp;Setup</source>
         <translation>&amp;Nastavení stahování</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="136"/>
+        <location filename="../resources/MainWindow.ui" line="137"/>
         <source>About &amp;OSM Viewer</source>
         <translation>O OSM &amp;Prohlížeči</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="144"/>
+        <location filename="../resources/MainWindow.ui" line="145"/>
         <source>&amp;Center Points</source>
         <translation>&amp;Centrovací body</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="152"/>
+        <location filename="../resources/MainWindow.ui" line="153"/>
         <source>&amp;Projects</source>
         <translation>P&amp;rojekty</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="160"/>
+        <location filename="../resources/MainWindow.ui" line="161"/>
         <source>&amp;GPX Files List</source>
         <translation>Seznam &amp;GPX souborů</translation>
     </message>
     <message>
-        <location filename="../resources/MainWindow.ui" line="168"/>
+        <location filename="../resources/MainWindow.ui" line="169"/>
         <source>GPX &amp;File Info Table</source>
         <translation>&amp;Tabulka s informacemi o GPX souboru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="65"/>
-        <location filename="../src/MainWindow.cpp" line="642"/>
+        <location filename="../resources/MainWindow.ui" line="177"/>
+        <location filename="../src/MainWindow.cpp" line="110"/>
+        <source>Map Layers</source>
+        <translation>Mapové vrstvy</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="68"/>
+        <location filename="../src/MainWindow.cpp" line="658"/>
         <source>Center Points</source>
         <translation>Centrovací body</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="72"/>
-        <location filename="../src/MainWindow.cpp" line="636"/>
+        <location filename="../src/MainWindow.cpp" line="75"/>
+        <location filename="../src/MainWindow.cpp" line="652"/>
         <source>Downloader Info</source>
         <translation>Informace o stahování</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="79"/>
-        <location filename="../src/MainWindow.cpp" line="638"/>
+        <location filename="../src/MainWindow.cpp" line="82"/>
+        <location filename="../src/MainWindow.cpp" line="654"/>
         <source>Downloader Setup</source>
         <translation>Nastavení stahování</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="86"/>
-        <location filename="../src/MainWindow.cpp" line="640"/>
+        <location filename="../src/MainWindow.cpp" line="89"/>
+        <location filename="../src/MainWindow.cpp" line="656"/>
         <source>Download Project</source>
         <translation>Projekty pro stahování</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="93"/>
-        <location filename="../src/MainWindow.cpp" line="644"/>
+        <location filename="../src/MainWindow.cpp" line="96"/>
+        <location filename="../src/MainWindow.cpp" line="660"/>
         <source>GPX List</source>
         <translation>Seznam GPX souborů</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="100"/>
-        <location filename="../src/MainWindow.cpp" line="646"/>
+        <location filename="../src/MainWindow.cpp" line="103"/>
+        <location filename="../src/MainWindow.cpp" line="662"/>
         <source>GPX Info Tables</source>
         <translation>Tabulka s informacemi o GPX souboru</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="252"/>
+        <location filename="../src/MainWindow.cpp" line="268"/>
         <source>Zoom Level: </source>
-        <translation>Úroveň přiblížení:</translation>
+        <translation>Úroveň přiblížení: </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="253"/>
+        <location filename="../src/MainWindow.cpp" line="269"/>
         <source>Zoom Scale: </source>
-        <translation>Mírka přiblížení:</translation>
+        <translation>Mírka přiblížení: </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="322"/>
+        <location filename="../src/MainWindow.cpp" line="338"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="322"/>
+        <location filename="../src/MainWindow.cpp" line="338"/>
         <source>Cannot open download setup dialog: 
 </source>
-        <translation>Není možné otevřít okno s nastavením stahování:
+        <translation>Není možné otevřít okno s nastavením stahování: 
 </translation>
     </message>
 </context>
@@ -779,13 +865,13 @@ Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="61"/>
-        <location filename="../src/MapContextMenu.cpp" line="79"/>
+        <location filename="../src/MapContextMenu.cpp" line="84"/>
         <source>Define as Rectangle</source>
         <translation>Definovat jako obdélnik</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="66"/>
-        <location filename="../src/MapContextMenu.cpp" line="84"/>
+        <location filename="../src/MapContextMenu.cpp" line="89"/>
         <source>Define as Polygon</source>
         <translation>Definovat jako polygon</translation>
     </message>
@@ -796,28 +882,41 @@ Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../src/MapContextMenu.cpp" line="76"/>
+        <source>Define as Circle</source>
+        <translation>Definovat jako kruh</translation>
+    </message>
+    <message>
+        <location filename="../src/MapContextMenu.cpp" line="81"/>
         <source>Find GPX&apos;s</source>
         <translation>Najít GPX soubory</translation>
     </message>
     <message>
-        <location filename="../src/MapContextMenu.cpp" line="107"/>
+        <location filename="../src/MapContextMenu.cpp" line="112"/>
         <source>Center Map</source>
         <translation>Vycentrovat mapu</translation>
     </message>
     <message>
-        <location filename="../src/MapContextMenu.cpp" line="111"/>
+        <location filename="../src/MapContextMenu.cpp" line="116"/>
         <source>Add to Center Points</source>
         <translation>Přidat do centrovacích bodů</translation>
     </message>
     <message>
-        <location filename="../src/MapContextMenu.cpp" line="115"/>
+        <location filename="../src/MapContextMenu.cpp" line="120"/>
         <source>Set as Home Point</source>
         <translation>Nastavit jako domovský bod</translation>
     </message>
     <message>
-        <location filename="../src/MapContextMenu.cpp" line="121"/>
+        <location filename="../src/MapContextMenu.cpp" line="126"/>
         <source>Save position to Clipboard</source>
         <translation>Uložit pozici do schránky</translation>
+    </message>
+</context>
+<context>
+    <name>MapLayersForm</name>
+    <message>
+        <location filename="../resources/MapLayersForm.ui" line="14"/>
+        <source>Form</source>
+        <translation>Formulář</translation>
     </message>
 </context>
 <context>
@@ -876,22 +975,22 @@ Skupina &quot;</translation>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../resources/OSMDownloadAreaDialog.ui" line="87"/>
+        <location filename="../resources/OSMDownloadAreaDialog.ui" line="105"/>
         <source>Save As Project</source>
         <translation>Uložit jako projekt</translation>
     </message>
     <message>
-        <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
+        <location filename="../src/OSMDownloadAreaDialog.cpp" line="114"/>
         <source>Overwrite Project</source>
         <translation>Přepsat projekt</translation>
     </message>
     <message>
-        <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
+        <location filename="../src/OSMDownloadAreaDialog.cpp" line="114"/>
         <source>Are You sure to overwrite project &quot;</source>
         <translation>Jste si jist, že chcete přepsat projekt &quot;</translation>
     </message>
     <message>
-        <location filename="../src/OSMDownloadAreaDialog.cpp" line="117"/>
+        <location filename="../src/OSMDownloadAreaDialog.cpp" line="114"/>
         <source>&quot;?</source>
         <translation>&quot;?</translation>
     </message>
@@ -949,9 +1048,9 @@ Skupina &quot;</translation>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="35"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="36"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="37"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="179"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="180"/>
         <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="181"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="182"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -967,7 +1066,7 @@ Skupina &quot;</translation>
     </message>
     <message>
         <location filename="../resources/OSMTileDownloaderInfoWidget.ui" line="111"/>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="163"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="164"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
@@ -987,7 +1086,7 @@ Skupina &quot;</translation>
         <translation>Sloupec:</translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="158"/>
+        <location filename="../src/OSMTileDownloaderInfoWidget.cpp" line="159"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
@@ -995,15 +1094,18 @@ Skupina &quot;</translation>
 <context>
     <name>OSMTileDownloaderPrepare</name>
     <message>
-        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
+        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="57"/>
+        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="91"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="60"/>
+        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="57"/>
+        <location filename="../src/OSMTileDownloaderPrepare.cpp" line="91"/>
         <source>Error by preparing download:
 </source>
-        <translation>Chyba počas přípravy stahování:</translation>
+        <translation>Chyba počas přípravy stahování:
+</translation>
     </message>
 </context>
 <context>
